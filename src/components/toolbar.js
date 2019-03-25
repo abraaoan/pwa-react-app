@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import Back from '../assets/back';
 
 const styles = ({
     toolbar: {
         marginLeft: 50,
         marginRight: 50,
-        padding: '5px 5px 5px 5px',
-        background: 'rgba(255, 0, 0, 0.1)',
+        // background: 'rgba(255, 0, 0, 0.1)'
     },
     search: {
         width: 500,
@@ -15,19 +15,21 @@ const styles = ({
 export default class Toolbar extends Component {
     render() {
         return (
-            <div class="d-flex flex-row justify-content-end" style={styles.toolbar}>
-                <div class="mr-auto p-2">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-primary">Adicionar</button>
-                        <button type="button" class="btn btn-primary">Listar</button>
-                        <button type="button" class="btn btn-primary">Voltar</button>
-                    </div>
+            <div className="d-flex flex-row justify-content-end" style={styles.toolbar}>
+                <div className="mr-auto p-2">
+                    <a href="/" className="d-flex" style={{color: "blue", height: 26}}>
+                      <div className="p-0">
+                        <Back style={{marginTop: 10}} fill="blue"/>
+                      </div>
+                      <div className="p-2" style={{fontSize: 14, marginLeft: -6}}>Voltar para home</div>
+                    </a>
+                    <h2>{this.props.title}</h2>
                 </div>
-                <div class="p-2" >
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar produto" aria-label="Username" aria-describedby="basic-addon1" />
-                        <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button">Buscar</button>
+                <div className="p-4" >
+                    <div className="input-group" style={{width: 400, marginRight:-18}}>
+                        <input type="text" className="form-control" placeholder="Buscar produto" aria-label="Username" aria-describedby="basic-addon1" />
+                        <div className="input-group-prepend">
+                        <button className="btn btn-outline-secondary" type="button">Buscar</button>
                         </div>
                     </div>
                 </div>
