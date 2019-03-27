@@ -4,7 +4,9 @@ import Toolbar from '../toolbar';
 import Modal from '../modal';
 import Form from './form';
 import Pages from '../pages';
-import Json from '../../assets/products.json';
+// import { Store } from '../../store/index';
+
+import { connect } from 'react-redux';
 
 const styles = ({
     tableView: {
@@ -14,15 +16,29 @@ const styles = ({
     },
 });
 
-export default class Product extends Component {
+class Product extends Component {
   constructor() {
     super();
 
     this.state = {
-      products: Json.products,
+      products: [],
     };
   }
+
+  componentDidMount = () => {
+    
+  }
+
+  componentDidUpdate = () => {
+    
+  }
+
   render() {
+
+    const { newValue } = this.props;
+    console.log(newValue);
+    this.setState({products: (newValue != null ? newValue : [])})
+
     return (
       <div>
         <Navbar />
@@ -72,3 +88,9 @@ export default class Product extends Component {
     )
   }
 }
+
+const mapStateToProps = store => ({
+  newValue: store.ProductReducer.newValue
+});
+
+export default connect(mapStateToProps)(Product);

@@ -7,6 +7,7 @@ import Home from './components/home/home.js';
 
 class App extends Component {
   render() {
+
     return (
       <div className="App">
         <Navbar />
@@ -17,3 +18,4 @@ class App extends Component {
 }
 
 export default App;
+
