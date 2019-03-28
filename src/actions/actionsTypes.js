@@ -1,3 +1,3 @@
-export const CLICK_UPDATE_VALUE = 'CLICK_UPDATE_VALUE'; //Example
 export const ADD_PRODUCT = 'ADD_PRODUCT'
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
 export const TOGGLE_PRODUCT = 'TOGGLE_PRODUCT'

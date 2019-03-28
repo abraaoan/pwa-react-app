@@ -1,11 +1,17 @@
-import { ADD_PRODUCT, TOGGLE_PRODUCT } from '../actions/actionTypes';
+import { ADD_PRODUCT, TOGGLE_PRODUCT, REMOVE_PRODUCT } from '../actions/actionTypes';
+import { REMOVE_PRODUCT } from './actionsTypes';
 
 export const addProduct = product => ({
   type: ADD_PRODUCT,
-  products: product
+  product
 });
 
-export const getProduct = product => ({
+export const toggleProduct = id => ({
   type: TOGGLE_PRODUCT,
-  products: product
+  id
+})
+
+export const removeProduct = id => ({
+  type: REMOVE_PRODUCT,
+  id
 })

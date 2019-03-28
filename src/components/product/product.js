@@ -26,7 +26,8 @@ class Product extends Component {
   }
 
   componentDidMount = () => {
-    
+    console.log(this.props);
+    this.setState({products: (this.props.newValue != null ? this.props.newValue : [])})
   }
 
   componentDidUpdate = () => {
@@ -37,7 +38,6 @@ class Product extends Component {
 
     const { newValue } = this.props;
     console.log(newValue);
-    this.setState({products: (newValue != null ? newValue : [])})
 
     return (
       <div>
