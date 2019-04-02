@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Store } from '../../store/index';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { addProduct } from '../../actions';
 
-
-export default class Form extends Component {
+class Form extends Component {
 
   constructor(props) {
     super(props);
@@ -12,7 +13,7 @@ export default class Form extends Component {
       price: '',
       description: '',
       size: '',
-      category: ''
+      category: '',
     }
 
     this.onChangeName = this.onChangeName.bind(this);
@@ -44,20 +45,28 @@ export default class Form extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const newProduct = {
-      id: "0123",
-      name: this.state.name,
-      price: this.state.price,
-      description: this.state.description,
-      size: this.state.size,
-      category: this.state.category
+    // "id": "1",
+    //   "Categoria": "Torta",
+    //   "nome": "Torta de morango com chocolate",
+    //   "price": 120.00,
+    //   "tamanho": "Médio"
+
+    const product = {
+      id: '7',
+      nome: this.state.name,
+      Categoria: this.state.category ? this.state.category : 'Torta',
+      price: parseFloat(this.state.price),
+      tamanho: this.state.size ? this.state.size : 'Média',
     }
 
-    Store.dispatch({type: 'ADD_PRODUCT', product: newProduct});
+    this.props.addProduct(product);
+
+    console.log(product);
 
   }
   
   render() {
+
     return (
       <div>
         <form id="productForm" style={{padding: 10}} onSubmit={this.onSubmit}>
@@ -98,9 +107,9 @@ export default class Form extends Component {
                 className="form-control" 
                 value={this.state.size} 
                 onChange={this.onChangeSize}>
-                  <option value="0">Grande</option>
-                  <option value="1">Médio</option>
-                  <option value="2">Pequena</option>
+                  <option value="Média">Média</option>
+                  <option value="Grande">Grande</option>
+                  <option value="Pequena">Pequena</option>
                 </select>
               </div>
               <div className="col-6">
@@ -109,9 +118,9 @@ export default class Form extends Component {
                 className="form-control" 
                 value={this.state.category} 
                 onChange={this.onChangeCategory}>
-                  <option value="1">Torta</option>
-                  <option value="2">Reta</option>
-                  <option value="3">Perpendicular</option>
+                  <option value="Torta">Torta</option>
+                  <option value="Reta">Reta</option>
+                  <option value="Perpendicular">Perpendicular</option>
                 </select>
               </div>
             </div>
@@ -121,3 +130,8 @@ export default class Form extends Component {
     )
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ addProduct }, dispatch);
+
+export default connect(null, mapDispatchToProps)(Form)

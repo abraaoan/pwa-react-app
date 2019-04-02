@@ -1,7 +1,7 @@
-import { ProductReducer } from './stateReducer';
+import { productReducer } from './stateReducer';
 // import { OtherReducer } from './otherReducer';
 import { combineReducers } from 'redux';
 export const Reducers = combineReducers({
-  ProductReducer: ProductReducer,
+  productState: productReducer
   // otherState: otherReducer
 });

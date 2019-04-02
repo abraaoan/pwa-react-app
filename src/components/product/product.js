@@ -4,7 +4,7 @@ import Toolbar from '../toolbar';
 import Modal from '../modal';
 import Form from './form';
 import Pages from '../pages';
-// import { Store } from '../../store/index';
+import $ from 'jquery';
 
 import { connect } from 'react-redux';
 
@@ -17,27 +17,24 @@ const styles = ({
 });
 
 class Product extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      products: [],
-    };
-  }
 
   componentDidMount = () => {
-    console.log(this.props);
-    this.setState({products: (this.props.newValue != null ? this.props.newValue : [])})
-  }
 
-  componentDidUpdate = () => {
+    const products = this.props.products
+
+    // Get tableView click
+    $("#tableProducts .test").on('click', function(event){
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     
+      const index =  $(this).find('td[class=hidden]').text();
+      console.log(products[index])
+
+    });
   }
 
   render() {
-
-    const { newValue } = this.props;
-    console.log(newValue);
+    const { products } = this.props;
 
     return (
       <div>
@@ -45,7 +42,7 @@ class Product extends Component {
         <Toolbar title="Produtos" />
         {/* TableView */}
         <div style={styles.tableView}>
-          <table className="table table-bordered table-hover">
+          <table id="tableProducts" className="table table-bordered table-hover">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -56,14 +53,15 @@ class Product extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.products.map(product => {
+              {products.map(product => {
                 return(
-                  <tr key={product.id}>
+                  <tr className="test" key={product.id}>
                     <th scope="row">{product.id}</th>
                     <td>{product.nome}</td>
                     <td>{product.tamanho}</td>
                     <td>{product.price}</td>
                     <td>{product.Categoria}</td>
+                    <td className="hidden" style={{display: 'none'}}>{products.indexOf(product)}</td>
                   </tr>
                 );
               } 
@@ -86,11 +84,11 @@ class Product extends Component {
 
       </div>
     )
-  }
+}
 }
 
-const mapStateToProps = store => ({
-  newValue: store.ProductReducer.newValue
+const mapStateToProps = (store) => ({
+  products: store.productState.products
 });
 
 export default connect(mapStateToProps)(Product);

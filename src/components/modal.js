@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 
 export default class Modal extends Component {
     render() {
         return (
             <div>
-                <div className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div id="modalProduto" className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                   <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div className="modal-content">
                       <div className="modal-header">
@@ -18,7 +19,7 @@ export default class Modal extends Component {
                       </div>
                       <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" form="productForm" className="btn btn-primary">Salvar</button>
+                        <button type="submit" form="productForm" className="btn btn-primary" onClick={() => { $('#modalProduto').modal('hide') }}>Salvar</button>
                       </div>
                     </div>
                   </div>

@@ -1,17 +1,23 @@
-import { ADD_PRODUCT, TOGGLE_PRODUCT, REMOVE_PRODUCT } from '../actions/actionsTypes';
-import json from '../assets/products.json';
+import { 
+  ADD_PRODUCT,
+  TOGGLE_PRODUCT,
+} from '../actions/actionsTypes';
+
+// import json from '../assets/products.json';
 
 const initState = {
-  products: json.products,
+  products: [],
 }
 
-export const ProductReducer = (state = initState, action) => {
+export const productReducer = (state = initState, action) => {
+
   switch (action.type) {
 
     case ADD_PRODUCT:
+
       return {
         ...state,
-        product: action.product
+        products: state.products.concat(action.product)
       }
 
     case TOGGLE_PRODUCT:
