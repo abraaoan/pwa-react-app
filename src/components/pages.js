@@ -1,23 +1,57 @@
 import React, { Component } from 'react';
 
 export default class Pages extends Component {
-    render() {
-        return (
-            <div>
-                <nav aria-label="Page navigation example" style={{marginTop: 4}}>
-                  <ul className="pagination justify-content-end">
-                    <li className="page-item disabled">
-                      <a className="page-link" href="/product?page=-1" tabIndex="-1" aria-disabled="true">Anterior</a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="/product?page=1">1</a></li>
-                    <li className="page-item"><a className="page-link" href="/product?page=-2">2</a></li>
-                    <li className="page-item"><a className="page-link" href="/product?page=-3">3</a></li>
-                    <li className="page-item">
-                      <a className="page-link" href="/product?page=next">Próxima</a>
-                    </li>
-                  </ul>
-                </nav>
-            </div>
-        )
+
+  render() {
+
+    const { pagination, currentPage } = this.props;
+    const cPage =  parseInt(currentPage);
+    const total = pagination.length;
+    const shouldEnablePrevious = cPage > 1;
+    const shouldDisableNext = cPage === total;
+    const pages = [];
+
+    const left = cPage - 1;
+    const right = cPage + 1;
+    
+    // Left
+    if (left > 0)
+      pages.push(left);
+    
+    pages.push(cPage);
+
+    // Right
+    if (right <= total) {
+      if (left > 0)
+        pages.push(right)
+      else 
+        pages.push(right, right + 1);
     }
+
+    return (
+      <div>
+        <nav aria-label="Page navigation example" style={{marginTop: 4}}>
+          <ul className="pagination justify-content-end">
+            <li className={shouldEnablePrevious ? "page-item" : "page-item disabled"}>
+              <a className="page-link" href={`/product?page=${currentPage - 1}`} tabIndex="-1" aria-disabled="true">Anterior</a>
+            </li>
+            {
+              
+              pages.map(page => {
+                return (
+                  <li className={page ===cPage ? "page-item active" : "page-item"} key={page}>
+                    <a className="page-link" href={`/product?page=${page}`}>{page}</a>
+                  </li>
+                );
+              })
+
+            }
+            <li className={shouldDisableNext ? "page-item disabled" : "page-item"}>
+              <a className="page-link" href={`/product?page=${currentPage + 1}`}>Próxima</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    )
+  }
 }

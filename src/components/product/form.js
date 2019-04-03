@@ -3,6 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { addProduct } from '../../actions';
 
+import {axiosInstance as axios, putProdutoData as data} from '../../api';
+import { PUT_PRODUTO } from '../../api/endpoints';
+
 class Form extends Component {
 
   constructor(props) {
@@ -14,6 +17,7 @@ class Form extends Component {
       description: '',
       size: '',
       category: '',
+      isSending: false,
     }
 
     this.onChangeName = this.onChangeName.bind(this);
@@ -45,21 +49,20 @@ class Form extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    // "id": "1",
-    //   "Categoria": "Torta",
-    //   "nome": "Torta de morango com chocolate",
-    //   "price": 120.00,
-    //   "tamanho": "Médio"
-
     const product = {
-      id: '7',
-      nome: this.state.name,
-      Categoria: this.state.category ? this.state.category : 'Torta',
-      price: parseFloat(this.state.price),
-      tamanho: this.state.size ? this.state.size : 'Média',
+      nome_produto: this.state.name,
+      tamanho: this.state.size ? this.state.size : 'Tradicional',
+      valor_produto: parseFloat(this.state.price),
+      categoria: this.state.category ? this.state.category : 'Torta',
+      descricao_produto: this.state.description,
     }
 
-    this.props.addProduct(product);
+    this.setState({ isSending: true });
+
+    axios.post(PUT_PRODUTO, data(product)).then((response) => {
+      this.setState({ isSending: false });
+      console.log(response);
+    });
 
     console.log(product);
 
@@ -107,9 +110,15 @@ class Form extends Component {
                 className="form-control" 
                 value={this.state.size} 
                 onChange={this.onChangeSize}>
-                  <option value="Média">Média</option>
+                  <option value="Mini">Mini</option>
+                  <option value="Baby">Baby</option>
+                  <option value="Pequeno">Pequeno</option>
+                  <option value="Medio">Medio</option>
                   <option value="Grande">Grande</option>
-                  <option value="Pequena">Pequena</option>
+                  <option value="Extra Grande">Extra Grande</option>
+                  <option value="Pirex Oval">Pirex Oval</option>
+                  <option value="Pirex Retangula">Pirex Retangula</option>
+                  <option value="Tradicional">Tradicional</option>
                 </select>
               </div>
               <div className="col-6">
@@ -118,9 +127,14 @@ class Form extends Component {
                 className="form-control" 
                 value={this.state.category} 
                 onChange={this.onChangeCategory}>
-                  <option value="Torta">Torta</option>
-                  <option value="Reta">Reta</option>
-                  <option value="Perpendicular">Perpendicular</option>
+                  <option value="Americano">Americano</option>
+                  <option value="Bola">Bola</option>
+                  <option value="Bolo">Bolo</option>
+                  <option value="Casquinha">Casquinha</option>
+                  <option value="Conde">Conde</option>
+                  <option value="Pao de lo">Pão de lo</option>
+                  <option value="Pave">Pave</option>
+                  <option value="Salgada">Salgada</option>
                 </select>
               </div>
             </div>

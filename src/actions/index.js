@@ -1,5 +1,6 @@
 import { 
-  ADD_PRODUCT, 
+  ADD_PRODUCT,
+  ADD_PRODUCTS,
   TOGGLE_PRODUCT, 
   REMOVE_PRODUCT 
 } from './actionsTypes';
@@ -7,6 +8,11 @@ import {
 export const addProduct = product => ({
   type: ADD_PRODUCT,
   product,
+})
+
+export const addProducts = products => ({
+  type: ADD_PRODUCTS,
+  products,
 })
 
 export const toggleProduct = id => ({
