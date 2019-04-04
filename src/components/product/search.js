@@ -25,6 +25,10 @@ export default class Search extends Component {
   }
 
   onSearch = () => {
+
+    if (!this.state.term)
+      return;
+
     axios.post(GET_PRODUTO_POR_NOME, getProdutosPorNomeData(this.state.term)).then((response) => {
       const products = response.data;
       this.props.onSearchFinish(products);

@@ -183,7 +183,7 @@ class Form extends Component {
               placeholder="Ex: 120,00" 
               value={this.state.price}
               type="text"
-              pattern="^\d+(\.|\,)\d{2}$" 
+              pattern="[0-9]*" 
               onChange={this.onChangePrice}/>
             </div>
           </div>
