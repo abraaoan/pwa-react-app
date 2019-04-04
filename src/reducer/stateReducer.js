@@ -2,12 +2,14 @@ import {
   ADD_PRODUCT,
   TOGGLE_PRODUCT,
   ADD_PRODUCTS,
+  FILL_FIELDS,
 } from '../actions/actionsTypes';
 
 // import json from '../assets/products.json';
 
 const initState = {
   products: [],
+  product: {}
 }
 
 export const productReducer = (state = initState, action) => {
@@ -26,6 +28,13 @@ export const productReducer = (state = initState, action) => {
       return {
         ...state,
         products: action.products
+      }
+
+    case FILL_FIELDS:
+
+      return {
+        ...state,
+        product: action.product
       }
 
     case TOGGLE_PRODUCT:

@@ -13,23 +13,36 @@ const styles = ({
 });
 
 export default class Toolbar extends Component {
+
+    onKeyPress = (e) => {
+        if (e.key === 'Enter')
+            this.props.onSearch();
+    }
+
     render() {
         return (
             <div className="d-flex flex-row justify-content-end" style={styles.toolbar}>
                 <div className="mr-auto p-2">
-                    <a href="/" className="d-flex" style={{color: "blue", height: 26}}>
+                    <a href={this.props.hRef} className="d-flex" style={{color: "blue", height: 26}}>
                       <div className="p-0">
                         <Back style={{marginTop: 10}} fill="blue"/>
                       </div>
-                      <div className="p-2" style={{fontSize: 14, marginLeft: -6}}>Voltar para home</div>
+                      <div className="p-2" style={{fontSize: 14, marginLeft: -6}}>{this.props.linkName}</div>
                     </a>
                     <h2>{this.props.title}</h2>
                 </div>
                 <div className="p-4" >
                     <div className="input-group" style={{width: 400, marginRight:-18}}>
-                        <input type="text" className="form-control" placeholder="Buscar produto" aria-label="Username" aria-describedby="basic-addon1" />
+                        <input type="text" 
+                            className="form-control"
+                            placeholder="Buscar produto" 
+                            aria-label="Username" 
+                            aria-describedby="basic-addon1" 
+                            value={this.props.term}
+                            onChange={this.props.onChangeTerm}
+                            onKeyPress={this.onKeyPress}/>
                         <div className="input-group-prepend">
-                        <button className="btn btn-outline-secondary" type="button">Buscar</button>
+                        <button className="btn btn-outline-secondary" type="button" onClick={()=>{this.props.onSearch()}}>Buscar</button>
                         </div>
                     </div>
                 </div>

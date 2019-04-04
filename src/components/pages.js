@@ -29,7 +29,7 @@ export default class Pages extends Component {
     }
 
     return (
-      <div>
+      <div style={total === 0 ? {opacity: '0'} : {opacity: '1'}}>
         <nav aria-label="Page navigation example" style={{marginTop: 4}}>
           <ul className="pagination justify-content-end">
             <li className={shouldEnablePrevious ? "page-item" : "page-item disabled"}>

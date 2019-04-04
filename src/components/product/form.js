@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { addProduct } from '../../actions';
-
-import {axiosInstance as axios, putProdutoData as data} from '../../api';
-import { PUT_PRODUTO } from '../../api/endpoints';
+import {
+  axiosInstance as axios,
+  putProdutoData,
+  editProdutoData,
+} from '../../api';
+import { 
+  PUT_PRODUTO, 
+  EDIT_PRODUTO,
+} from '../../api/endpoints';
+import Alert from '../alert';
 
 class Form extends Component {
 
@@ -12,12 +16,16 @@ class Form extends Component {
     super(props);
 
     this.state = {
+      id: '',
       name: '',
       price: '',
       description: '',
       size: '',
       category: '',
-      isSending: false,
+      alertType: 'danger', // success, warning
+      alertTitle: '',
+      alertMessage: '',
+      editMode: false,
     }
 
     this.onChangeName = this.onChangeName.bind(this);
@@ -31,7 +39,7 @@ class Form extends Component {
   }
 
   onChangePrice(e) {
-    this.setState({price: e.target.value});
+    this.setState({price: (e.target.validity.valid) ? e.target.value : this.state.price});
   }
 
   onChangeDescription(e) {
@@ -46,10 +54,29 @@ class Form extends Component {
     this.setState({category: e.target.value});
   }
 
+  onError = (message) => {
+
+    console.error(message);
+
+    this.setState({
+      alertTitle: '',
+      alertMessage: message,
+      showAlert: true,
+      alertType: 'danger'
+    });
+
+    // Self close
+    setTimeout(() => {
+      this.setState({showAlert: false})
+    }, 3000); // 3s
+
+  }
+
   onSubmit = (e) => {
     e.preventDefault();
 
     const product = {
+      id_produto: this.state.id,
       nome_produto: this.state.name,
       tamanho: this.state.size ? this.state.size : 'Tradicional',
       valor_produto: parseFloat(this.state.price),
@@ -57,21 +84,85 @@ class Form extends Component {
       descricao_produto: this.state.description,
     }
 
-    this.setState({ isSending: true });
-
-    axios.post(PUT_PRODUTO, data(product)).then((response) => {
-      this.setState({ isSending: false });
-      console.log(response);
-    });
-
-    console.log(product);
-
+    this.sendProductProduct(product);
+    
   }
+
+  sendProductProduct = (product) => {
+
+    let request
+
+    if (this.state.editMode)
+      request = axios.post(EDIT_PRODUTO, editProdutoData(product))
+    else
+      request = axios.post(PUT_PRODUTO, putProdutoData(product))
+
+    request.then((response) => {
+
+      console.log('response data: ', response.data);
+
+      try {
+        let result = response.data;
+        if (result['status'] === 'ok') {
+          const message = this.state.editMode ? 'Produto atualizado com sucesso!' : 'Produto adicionado com sucesso!'
+          this.props.onAddProduct(product, message);
+          this.clearFields();
+        } else {
+
+          // Show alert
+          if (result['erro'])
+            this.onError(result['erro']);
+
+        }
+
+      } catch(e) {
+        console.error(e);
+        
+        this.onError('Ocorreu um erro desconhecido.');
+      }
+    });
+  }
+
+  clearFields = () => {
+    this.setState({
+      name: '',
+      price: '',
+      description: '',
+      size: '',
+      category: '',
+      showAlert: false,
+      editMode: false,
+    });
+  }
+
+  fillFields = (product) => {
+
+    if (product) {
+
+      this.setState({
+        id: product.id_produto,
+        name: product.nome_produto,
+        size: product.tamanho,
+        price: product.valor_produto,
+        category: product.categoria,
+        description: product.descricao_produto,
+        editMode: true,
+
+      })
+    }
+  }
+
   
   render() {
 
     return (
       <div>
+        <Alert 
+          show={this.state.showAlert} 
+          title={this.state.alertTitle} 
+          message={`${this.state.alertMessage}.`}
+          type={this.state.alertType}
+          alertStyle={{marginTop: -22}}/>
         <form id="productForm" style={{padding: 10}} onSubmit={this.onSubmit}>
           <div className="form-group row">
             <label htmlFor="inputNome">Nome</label>
@@ -91,13 +182,16 @@ class Form extends Component {
               id="price"
               placeholder="Ex: 120,00" 
               value={this.state.price}
+              type="text"
+              pattern="^\d+(\.|\,)\d{2}$" 
               onChange={this.onChangePrice}/>
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="inputDescription">Descrição</label>
-            <input className="form-control"
-             id="description" 
+            <textarea className="form-control"
+             id="description"
+             rows="3"
              placeholder="Ex: Torta feita com suco de limão batido com leite condensado..." 
              value={this.state.description}
              onChange={this.onChangeDescription}/>
@@ -145,7 +239,4 @@ class Form extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ addProduct }, dispatch);
-
-export default connect(null, mapDispatchToProps)(Form)
+export default Form

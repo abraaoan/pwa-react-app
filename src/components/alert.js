@@ -6,7 +6,7 @@ const style = {
     position: 'absolute',
     width: '80%',
     marginLeft: '10%',
-    zIndex: 1,
+    zIndex: 999,
     opacity: '1',
     transition: 'opacity 0.5s',
   },
@@ -35,24 +35,23 @@ export default class Alert extends Component {
     const oldProps = this.props
     if(oldProps.show !== newProps.show) {
       this.setState({ isHidden: !newProps.show });
-
-      if (this.state.isHidden) {
-        setTimeout(() => {
-          this.setState({isHidden: true})
-        }, 3000); // 3s
-      }
-
     }
 
   }
 
   render() {
 
+    const {title, message, type, alertStyle} = this.props;
+    const defaultStyle = this.state.isHidden ? style.hidden : style.showing
     return (
       <div>
-          <div id="alert" style={this.state.isHidden ? style.hidden : style.showing} className="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Produto adicionado com sucesso!</strong> Torta de limão com cobertura de laranja lima.
-            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+          <div
+           id="alert"
+           style={{...defaultStyle, ...alertStyle}}
+           className={`alert alert-${type} alert-dismissible fade show`}
+           role="alert">
+            <strong>{title}</strong> <span>{`${message}`}</span>
+            <button type="button" className="close" aria-label="Close" onClick={() => { this.setState({ isHidden: true }); }}>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>

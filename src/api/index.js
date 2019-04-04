@@ -20,6 +20,18 @@ export const getProdutosPaginacaoData = (registros, pagina) => {
   return data;
 };
 
+export const getProdutosPorNomeData = (nome) => {
+
+  const data = new FormData();
+
+  data.append('nome_produto', nome);
+  data.append('token', token('put_produto'));
+  data.append('nome_script', 'put_produto');
+
+  return data;
+
+}
+
 export const putProdutoData = (product) => {
 
   const data = new FormData();
@@ -29,6 +41,35 @@ export const putProdutoData = (product) => {
   data.append('valor_produto', product.valor_produto);
   data.append('categoria', product.categoria);
   data.append('descricao_produto', product.descricao_produto);
+  data.append('token', token('put_produto'));
+  data.append('nome_script', 'put_produto');
+
+  return data;
+
+}
+
+export const editProdutoData = (product) => {
+
+  const data = new FormData();
+
+  data.append('id_produto', product.id_produto);
+  data.append('nome_produto', product.nome_produto);
+  data.append('tamanho', product.tamanho);
+  data.append('valor_produto', product.valor_produto);
+  data.append('categoria', product.categoria);
+  data.append('descricao_produto', product.descricao_produto);
+  data.append('token', token('put_produto'));
+  data.append('nome_script', 'put_produto');
+
+  return data;
+
+}
+
+export const deleteProdutoData = (productId) => {
+
+  const data = new FormData();
+
+  data.append('id_produto', productId);
   data.append('token', token('put_produto'));
   data.append('nome_script', 'put_produto');
 
