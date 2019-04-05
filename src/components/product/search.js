@@ -13,7 +13,7 @@ export default class Search extends Component {
 
     this.state = {
       term: '',
-      hRef: '/',
+      hRef: '/pwa-react-app',
       linkName: 'Voltar pra home',
       title: props.title,
     }
@@ -34,7 +34,7 @@ export default class Search extends Component {
       this.props.onSearchFinish(products);
       
       this.setState({
-        hRef: '/product?page=1',
+        hRef: '/pwa-react-app/product?page=1',
         linkName: 'Voltar pra produtos',
         title: 'Resultado da busca',
       });

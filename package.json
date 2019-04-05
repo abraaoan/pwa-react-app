@@ -1,11 +1,12 @@
 {
   "name": "pwa-react-app",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "gh-pages": "^2.0.1",
+    "history": "^4.9.0",
     "jquery": "^3.3.1",
     "js-sha1": "^0.6.0",
     "md5": "^2.2.1",
@@ -39,5 +40,5 @@
     "redux": "^4.0.1",
     "uglify-js-brunch": "^2.10.0"
   },
-  "homepage": "https://abraaoan.github.io/pwa-react-app"
+  "homepage": "https://abraaoan.github.io/pwa-react-app/"
 }
