@@ -133,8 +133,7 @@ class Product extends Component {
     $('#modalProduto').modal('hide')
     
     // Get new product
-    if (this.pagination.length > 0)
-      this.getProducts();
+    this.getProducts();
 
   }
 

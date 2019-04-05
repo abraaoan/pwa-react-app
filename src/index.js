@@ -16,10 +16,10 @@ ReactDOM.render(
         <BrowserRouter>
             <Switch>
                 <Route path="/" exact={true} component={App} />
-                <Route path="/product" exact={true} component={Product} />
-                <Route path="/clientes" exact={true} component={Client} />
-                <Route path="/pedidos" exact={true} component={Order} />
-                <Route path="/relatorios" exact={true} component={Report} />
+                <Route path="/product" component={Product} />
+                <Route path="/clientes" component={Client} />
+                <Route path="/pedidos" component={Order} />
+                <Route path="/relatorios" component={Report} />
             </Switch>
         </BrowserRouter>
     </Provider>, document.getElementById('root'));
