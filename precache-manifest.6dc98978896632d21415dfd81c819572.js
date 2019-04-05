@@ -20,15 +20,15 @@ self.__precacheManifest = [
     "url": "/pwa-react-app/static/js/runtime~main.48f73173.js"
   },
   {
-    "revision": "3fc39716506bfd0bc52e",
-    "url": "/pwa-react-app/static/js/main.7b12e7f4.chunk.js"
+    "revision": "a4eed13decff99640d2e",
+    "url": "/pwa-react-app/static/js/main.4405ea4c.chunk.js"
   },
   {
     "revision": "11cacbcf42585411fce8",
     "url": "/pwa-react-app/static/js/2.bcee6281.chunk.js"
   },
   {
-    "revision": "3fc39716506bfd0bc52e",
+    "revision": "a4eed13decff99640d2e",
     "url": "/pwa-react-app/static/css/main.c68e18f4.chunk.css"
   },
   {
@@ -36,7 +36,7 @@ self.__precacheManifest = [
     "url": "/pwa-react-app/static/css/2.86db3b9c.chunk.css"
   },
   {
-    "revision": "e8eddca6e45a267e1a76be3ccf279174",
+    "revision": "8a5930a37605379e1ab6388a98a01511",
     "url": "/pwa-react-app/index.html"
   }
 ];
