@@ -4,7 +4,7 @@ export default class Navbar extends Component {
     render() {
         return (
             <nav className="navbar navbar-dark bg-dark">
-                <a className="navbar-brand" href="/pwa-react-app">iPede Aí</a>
+                <a className="navbar-brand" href={process.env.PUBLIC_URL + '/'}>iPede Aí</a>
             </nav>
         )
     }

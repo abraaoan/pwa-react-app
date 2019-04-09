@@ -40,5 +40,5 @@
     "redux": "^4.0.1",
     "uglify-js-brunch": "^2.10.0"
   },
-  "homepage": "https://abraaoan.github.io/pwa-react-app/"
+  "homepage": "https://localhost/pwa/"
 }

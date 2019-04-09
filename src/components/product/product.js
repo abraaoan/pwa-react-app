@@ -56,7 +56,7 @@ class Product extends Component {
     const newData = data(8, paginaAtual);
 
     // Request Products
-    axios.post(GET_PRODUTO_PAGINACAO, newData)
+    const a = axios.post(GET_PRODUTO_PAGINACAO, newData)
     .then(response => {
 
       const result = response.data;
@@ -72,6 +72,9 @@ class Product extends Component {
       console.log(result);
 
     }).catch(errors => console.log(errors));
+
+    console.log('-->', a);
+
   }
 
   sendDeleteProduct = (product) => {
