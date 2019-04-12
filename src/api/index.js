@@ -3,11 +3,13 @@ import sha1 from 'js-sha1';
 import md5 from 'md5';
 
 export const axiosInstance = axios.create({
-  baseURL: (process.env.NODE_ENV === 'production') ? `http://157.230.84.180/cats/api/` : `http://localhost/cats/api/`,
+  baseURL: `http://localhost/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
 });
+
+// ---- PRODUTOS ---- //
 
 export const getProdutosPaginacaoData = (registros, pagina) => {
   const data = new FormData();
@@ -76,6 +78,19 @@ export const deleteProdutoData = (productId) => {
   return data;
 
 }
+
+// ---- CLIENTES ---- //
+
+export const getClientePaginacaoData = (registros, pagina) => {
+  const data = new FormData();
+
+  data.append('registros', registros);
+  data.append('pagina', pagina);
+  data.append('token', token('get_clientes_paginacao'));
+  data.append('nome_script', 'get_clientes_paginacao');
+
+  return data;
+};
 
 const currentDate = () => {
   let d     = new Date(),

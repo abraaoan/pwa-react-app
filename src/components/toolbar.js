@@ -35,7 +35,7 @@ export default class Toolbar extends Component {
                     <div className="input-group" style={{width: 400, marginRight:-18}}>
                         <input type="text" 
                             className="form-control"
-                            placeholder="Buscar produto" 
+                            placeholder={`buscar ${this.props.title}`}
                             aria-label="Username" 
                             aria-describedby="basic-addon1" 
                             value={this.props.term}
