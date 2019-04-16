@@ -4,7 +4,7 @@ export default class Pages extends Component {
 
   render() {
 
-    const { pagination, currentPage } = this.props;
+    const { pagination, currentPage, path } = this.props;
     const cPage =  parseInt(currentPage);
     const total = pagination.length;
     const shouldEnablePrevious = cPage > 1;
@@ -24,8 +24,12 @@ export default class Pages extends Component {
     if (right <= total) {
       if (left > 0)
         pages.push(right)
-      else 
+      else if (total > 2)
         pages.push(right, right + 1);
+      else
+        pages.push(right);
+    } else if (currentPage > 1) {
+        pages.splice(0, 0, currentPage - 2);
     }
 
     return (
@@ -33,7 +37,7 @@ export default class Pages extends Component {
         <nav aria-label="Page navigation example" style={{marginTop: 4}}>
           <ul className="pagination justify-content-end">
             <li className={shouldEnablePrevious ? "page-item" : "page-item disabled"}>
-              <a className="page-link" href={`${process.env.PUBLIC_URL}/product?page=${currentPage - 1}`}
+              <a className="page-link" href={`${process.env.PUBLIC_URL}/${path}?page=${currentPage - 1}`}
                tabIndex="-1" 
                aria-disabled="true">
                Anterior
@@ -44,14 +48,14 @@ export default class Pages extends Component {
               pages.map(page => {
                 return (
                   <li className={page ===cPage ? "page-item active" : "page-item"} key={page}>
-                    <a className="page-link" href={`${process.env.PUBLIC_URL}/product?page=${page}`}>{page}</a>
+                    <a className="page-link" href={`${process.env.PUBLIC_URL}/${path}?page=${page}`}>{page}</a>
                   </li>
                 );
               })
 
             }
             <li className={shouldDisableNext ? "page-item disabled" : "page-item"}>
-              <a className="page-link" href={`${process.env.PUBLIC_URL}/product?page=${currentPage + 1}`}>Próxima</a>
+              <a className="page-link" href={`${process.env.PUBLIC_URL}/${path}?page=${currentPage + 1}`}>Próxima</a>
             </li>
           </ul>
         </nav>

@@ -2,10 +2,21 @@ import React, { Component } from 'react';
 import Navbar from '../navbar';
 import Search from './search';
 import Pages from '../pages';
+import Modal from '../modal';
+import Form from './form';
+
+// APIS
+import queryString from 'query-string';
 import {
-  axiosInstance as axios, 
+  axiosInstance as axios,
+  getClientePaginacaoData as data,
 } from '../../api'; 
-import { GET_PRODUTO_PAGINACAO, DELETE_PRODUTO } from '../../api/endpoints';
+import { GET_CLIENTE_PAGINACAO } from '../../api/endpoints';
+
+// REDUX
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { addClients } from '../../actions';
 
 const styles = ({
   tableView: {
@@ -15,19 +26,53 @@ const styles = ({
   },
 });
 
-export default class Clients extends Component {
+class Clients extends Component {
 
   constructor(props){
     super(props);
 
     this.state = {
       pagination: [],
+      clients: [],
       currentPage: 1,
     }
 
   }
 
+  getClients = () => {
+    const queries = queryString.parse(this.props.location.search)
+    const paginaAtual = queries.page;
+    const newData = data(8, paginaAtual);
+
+    // Request Products
+    axios.post(GET_CLIENTE_PAGINACAO, newData)
+    .then(response => {
+
+      const result = response.data;
+      const pagination = result.pop();
+      const apiClients = result;
+
+      this.props.addClients(apiClients);
+
+      this.setState({
+        pagination: pagination['paginacao'],
+        currentPage: parseInt(queries.page),
+      });
+
+      console.log(pagination);
+
+    }).catch(errors => console.log(errors));
+
+  }
+
+  componentDidMount = () => {
+    this.getClients();
+  }
+
   render() {
+
+    const { clients } = this.props;
+
     return (
       <div>
         <Navbar />
@@ -50,22 +95,29 @@ export default class Clients extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr className="test" >
-                <th scope="row">0</th>
-                <td>Appleseed</td>
-                <td>99999999</td>
-                <td>-</td>
-                <td>n</td>
-                <td style={{width: 50}}>
-                  Edit
-                </td>
-                <td style={{width: 120}}>
-                  Fazer pedido
-                </td>
-                <td style={{width: 130}}>
-                  Listar pedidos
-                </td>
-              </tr>
+            {clients.map(client => {
+                return(
+
+                  <tr className="test" key={client.id_cliente}>
+                    <th scope="row">{client.id_cliente}</th>
+                    <td>{client.nome_cliente}</td>
+                    <td>{client.telefone1}</td>
+                    <td>{(client.telefone2) ? client.telefone2 : '-'}</td>
+                    <td>{client.lista_negra === '0' ? 'N' : 'S'}</td>
+                    <td style={{width: 50}}>
+                      Edit
+                    </td>
+                    <td style={{width: 120}}>
+                      Fazer pedido
+                    </td>
+                    <td style={{width: 130}}>
+                      Listar pedidos
+                    </td>
+                  </tr>
+
+                );
+              })
+            }
             </tbody>
           </table>
 
@@ -74,14 +126,32 @@ export default class Clients extends Component {
             <button type="button" 
              className="btn btn-primary mr-auto"
              data-toggle="modal" 
-             data-target=".bd-example-modal-lg" 
-             onClick={() => { this.refs.form.clearFields(); }}>Adicionar novo produto</button>
-            <Pages pagination={this.state.pagination} currentPage={this.state.currentPage} />  
+             data-target=".bd-example-modal-lg">Adicionar novo Cliente</button>
+            <Pages path="clientes" pagination={this.state.pagination} currentPage={this.state.currentPage} />  
           </div>
 
         </div>
+
+        <Modal 
+          title="Cadastro de cliente"
+          buttons={[
+            <button type="submit" className="btn btn-primary">Cadastrar endereço</button>,
+            <button type="submit" form="clientForm" className="btn btn-primary">Salvar</button>,
+            <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
+          ]}>
+          <Form ref="form"/>
+        </Modal>
 
       </div>
     )
   }
 }
+
+const mapStateToProps = (store) => ({
+  clients: store.clientState.clients
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ addClients }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Clients);

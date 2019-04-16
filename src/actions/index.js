@@ -3,7 +3,9 @@ import {
   ADD_PRODUCTS,
   TOGGLE_PRODUCT, 
   REMOVE_PRODUCT,
-  FILL_FIELDS
+  FILL_FIELDS,
+  ADD_CLIENT,
+  ADD_CLIENTS,
 } from './actionsTypes';
 
 export const addProduct = product => ({
@@ -29,4 +31,14 @@ export const removeProduct = id => ({
 export const fillProductFields = product => ({
   type: FILL_FIELDS,
   product,
+})
+
+export const addClient = client => ({
+  type: ADD_CLIENT,
+  client,
+})
+
+export const addClients = clients => ({
+  type: ADD_CLIENTS,
+  clients,
 })

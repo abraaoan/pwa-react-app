@@ -3,7 +3,7 @@ import sha1 from 'js-sha1';
 import md5 from 'md5';
 
 export const axiosInstance = axios.create({
-  baseURL: `http://localhost/cats/api/`,
+  baseURL: `http://localhost:8080/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
@@ -88,6 +88,39 @@ export const getClientePaginacaoData = (registros, pagina) => {
   data.append('pagina', pagina);
   data.append('token', token('get_clientes_paginacao'));
   data.append('nome_script', 'get_clientes_paginacao');
+
+  return data;
+};
+
+export const putClient = (client) => {
+  const data = new FormData();
+
+  data.append('nome_cliente', client.nome_cliente);
+  data.append('telefone1', client.telefone1);
+  data.append('telefone2', client.telefone2);
+  data.append('aniversario', client.aniversario);
+  data.append('lista_negra', client.lista_negra);
+  data.append('observacao_cliente', client.observacao_cliente);
+  data.append('data_cadastro', client.dataCadastro);
+  data.append('token', token('put_cliente'));
+  data.append('nome_script', 'put_cliente');
+
+  return data;
+};
+
+export const editClient = (client) => {
+  const data = new FormData();
+
+  data.append('id_cliente', client.id_cliente);
+  data.append('nome_cliente', client.nome_cliente);
+  data.append('telefone1', client.telefone1);
+  data.append('telefone2', client.telefone2);
+  data.append('aniversario', client.aniversario);
+  data.append('lista_negra', client.lista_negra);
+  data.append('observacao_cliente', client.observacao_cliente);
+  data.append('data_cadastro', client.dataCadastro);
+  data.append('token', token('edit_cliente'));
+  data.append('nome_script', 'edit_cliente');
 
   return data;
 };

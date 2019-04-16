@@ -236,12 +236,17 @@ class Product extends Component {
              data-toggle="modal" 
              data-target=".bd-example-modal-lg" 
              onClick={() => { this.refs.form.clearFields(); }}>Adicionar novo produto</button>
-            <Pages pagination={this.state.pagination} currentPage={this.state.currentPage} />  
+            <Pages path="product" pagination={this.state.pagination} currentPage={this.state.currentPage} />  
           </div>
 
         </div>
 
-        <Modal title="Cadastro de produto">
+        <Modal 
+          title="Cadastro de produto"
+          buttons={[
+            <button type="submit" form="productForm" className="btn btn-primary">Salvar</button>,
+            <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
+          ]}>
           <Form 
             ref="form"
             onAddProduct={this.onAddProduct}

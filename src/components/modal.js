@@ -17,8 +17,9 @@ export default class Modal extends Component {
                         {this.props.children}
                       </div>
                       <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" form="productForm" className="btn btn-primary">Salvar</button>
+                        { this.props.buttons.map(button => {
+                          return button
+                        })}
                       </div>
                     </div>
                   </div>
