@@ -4,6 +4,7 @@ import Search from './search';
 import Pages from '../pages';
 import Modal from '../modal';
 import Form from './form';
+import $ from 'jquery';
 
 // APIS
 import queryString from 'query-string';
@@ -67,11 +68,25 @@ class Clients extends Component {
 
   componentDidMount = () => {
     this.getClients();
+
+    
+
   }
 
   render() {
 
     const { clients } = this.props;
+
+    // Get tableView click
+    $("#tableClients .clientRow").on('click', function(event){
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    
+      const index =  $(this).find('td[class=hidden]').text();
+      const client = clients[index];
+      console.log(client);
+
+    });
 
     return (
       <div>
@@ -83,7 +98,7 @@ class Clients extends Component {
 
         {/* TableView */}
         <div style={styles.tableView}>
-          <table id="tableProducts" className="table table-bordered table-hover">
+          <table id="tableClients" className="table table-bordered table-hover">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -98,7 +113,7 @@ class Clients extends Component {
             {clients.map(client => {
                 return(
 
-                  <tr className="test" key={client.id_cliente}>
+                  <tr className="clientRow" key={client.id_cliente}>
                     <th scope="row">{client.id_cliente}</th>
                     <td>{client.nome_cliente}</td>
                     <td>{client.telefone1}</td>
@@ -113,6 +128,7 @@ class Clients extends Component {
                     <td style={{width: 130}}>
                       Listar pedidos
                     </td>
+                    <td className="hidden" style={{display: 'none'}}>{clients.indexOf(client)}</td>
                   </tr>
 
                 );
@@ -135,9 +151,9 @@ class Clients extends Component {
         <Modal 
           title="Cadastro de cliente"
           buttons={[
-            <button type="submit" className="btn btn-primary">Cadastrar endereço</button>,
-            <button type="submit" form="clientForm" className="btn btn-primary">Salvar</button>,
-            <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
+            <button key="1" type="submit" className="btn btn-primary">Cadastrar endereço</button>,
+            <button key="2" type="submit" form="clientForm" className="btn btn-primary">Salvar</button>,
+            <button key="3" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
           <Form ref="form"/>
         </Modal>

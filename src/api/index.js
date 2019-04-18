@@ -3,7 +3,7 @@ import sha1 from 'js-sha1';
 import md5 from 'md5';
 
 export const axiosInstance = axios.create({
-  baseURL: `http://localhost:8080/cats/api/`,
+  baseURL: `http://localhost/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
