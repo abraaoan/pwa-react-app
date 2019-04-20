@@ -6,15 +6,14 @@ import reports from '../../assets/report.jpg';
 
 const styles = ({
         card: {
-            width: 320,
+            width: 270,
             margin: 25
         },
         cardImage: {
             width: 200
         },
         content: {
-            width: 715,
-            margin: '25px auto',
+            margin: '15px auto',
         }
 
     });
@@ -45,8 +44,6 @@ export default class Home extends Component {
                                 <a href={process.env.PUBLIC_URL + '/pedidos?page=1'} className="btn btn-primary">Ir para pedidos</a>
                             </div>
                         </div>
-                    </div>
-                    <div className ="row">
                         <div className="card" style={styles.card}>
                             <div className="card-body">
                                 <h5 className="card-title">Produtos</h5>

@@ -5,19 +5,29 @@ import Pages from '../pages';
 import Modal from '../modal';
 import Form from './form';
 import $ from 'jquery';
+import DecisionModal from '../decisionModal';
+import Alert from '../alert';
 
 // APIS
 import queryString from 'query-string';
 import {
   axiosInstance as axios,
   getClientePaginacaoData as data,
+  deleteClienteData,
 } from '../../api'; 
-import { GET_CLIENTE_PAGINACAO } from '../../api/endpoints';
+import { 
+  GET_CLIENTE_PAGINACAO,
+  DELETE_CLIENTE,
+} from '../../api/endpoints';
 
 // REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addClients } from '../../actions';
+
+// ICONS
+import Edit from '../../assets/edit';
+import Delete from '../../assets/delete';
 
 const styles = ({
   tableView: {
@@ -36,6 +46,11 @@ class Clients extends Component {
       pagination: [],
       clients: [],
       currentPage: 1,
+      modalContent: '',
+      showAlert: false,
+      alertType: 'success', // danger, warning
+      alertTitle: 'Endereço adicionado com sucesso!',
+      alertMessage: '',
     }
 
   }
@@ -43,9 +58,9 @@ class Clients extends Component {
   getClients = () => {
     const queries = queryString.parse(this.props.location.search)
     const paginaAtual = queries.page;
-    const newData = data(8, paginaAtual);
+    const newData = data(6, paginaAtual);
 
-    // Request Products
+    // Request Clients
     axios.post(GET_CLIENTE_PAGINACAO, newData)
     .then(response => {
 
@@ -66,31 +81,138 @@ class Clients extends Component {
 
   }
 
+  // When Search Finish
+  onSearchFinish = (clients) => {
+
+    this.props.addClients(clients);
+
+    this.setState({
+      pagination: [],
+      currentPage: 1,
+    });
+
+  }
+
+  sendDeleteCliente = (client) => {
+
+    $('#modalDecision').modal('hide');
+
+    axios.post(DELETE_CLIENTE, deleteClienteData(client.id_cliente)).then((response) => {
+
+      console.log('response data: ', response.data);
+
+      try {
+        let result = response.data;
+        if (result['status'] === 'ok') {
+          const message = 'Produto removido com sucesso!'
+          this.onAddClient(client, message);
+        } else {
+
+          // Show alert
+          if (result['erro']) {
+            this.setState({
+              alertTitle: 'Ops!',
+              alertMessage: result['erro'],
+              showAlert: true,
+              alertType: 'danger'
+            });
+          }
+
+        }
+
+      } catch(e) {
+        console.error(e);
+        
+        this.setState({
+          alertTitle: 'Ops!',
+          alertMessage: 'Ocorreu um erro desconhecido.',
+          showAlert: true,
+          alertType: 'danger'
+        });
+      }
+    });
+
+  }
+
+  // ACTIONS
+
+  navigateToDetail = (id_cliente) => {
+    const { history } = this.props;
+    history.push(`${process.env.PUBLIC_URL}/cliente/${id_cliente}`)
+  }
+
+  onEdit = (client) => {
+    $('#modalProduto').modal()
+    this.refs.form.fillFields(client);
+  }
+
+  shouldDeleteClient = (client) => {
+
+    this.setState({
+      modalContent: `${client.id_cliente} - ${client.nome_cliente}`
+    });
+
+    $('#modalDecision').modal()
+
+    $('#decisionModalAction').click(()=>{
+      this.sendDeleteCliente(client);
+      $('#modalDecision').modal('hide');
+    });
+
+  }
+
+  // DELEGATE
+
+  onAddClient = (client, message) => {
+
+    if (message === 'kGoToDetail') {
+
+      //close modal
+      $('#modalProduto').modal('hide')
+      this.navigateToDetail(client.id_cliente);
+
+    } else {
+
+      this.setState({
+        alertTitle: message,
+        alertMessage: client.nome_cliente,
+        showAlert: true,
+        alertType: 'success'
+      });
+  
+      // Self close
+      setTimeout(() => {
+        this.setState({showAlert: false})
+      }, 5000); // 5s
+  
+      //close modal
+      $('#modalProduto').modal('hide')
+      
+      // Get new product
+      this.getClients();
+
+    }
+
+  }
+
+  //
   componentDidMount = () => {
     this.getClients();
-
-    
-
   }
 
   render() {
 
     const { clients } = this.props;
 
-    // Get tableView click
-    $("#tableClients .clientRow").on('click', function(event){
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-    
-      const index =  $(this).find('td[class=hidden]').text();
-      const client = clients[index];
-      console.log(client);
-
-    });
-
     return (
       <div>
         <Navbar />
+
+        <Alert 
+          show={this.state.showAlert} 
+          title={this.state.alertTitle} 
+          message={`${this.state.alertMessage}.`}
+          type={this.state.alertType} />
 
         <Search 
           title="Clientes" 
@@ -106,21 +228,44 @@ class Clients extends Component {
                 <th scope="col">Telefone 1</th>
                 <th scope="col">Telefone 2</th>
                 <th scope="col" style={{width: 50}}>LN</th>
-                <th scope="col" colSpan="3"></th>
+                <th scope="col" colSpan="4"></th>
               </tr>
             </thead>
             <tbody>
             {clients.map(client => {
                 return(
 
-                  <tr className="clientRow" key={client.id_cliente}>
-                    <th scope="row">{client.id_cliente}</th>
-                    <td>{client.nome_cliente}</td>
-                    <td>{client.telefone1}</td>
-                    <td>{(client.telefone2) ? client.telefone2 : '-'}</td>
-                    <td>{client.lista_negra === '0' ? 'N' : 'S'}</td>
+                  <tr key={client.id_cliente}>
+                    <th scope="row" className="data">{client.id_cliente}</th>
+                    <td onClick={ ()=> this.navigateToDetail(client.id_cliente) }>
+                      {client.nome_cliente}
+                    </td>
+                    <td onClick={ ()=> this.navigateToDetail(client.id_cliente) }>
+                      {client.telefone1}
+                    </td>
+                    <td onClick={ ()=> this.navigateToDetail(client.id_cliente) }>
+                      {(client.telefone2) ? client.telefone2 : '-'}
+                    </td>
+                    <td onClick={ ()=> this.navigateToDetail(client.id_cliente) }>
+                      {client.lista_negra === '0' ? 'N' : 'S'}
+                    </td>
                     <td style={{width: 50}}>
-                      Edit
+                      <button 
+                        type="button" 
+                        className="btn btn-link" 
+                        onClick={() => { this.onEdit(client); }}
+                        data-toggle="tooltip" data-placement="bottom" title="Editar cliente">
+                        <Edit />
+                      </button>
+                    </td>
+                    <td style={{width: 50}}>
+                      <button 
+                        type="button" 
+                        className="btn btn-link" 
+                        onClick={() => { this.shouldDeleteClient(client); }}
+                        data-toggle="tooltip" data-placement="bottom" title="Apagar cliente">
+                        <Delete />
+                      </button>
                     </td>
                     <td style={{width: 120}}>
                       Fazer pedido
@@ -142,7 +287,8 @@ class Clients extends Component {
             <button type="button" 
              className="btn btn-primary mr-auto"
              data-toggle="modal" 
-             data-target=".bd-example-modal-lg">Adicionar novo Cliente</button>
+             data-target=".bd-example-modal-lg"
+             onClick={() => { this.refs.form.clearFields(); }}>Adicionar novo Cliente</button>
             <Pages path="clientes" pagination={this.state.pagination} currentPage={this.state.currentPage} />  
           </div>
 
@@ -151,12 +297,16 @@ class Clients extends Component {
         <Modal 
           title="Cadastro de cliente"
           buttons={[
-            <button key="1" type="submit" className="btn btn-primary">Cadastrar endereço</button>,
             <button key="2" type="submit" form="clientForm" className="btn btn-primary">Salvar</button>,
             <button key="3" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
-          <Form ref="form"/>
+          <Form ref="form" onAddClient={this.onAddClient}/>
         </Modal>
+
+        <DecisionModal title="Atenção" actionTitle="Apagar">
+          <div>Deseja realmente remover este cliente?</div>
+          <strong>{this.state.modalContent}</strong>
+        </DecisionModal>
 
       </div>
     )

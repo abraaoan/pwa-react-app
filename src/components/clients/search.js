@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {
   axiosInstance as axios, 
-  getProdutosPorNomeData
+  getClientePorNomeData
 } from '../../api'; 
-import { GET_PRODUTO_POR_NOME } from '../../api/endpoints';
+import { GET_CLIENTE_NOME } from '../../api/endpoints';
 import Toolbar from '../toolbar';
 
 export default class Search extends Component {
@@ -29,9 +29,9 @@ export default class Search extends Component {
     if (!this.state.term)
       return;
 
-    axios.post(GET_PRODUTO_POR_NOME, getProdutosPorNomeData(this.state.term)).then((response) => {
-      const products = response.data;
-      this.props.onSearchFinish(products);
+    axios.post(GET_CLIENTE_NOME, getClientePorNomeData(this.state.term)).then((response) => {
+      const clients = response.data;
+      this.props.onSearchFinish(clients);
       
       this.setState({
         hRef: process.env.PUBLIC_URL + '/clientes?page=1',

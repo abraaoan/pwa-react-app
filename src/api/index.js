@@ -81,6 +81,30 @@ export const deleteProdutoData = (productId) => {
 
 // ---- CLIENTES ---- //
 
+export const getClientePorNomeData = (nome) => {
+
+  const data = new FormData();
+
+  data.append('nome_telefone', nome);
+  data.append('token', token('get_cliente_por_nome_telefone'));
+  data.append('nome_script', 'get_cliente_por_nome_telefone');
+
+  return data;
+
+}
+
+export const getClientePorID = (id) => {
+
+  const data = new FormData();
+
+  data.append('id_cliente', id);
+  data.append('token', token('get_cliente_por_id'));
+  data.append('nome_script', 'get_cliente_por_id');
+
+  return data;
+
+}
+
 export const getClientePaginacaoData = (registros, pagina) => {
   const data = new FormData();
 
@@ -108,6 +132,34 @@ export const putClient = (client) => {
   return data;
 };
 
+export const putClientGetData = (client) => {
+  const data = new FormData();
+
+  data.append('nome_cliente', client.nome_cliente);
+  data.append('telefone1', client.telefone1);
+  data.append('telefone2', client.telefone2);
+  data.append('aniversario', client.aniversario);
+  data.append('lista_negra', client.lista_negra);
+  data.append('observacao_cliente', client.observacao_cliente);
+  data.append('data_cadastro', client.dataCadastro);
+  data.append('token', token('put_cliente_retorna_dados'));
+  data.append('nome_script', 'put_cliente_retorna_dados');
+
+  return data;
+};
+
+export const deleteClienteData = (id) => {
+
+  const data = new FormData();
+
+  data.append('id_cliente', id);
+  data.append('token', token('delete_cliente'));
+  data.append('nome_script', 'delete_cliente');
+
+  return data;
+
+}
+
 export const editClient = (client) => {
   const data = new FormData();
 
@@ -124,6 +176,71 @@ export const editClient = (client) => {
 
   return data;
 };
+
+// ---- ADDRESSES --- ///
+
+export const getClientAddressPorId = (id) => {
+
+  const data = new FormData();
+
+  data.append('id_cliente', id);
+  data.append('token', token('get_endereco_por_id_cliente'));
+  data.append('nome_script', 'get_endereco_por_id_cliente');
+
+  return data;
+
+}
+
+export const putAddressData = (address) => {
+
+  const data = new FormData();
+
+  data.append('id_cliente', address.id_cliente);
+  data.append('logradouro', address.logradouro);
+  data.append('numero', address.numero);
+  data.append('bairro', address.bairro);
+  data.append('complemento', address.complemento);
+  data.append('referencia', address.referencia);
+  data.append('cep', address.cep);
+  data.append('token', token('put_endereco'));
+  data.append('nome_script', 'put_endereco');
+
+  return data;
+
+}
+
+export const editAddressData = (address) => {
+
+  const data = new FormData();
+
+  data.append('id_endereco', address.id_endereco);
+  data.append('id_cliente', address.id_cliente);
+  data.append('logradouro', address.logradouro);
+  data.append('numero', address.numero);
+  data.append('bairro', address.bairro);
+  data.append('complemento', address.complemento);
+  data.append('referencia', address.referencia);
+  data.append('cep', address.cep);
+  data.append('token', token('put_endereco'));
+  data.append('nome_script', 'put_endereco');
+
+  return data;
+
+}
+
+export const deleteAddressData = (id) => {
+
+  const data = new FormData();
+
+  data.append('id_endereco', id);
+  data.append('token', token('put_endereco'));
+  data.append('nome_script', 'put_endereco');
+
+  return data;
+
+}
+
+//
 
 const currentDate = () => {
   let d     = new Date(),

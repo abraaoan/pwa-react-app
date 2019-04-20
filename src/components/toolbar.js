@@ -31,7 +31,7 @@ export default class Toolbar extends Component {
                     </a>
                     <h2>{this.props.title}</h2>
                 </div>
-                <div className="p-4" >
+                <div className="p-4" style={ this.props.shouldHideSearch ? {opacity: 0} : {opacity: 1} }>
                     <div className="input-group" style={{width: 400, marginRight:-18}}>
                         <input type="text" 
                             className="form-control"

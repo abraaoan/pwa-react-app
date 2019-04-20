@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {
   axiosInstance as axios,
-  putClient,
+  putClientGetData,
   editClient,
 } from '../../api';
 import { 
-  PUT_CLIENTE, 
+  PUT_CLIENTE_GET, 
   EDIT_CLIENTE,
 } from '../../api/endpoints';
 import Alert from '../alert';
@@ -21,7 +21,7 @@ class Form extends Component {
       phone: '',
       phone2: '',
       bithday: '',
-      blackList: false,
+      blackList: 'nao',
       observation: '',
       date: '',
       editMode: false,
@@ -44,6 +44,11 @@ class Form extends Component {
 
   onChangeBirthday = (e) => {
     this.setState({bithday: (e.target.validity.valid) ? e.target.value : this.state.bithday});
+  }
+
+  onChangeCheckBox = (e) => {
+    console.log(e.target.value);
+    this.setState({ blackList: e.target.value});
   }
 
   //
@@ -75,7 +80,7 @@ class Form extends Component {
       telefone1: this.state.phone,
       telefone2: this.state.phone2,
       aniversario: this.state.bithday,
-      lista_negra: this.state.blackList,
+      lista_negra: this.state.blackList === 'nao' ? '0' : '1',
       observacao_cliente: this.state.observation,
       data_cadastro: this.state.date
     }
@@ -91,7 +96,7 @@ class Form extends Component {
     if (this.state.editMode)
       request = axios.post(EDIT_CLIENTE, editClient(client))
     else
-      request = axios.post(PUT_CLIENTE, putClient(client))
+      request = axios.post(PUT_CLIENTE_GET, putClientGetData(client))
 
     request.then((response) => {
 
@@ -99,9 +104,13 @@ class Form extends Component {
 
       try {
         let result = response.data;
-        if (result['status'] === 'ok') {
+
+        if (result[0].id_cliente) {
+          const client = result[0];
+          this.props.onAddClient(client, 'kGoToDetail');
+        } else if (result['status'] === 'ok') {
           const message = this.state.editMode ? 'Cliente atualizado com sucesso!' : 'Cliente adicionado com sucesso!'
-          // this.props.onAddProduct(product, message);
+          this.props.onAddClient(client, message);
           this.clearFields();
         } else {
 
@@ -122,14 +131,15 @@ class Form extends Component {
   clearFields = () => {
     
     this.setState({
-      id_cliente: '',
-      nome_cliente: '',
-      telefone1: '',
-      telefone2: '',
-      aniversario: '',
-      lista_negra: false,
-      observacao_cliente: '',
-      data_cadastro: ''
+      id: '',
+      name: '',
+      phone: '',
+      phone2: '',
+      bithday: '',
+      blackList: 'nao',
+      observation: '',
+      date: '',
+      editMode: false,
     });
   }
 
@@ -139,13 +149,14 @@ class Form extends Component {
     if (client) {
       this.setState({
         id: client.id_cliente,
-        name: client.nome_produto,
+        name: client.nome_cliente,
         phone: client.telefone1,
-        phone2: client.telefone2,
+        phone2: client.telefone2 == null ? '' : client.telefone2,
         bithday: client.aniversario,
-        blackList: client.lista_negra,
+        blackList: client.lista_negra === '0' ? 'nao' : 'sim',
         observation: client.observacao_cliente,
         date: client.data_cadastro,
+        editMode: true
       })
     }
   }
@@ -202,7 +213,7 @@ class Form extends Component {
               <label htmlFor="inputNome">Aniversário</label>
               <input className="form-control"
               id="bithday" 
-              placeholder="Ex: 01/01/1986"
+              placeholder="Ex: 1986-01-01"
               value={this.state.bithday}
               onChange={this.onChangeBirthday}/>
              </div>
@@ -214,11 +225,21 @@ class Form extends Component {
             </div>
             <div className="col">
               <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" />
+                <input 
+                  className="form-check-input" 
+                  type="radio"
+                  value="nao" 
+                  checked={this.state.blackList === 'nao'} 
+                  onChange={this.onChangeCheckBox}/>
                 <label className="form-check-label" forhtml="inlineRadio1">Não</label>
               </div>
               <div className="form-check form-check-inline">
-                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" />
+                <input 
+                  className="form-check-input" 
+                  type="radio" 
+                  value="sim" 
+                  checked={this.state.blackList === 'sim'} 
+                  onChange={this.onChangeCheckBox}/>
                 <label className="form-check-label" forhtml="inlineRadio2">Sim</label>
               </div>
             </div>
