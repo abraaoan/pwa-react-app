@@ -85,8 +85,6 @@ export default class Detail extends Component {
         addresses: result,
       });
 
-      console.log(result);
-
     }).catch(errors => console.error(errors));
 
   }
@@ -97,8 +95,6 @@ export default class Detail extends Component {
     $('#modalDecision').modal('hide');
 
     axios.post(DELETE_CLIENTE_ENDERECO, deleteAddressData(address.id_endereco)).then((response) => {
-
-      console.log('response data: ', response.data);
 
       try {
         let result = response.data;

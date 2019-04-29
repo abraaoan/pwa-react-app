@@ -28,7 +28,7 @@ export default class Pages extends Component {
         pages.push(right, right + 1);
       else
         pages.push(right);
-    } else if (currentPage > 1) {
+    } else if (currentPage > 2) {
         pages.splice(0, 0, currentPage - 2);
     }
 

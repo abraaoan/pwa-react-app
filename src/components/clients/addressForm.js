@@ -9,6 +9,7 @@ import {
   EDIT_CLIENTE_ENDERECO,
 } from '../../api/endpoints';
 import Alert from '../alert';
+import $ from 'jquery';
 
 class AddressForm extends Component {
 
@@ -93,8 +94,6 @@ class AddressForm extends Component {
       referencia: this.state.referencia,
     }
 
-    console.log(address);
-
     this.sendClientAddress(address);
     
   }
@@ -109,8 +108,6 @@ class AddressForm extends Component {
       request = axios.post(PUT_CLIENTE_ENDERECO, putAddressData(address))
 
     request.then((response) => {
-
-      console.log('response data: ', response.data);
 
       try {
         let result = response.data;
@@ -244,8 +241,7 @@ class AddressForm extends Component {
                   <label htmlFor="inputNome">CEP</label>
                   <input className="form-control"
                   id="cep" 
-                  placeholder="Ex: 69000-000"
-                  pattern="[0-9]*" 
+                  placeholder="Ex: 69000-000" 
                   value={this.state.cep}
                   onChange={this.onChangeCep}/>
                 </div>

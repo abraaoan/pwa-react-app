@@ -3,7 +3,7 @@ import sha1 from 'js-sha1';
 import md5 from 'md5';
 
 export const axiosInstance = axios.create({
-  baseURL: `http://localhost/cats/api/`,
+  baseURL: `http://157.230.84.180/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
@@ -141,7 +141,7 @@ export const putClientGetData = (client) => {
   data.append('aniversario', client.aniversario);
   data.append('lista_negra', client.lista_negra);
   data.append('observacao_cliente', client.observacao_cliente);
-  data.append('data_cadastro', client.dataCadastro);
+  data.append('data_cadastro', client.data_cadastro);
   data.append('token', token('put_cliente_retorna_dados'));
   data.append('nome_script', 'put_cliente_retorna_dados');
 
@@ -170,7 +170,7 @@ export const editClient = (client) => {
   data.append('aniversario', client.aniversario);
   data.append('lista_negra', client.lista_negra);
   data.append('observacao_cliente', client.observacao_cliente);
-  data.append('data_cadastro', client.dataCadastro);
+  data.append('data_cadastro', client.data_cadastro);
   data.append('token', token('edit_cliente'));
   data.append('nome_script', 'edit_cliente');
 

@@ -75,9 +75,7 @@ class Clients extends Component {
         currentPage: parseInt(queries.page),
       });
 
-      console.log(pagination);
-
-    }).catch(errors => console.log(errors));
+    }).catch(errors => console.error(errors));
 
   }
 
@@ -98,8 +96,6 @@ class Clients extends Component {
     $('#modalDecision').modal('hide');
 
     axios.post(DELETE_CLIENTE, deleteClienteData(client.id_cliente)).then((response) => {
-
-      console.log('response data: ', response.data);
 
       try {
         let result = response.data;

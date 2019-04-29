@@ -99,8 +99,6 @@ class Form extends Component {
 
     request.then((response) => {
 
-      console.log('response data: ', response.data);
-
       try {
         let result = response.data;
         if (result['status'] === 'ok') {

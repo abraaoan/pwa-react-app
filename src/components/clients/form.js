@@ -47,7 +47,6 @@ class Form extends Component {
   }
 
   onChangeCheckBox = (e) => {
-    console.log(e.target.value);
     this.setState({ blackList: e.target.value});
   }
 
@@ -82,7 +81,7 @@ class Form extends Component {
       aniversario: this.state.bithday,
       lista_negra: this.state.blackList === 'nao' ? '0' : '1',
       observacao_cliente: this.state.observation,
-      data_cadastro: this.state.date
+      data_cadastro: this.state.date ? this.state.date : this.getCurrentDate()
     }
 
     this.sendClient(client);
@@ -98,14 +97,17 @@ class Form extends Component {
     else
       request = axios.post(PUT_CLIENTE_GET, putClientGetData(client))
 
-    request.then((response) => {
 
-      console.log('response data: ', response.data);
+      console.log(client);
+
+    request.then((response) => {
 
       try {
         let result = response.data;
 
-        if (result[0].id_cliente) {
+        console.log(result);
+
+        if (Array.isArray(result)) {
           const client = result[0];
           this.props.onAddClient(client, 'kGoToDetail');
         } else if (result['status'] === 'ok') {
@@ -138,7 +140,7 @@ class Form extends Component {
       bithday: '',
       blackList: 'nao',
       observation: '',
-      date: '',
+      date: this.getCurrentDate(),
       editMode: false,
     });
   }
@@ -155,10 +157,24 @@ class Form extends Component {
         bithday: client.aniversario,
         blackList: client.lista_negra === '0' ? 'nao' : 'sim',
         observation: client.observacao_cliente,
-        date: client.data_cadastro,
+        date: client.data_cadastro ? client.data_cadastro : this.getCurrentDate(),
         editMode: true
       })
     }
+  }
+
+  getCurrentDate = () => {
+
+    let d     = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day   = '' + d.getDate(),
+        year  = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+
   }
   
   render() {

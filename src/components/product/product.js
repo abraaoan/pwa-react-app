@@ -56,7 +56,7 @@ class Product extends Component {
     const newData = data(8, paginaAtual);
 
     // Request Products
-    const a = axios.post(GET_PRODUTO_PAGINACAO, newData)
+    axios.post(GET_PRODUTO_PAGINACAO, newData)
     .then(response => {
 
       const result = response.data;
@@ -69,11 +69,7 @@ class Product extends Component {
         currentPage: parseInt(queries.page),
       });
 
-      console.log(result);
-
-    }).catch(errors => console.log(errors));
-
-    console.log('-->', a);
+    }).catch(errors => console.error(errors));
 
   }
 
@@ -82,8 +78,6 @@ class Product extends Component {
     $('#modalDecision').modal('hide');
 
     axios.post(DELETE_PRODUTO, deleteProdutoData(product.id_produto)).then((response) => {
-
-      console.log('response data: ', response.data);
 
       try {
         let result = response.data;
