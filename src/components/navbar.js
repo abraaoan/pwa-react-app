@@ -10,7 +10,7 @@ export default class Navbar extends Component {
                     <a className="nav-link active" href={process.env.PUBLIC_URL + '/clientes?page=1'}>Clientes</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href={process.env.PUBLIC_URL + '/pedidos'}>Pedidos</a>
+                    <a className="nav-link" href={process.env.PUBLIC_URL + '/pedidos?page=1'}>Pedidos</a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href={process.env.PUBLIC_URL + '/produtos?page=1'}>Produtos</a>

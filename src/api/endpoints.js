@@ -20,4 +20,7 @@ export const PUT_CLIENTE_ENDERECO = 'enderecos/put_endereco.php'
 export const EDIT_CLIENTE_ENDERECO = 'enderecos/edit_endereco.php'
 export const DELETE_CLIENTE_ENDERECO = 'enderecos/delete_endereco.php'
 
+// ---- ADDRESSES ---- //
+export const GET_PEDIDO_PAGINACAO = 'pedidos/get_pedidos_por_data_pedido_paginacao.php'
+
 

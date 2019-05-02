@@ -2,12 +2,28 @@ import axios from 'axios';
 import sha1 from 'js-sha1';
 import md5 from 'md5';
 
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+
 export const axiosInstance = axios.create({
-  baseURL: `http://157.230.84.180/cats/api/`,
+  baseURL: isOnDevMode ? `http://localhost:8080/cats/api` : `http://157.230.84.180/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
 });
+
+// ---- PEDIDOS ----- //
+export const getPedidosPaginacaoData = (registros, pagina, date) => {
+  const data = new FormData();
+
+  data.append('registros', registros);
+  data.append('pagina', pagina);
+  data.append('data_inicio', date + ' 00:00:00');
+  data.append('data_fim', `2019-12-31 23:59:59`);
+  data.append('token', token('get_produtos_paginacao'));
+  data.append('nome_script', 'get_produtos_paginacao');
+
+  return data;
+};
 
 // ---- PRODUTOS ---- //
 

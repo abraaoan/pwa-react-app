@@ -6,6 +6,8 @@ import {
   FILL_FIELDS,
   ADD_CLIENT,
   ADD_CLIENTS,
+  ADD_ORDER,
+  ADD_ORDERS,
 } from './actionsTypes';
 
 export const addProduct = product => ({
@@ -41,4 +43,14 @@ export const addClient = client => ({
 export const addClients = clients => ({
   type: ADD_CLIENTS,
   clients,
+})
+
+export const addOrder = order => ({
+  type: ADD_ORDER,
+  order,
+})
+
+export const addOrders = orders => ({
+  type: ADD_ORDERS,
+  orders,
 })
