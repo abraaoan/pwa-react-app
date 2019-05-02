@@ -5,7 +5,7 @@ import md5 from 'md5';
 const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export const axiosInstance = axios.create({
-  baseURL: isOnDevMode ? `http://localhost:8080/cats/api` : `http://157.230.84.180/cats/api/`,
+  baseURL: isOnDevMode ? `http://localhost/cats/api` : `http://157.230.84.180/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
