@@ -34,8 +34,8 @@ export default class Search extends Component {
       this.props.onSearchFinish(clients);
       
       this.setState({
-        hRef: process.env.PUBLIC_URL + '/clientes?page=1',
-        linkName: 'Voltar pra clientes',
+        hRef: process.env.PUBLIC_URL + '/pedidos?page=1',
+        linkName: 'Voltar pra pedidos',
         title: 'Resultado da busca',
       });
 
@@ -51,7 +51,8 @@ export default class Search extends Component {
             onChangeTerm={this.onChangeTerm} 
             onSearch={this.onSearch}
             hRef={this.state.hRef}
-            linkName={this.state.linkName}/>
+            linkName={this.state.linkName}
+            shouldHideSearch={true}/>
       </div>
     )
   }

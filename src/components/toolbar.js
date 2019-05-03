@@ -42,7 +42,7 @@ export default class Toolbar extends Component {
                             onChange={this.props.onChangeTerm}
                             onKeyPress={this.onKeyPress}/>
                         <div className="input-group-prepend">
-                        <button className="btn btn-outline-secondary" type="button" onClick={()=>{this.props.onSearch()}}>Buscar</button>
+                            <button className="btn btn-outline-secondary" type="button" onClick={()=>{this.props.onSearch()}}>Buscar</button>
                         </div>
                     </div>
                 </div>

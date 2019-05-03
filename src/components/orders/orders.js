@@ -25,6 +25,7 @@ import {
 } from '../../api'; 
 import { 
   GET_PEDIDO_PAGINACAO,
+  GET_PEDIDO_STATUS_PAG
 } from '../../api/endpoints';
 
 const styles = ({
@@ -33,8 +34,21 @@ const styles = ({
     marginRight: 60,
     marginTop: 20,
   },
-  cards: {
-    marginTop: 10
+  filters: {
+    marginLeft: 60,
+    marginRight: 60,
+    marginTop: 10,
+    float: 'left',
+
+  },
+  filter: {
+    marginLeft: 20,
+  },
+  dateFilter: {
+    marginTop: 10,
+    marginLeft: -40,
+    width: 200,
+    marginRight:-18
   }
 });
 
@@ -48,17 +62,22 @@ class Orders extends Component {
       pagination: [],
       pedidos: [],
       currentPage: 1,
+      currentStatus: 'T',
+      currentDate: null
     }
 
   }
 
-  getPedidos = () => {
+  getPedidos = (status, date) => {
     const queries = queryString.parse(this.props.location.search)
     const paginaAtual = queries.page;
-    const newData = data(6, paginaAtual, '2019-01-01'); // TODO: Change date
+    const newData = data(6, paginaAtual, date, status);
+    const urlParam = status === 'T' ? GET_PEDIDO_PAGINACAO : GET_PEDIDO_STATUS_PAG;
+
+    this.props.addOrders([]);
 
     // Request Clients
-    axios.post(GET_PEDIDO_PAGINACAO, newData)
+    axios.post(urlParam, newData)
     .then(response => {
 
       const result = response.data;
@@ -76,17 +95,32 @@ class Orders extends Component {
 
   }
 
+  changeStatus = (status) => {
+    this.getPedidos(status);
+    this.setState({ currentStatus: status });
+  }
+
+  filterByDate = () => {
+    this.getPedidos(this.state.currentStatus, this.state.currentDate);
+  }
+
+  // ---
+
+  onDateChange = (e) => {
+    this.setState({currentDate: e.target.value});
+  }
+
   showAddModal = () => {
     $('#modalProduto').modal();
   }
 
   componentDidMount = () => {
-    this.getPedidos();
+    this.getPedidos('T');
 
     const queries = queryString.parse(this.props.location.search)
     const action = queries.action;
 
-    if (action == 'addPedido') {
+    if (action === 'addPedido') {
       this.showAddModal();
     }
 
@@ -101,6 +135,50 @@ class Orders extends Component {
         <Navbar />
         <Search 
           title="Pedidos"/>
+
+        <div style={styles.filters}>
+          <button 
+            type="button" 
+            className={`btn btn${this.state.currentStatus === 'T' ? '' : '-outline'}-primary`}
+            onClick={ () => { this.changeStatus('T') }}>
+            Todos
+          </button>
+          <button 
+            style={styles.filter} 
+            type="button" 
+            className={`btn btn${this.state.currentStatus === 'A' ? '' : '-outline'}-warning`}
+            onClick={ () => { this.changeStatus('A') }}>
+            Abertos
+          </button>
+          <button 
+            style={styles.filter}
+            type="button"
+            className={`btn btn${this.state.currentStatus === 'C' ? '' : '-outline'}-danger`}
+            onClick={ () => { this.changeStatus('C') }}>
+            Cancelados
+          </button>
+          <button 
+            style={styles.filter}
+            type="button"
+            className={`btn btn${this.state.currentStatus === 'E' ? '' : '-outline'}-success`}
+            onClick={ () => { this.changeStatus('E') }}>
+            Entregues
+          </button>
+        </div>
+        <div className="input-group" style={styles.dateFilter}>
+              <input type="text" 
+                  className="form-control"
+                  placeholder="01/01/2019"
+                  aria-describedby="basic-addon1"
+                  value={this.state.currentDate}
+                  onChange={this.onDateChange}/>
+              <div className="input-group-prepend">
+                  <button 
+                    className="btn btn-outline-primary" 
+                    type="button"
+                    onClick={ () => { this.filterByDate() }}>Filtrar</button>
+              </div>
+          </div>
         
         <div style={styles.listView}>
         <table id="tableClients" className="table table-bordered table-hover">
@@ -110,7 +188,7 @@ class Orders extends Component {
               <th scope="col">Nome</th>
               <th scope="col">Telefone 1</th>
               <th scope="col">Data e hora</th>
-              <th scope="col">Entrega</th>
+              <th scope="col">Bairro</th>
               <th scope="col">Taxa</th>
               <th scope="col">Status</th>
               <th scope="col" colSpan="2"></th>

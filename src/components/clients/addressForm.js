@@ -9,7 +9,6 @@ import {
   EDIT_CLIENTE_ENDERECO,
 } from '../../api/endpoints';
 import Alert from '../alert';
-import $ from 'jquery';
 
 class AddressForm extends Component {
 

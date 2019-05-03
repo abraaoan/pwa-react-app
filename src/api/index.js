@@ -12,15 +12,39 @@ export const axiosInstance = axios.create({
 });
 
 // ---- PEDIDOS ----- //
-export const getPedidosPaginacaoData = (registros, pagina, date) => {
+export const getPedidosPaginacaoData = (registros, pagina, date, status) => {
   const data = new FormData();
+
+  var dataInicio;
+  var dataFim;
+
+  // Caso não exista o parametro data pega o range do ano todo
+  if (!date) {
+    const year = currantYear();
+    dataInicio = `${year}-01-01 00:00:00`;
+    dataFim = `${year}-12-31 23:59:59`;
+  } else {
+
+    //TODO split date 01/01/2019
+    var infors = date.split('/');
+
+    var year = infors[2];
+    var month = infors[1];
+    var day = infors[0];
+
+    dataInicio = `${year}-${month}-${day} 00:00:00`;
+    dataFim = `${year}-${month}-${day} 23:59:00`;
+  }
 
   data.append('registros', registros);
   data.append('pagina', pagina);
-  data.append('data_inicio', date + ' 00:00:00');
-  data.append('data_fim', `2019-12-31 23:59:59`);
+  data.append('data_inicio', dataInicio);
+  data.append('data_fim', dataFim);
   data.append('token', token('get_produtos_paginacao'));
   data.append('nome_script', 'get_produtos_paginacao');
+
+  if (status !== 'T')
+    data.append('status', status);
 
   return data;
 };
@@ -282,4 +306,9 @@ const token = (nome_script) => {
 
   return sha;
 
+}
+
+const currantYear = () => {
+  const date = new Date();
+  return date.getFullYear();
 }

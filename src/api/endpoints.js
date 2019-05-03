@@ -22,5 +22,6 @@ export const DELETE_CLIENTE_ENDERECO = 'enderecos/delete_endereco.php'
 
 // ---- ADDRESSES ---- //
 export const GET_PEDIDO_PAGINACAO = 'pedidos/get_pedidos_por_data_pedido_paginacao.php'
+export const GET_PEDIDO_STATUS_PAG = 'pedidos/get_pedidos_por_status_paginacao.php'
 
 
