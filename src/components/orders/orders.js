@@ -5,6 +5,7 @@ import Status from './status';
 import Pages from '../pages';
 import Modal from '../modal';
 import AddForm from './formAdd';
+import AddProductModal from './addProductModal';
 import ConfirmationModal from './confirmationModal';
 import $ from 'jquery';
 
@@ -114,6 +115,10 @@ class Orders extends Component {
     $('#modalProduto').modal();
   }
 
+  showAddProductsModal = () => {
+    $('#addProductModal').modal();
+  }
+
   componentDidMount = () => {
     this.getPedidos('T');
 
@@ -129,6 +134,7 @@ class Orders extends Component {
   render() {
 
     const { orders } = this.props;
+    const { client } = this.props.location;
 
     return (
       <div>
@@ -259,11 +265,13 @@ class Orders extends Component {
               }}>Confirmação</button>,
             <button key="3" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
-          <AddForm />
+          <AddForm client={client} />
         </Modal>
 
         <ConfirmationModal
           onCancel={this.showAddModal} />
+
+        <AddProductModal />
 
       </div>
     </div>

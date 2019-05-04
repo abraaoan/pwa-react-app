@@ -21,12 +21,42 @@ export default class AddForm extends Component {
     super(props);
 
     this.state = {
-      
+      dateTime: '',
+      status: 'A',
+      addressId: '0',
+      frete: 0,
+      retirada: 'centro',
+      produtos: [],
     }
     
   }
 
+  onDateTimeChange = (e) => {
+    if (e.target.value.match("(^[0-9\\s//:]*$)") != null) {
+      this.setState( { dateTime: e.target.value });
+    }
+  }
+
+  onChangeFrete = (e) => {
+    this.setState({frete: e.target.value});
+  }
+
+  onChangeAddresses = (e) => {
+    this.setState({ addressId: e.target.value});
+  }
+
+  onChangeRetirada = (e) => {
+    this.setState({ retirada: e.target.value});
+  }
+
   render() {
+    
+    const { client } = this.props;
+    var newClient = {}
+
+    if (client)
+      newClient = client
+
     return (
       <div>
           {/* Cliente */}
@@ -36,15 +66,20 @@ export default class AddForm extends Component {
             </div>
             <div className="card-body container">
               <div className="row">
-                <p className="col-4 card-text">Nome: Rivaplay</p>
-                <p className="col card-text">Telefone: 9999-9999</p>
+                <p className="col-4 card-text">Nome: {newClient.nome_cliente}</p>
+                <p className="col card-text">Telefone: {newClient.telefone1}</p>
               </div>
               <div className="row">
                 <p className="col-4 card-text">
                   Data e hora da entregada:
                 </p>
                 <div className="col-4">
-                <input className="form-control form-control-sm" type="text" placeholder="01/01/2019 14:00" />
+                <input 
+                 className="form-control form-control-sm" 
+                 type="text" 
+                 placeholder="01/01/2019 14:00" 
+                 value={this.state.dateTime}
+                 onChange={this.onDateTimeChange}/>
                 </div>
               </div>
               <div className="row">
@@ -83,13 +118,23 @@ export default class AddForm extends Component {
                 <div className="col">
                   <div className="row">
                     <div className="form-check col-4" style={{ marginLeft: 14}}>
-                      <input className="form-check-input" type="radio" name="delivery" id="devilery1" value="option1" checked />
+                      <input 
+                       className="form-check-input" 
+                       type="radio" 
+                       name="delivery" 
+                       id="devilery1" 
+                       value="0"
+                       checked={this.state.addressId === '0'} 
+                       onChange={this.onChangeAddresses} />
                       <label class="form-check-label" htmlFor="devilery1">
                         Endereço A
                       </label>
                     </div>
                     <div className="col-4">
-                      <select className="form-control" id="exampleFormControlSelect1">
+                      <select 
+                       className="form-control"
+                       value={this.state.frete} 
+                       onChange={this.onChangeFrete}> 
                         <option>10</option>
                         <option>20</option>
                         <option>30</option>
@@ -100,14 +145,24 @@ export default class AddForm extends Component {
                   </div>
                   <div className="row">
                     <div className="form-check col-4"  style={{ marginLeft: 14}}>
-                      <input className="form-check-input" type="radio" name="delivery" id="devilery2" value="option2" />
+                      <input 
+                       className="form-check-input"
+                       type="radio" 
+                       name="delivery" 
+                       id="devilery2" 
+                       value="1"
+                       checked={this.state.addressId === '1'} 
+                       onChange={this.onChangeAddresses} />
                       <label className="form-check-label" htmlFor="devilery2">
                         Endereço B
                       </label>
                     </div>
 
                     <div className="col-4">
-                      <select className="form-control" id="exampleFormControlSelect1">
+                      <select 
+                       className="form-control"
+                       value={this.state.frete} 
+                       onChange={this.onChangeFrete}> 
                         <option>10</option>
                         <option>20</option>
                         <option>30</option>
@@ -120,13 +175,27 @@ export default class AddForm extends Component {
                 </div>
                 <div className="col">
                 <div className="form-check">
-                    <input className="form-check-input" type="radio" name="retirada" id="retirada1" value="centro" />
+                    <input 
+                     className="form-check-input" 
+                     type="radio" 
+                     name="retirada" 
+                     id="retirada1" 
+                     value="centro"
+                     checked={this.state.retirada === 'centro'} 
+                     onChange={this.onChangeRetirada}  
+                     />
                     <label class="form-check-label" htmlFor="retirada1">
                       Centro
                     </label>
                   </div>
                   <div className="form-check">
-                    <input className="form-check-input" type="radio" name="retirada" id="retirada2" value="vieralves" />
+                    <input 
+                     className="form-check-input"
+                     type="radio" name="retirada" 
+                     id="retirada2" 
+                     value="vieralves" 
+                     checked={this.state.retirada === 'vieralves'} 
+                     onChange={this.onChangeRetirada} />
                     <label class="form-check-label" htmlFor="retirada2">
                       Vieralves
                     </label>
@@ -138,8 +207,8 @@ export default class AddForm extends Component {
                 type="button" 
                 className="btn btn-primary"
                 data-toggle="tooltip" 
-                style={{marginTop: 12}}
-                data-placement="bottom" title="Remove produto" disabled>
+                style={{marginTop: 14}}
+                data-placement="bottom" title="Remove produto">
                 Adicionar Endereço
               </button>
             </div>

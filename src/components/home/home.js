@@ -14,6 +14,7 @@ const styles = ({
         },
         content: {
             margin: '15px auto',
+            width: 1250,
         }
 
     });
@@ -40,7 +41,7 @@ export default class Home extends Component {
                                 <div className="text-center">
                                     <img alt="Cadastro de Pedidos" src={pedidos} className="img-thumbnail border-0" />
                                 </div>
-                                <p className="card-text">Adicione, edite e cancele pedidos nessa sessão.</p>
+                                <p className="card-text">Adicione, edite, cancele e mude o status dos pedidos nessa sessão. </p>
                                 <a href={process.env.PUBLIC_URL + '/pedidos?page=1'} className="btn btn-primary">Ir para pedidos</a>
                             </div>
                         </div>

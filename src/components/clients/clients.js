@@ -7,6 +7,7 @@ import Form from './form';
 import $ from 'jquery';
 import DecisionModal from '../decisionModal';
 import Alert from '../alert';
+import { Link } from 'react-router-dom'
 
 // APIS
 import queryString from 'query-string';
@@ -264,10 +265,22 @@ class Clients extends Component {
                       </button>
                     </td>
                     <td style={{width: 120}}>
-                      Fazer pedido
+                      <Link to={{
+                        pathname: process.env.PUBLIC_URL + '/pedidos',
+                        search: '?page=1&action=addPedido',
+                        client: client
+                      }}>
+                        Fazer pedido
+                      </Link>
                     </td>
                     <td style={{width: 130}}>
+                      <Link to={{
+                          pathname: process.env.PUBLIC_URL + '/pedidos',
+                          search: '?page=1&action=listPedido',
+                          client
+                      }}>
                       Listar pedidos
+                      </Link>
                     </td>
                     <td className="hidden" style={{display: 'none'}}>{clients.indexOf(client)}</td>
                   </tr>
