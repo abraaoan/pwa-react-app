@@ -25,3 +25,10 @@ export const GET_PEDIDO_PAGINACAO = 'pedidos/get_pedidos_por_data_pedido_paginac
 export const GET_PEDIDO_STATUS_PAG = 'pedidos/get_pedidos_por_status_paginacao.php'
 
 
+// ---- OUTROS
+export const GET_TAMANHO_PRODUTO = 'tamanhos/get_tamanhos.php'
+export const GET_CATEGORIA_PRODUTO = 'categoria/get_categorias.php'
+export const GET_TAXA_ENTREGA = 'taxa_entrega/get_taxa_entrega.php'
+
+
+

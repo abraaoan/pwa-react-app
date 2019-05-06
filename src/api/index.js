@@ -5,7 +5,7 @@ import md5 from 'md5';
 const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export const axiosInstance = axios.create({
-  baseURL: isOnDevMode ? `http://localhost/cats/api` : `http://157.230.84.180/cats/api/`,
+  baseURL: isOnDevMode ? `http://localhost:8080/cats/api` : `http://157.230.84.180/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
@@ -275,6 +275,19 @@ export const deleteAddressData = (id) => {
   data.append('id_endereco', id);
   data.append('token', token('put_endereco'));
   data.append('nome_script', 'put_endereco');
+
+  return data;
+
+}
+
+// --- OUTROS
+
+export const taxData = () => {
+
+  const data = new FormData();
+
+  data.append('token', token('get_taxa_entrega'));
+  data.append('nome_script', 'get_taxa_entrega');
 
   return data;
 

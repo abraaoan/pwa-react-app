@@ -4,6 +4,17 @@ import React, { Component } from 'react';
 import Status from './status';
 import Remove from '../../assets/delete';
 
+//API
+import {
+  axiosInstance as axios, 
+  getClientAddressPorId,
+  taxData,
+} from '../../api'; 
+import { 
+  GET_CLIENTE_ENDERECO,
+  GET_TAXA_ENTREGA
+ } from '../../api/endpoints';
+
 const styles = ({
   listView: {
     marginLeft: 60,
@@ -26,7 +37,10 @@ export default class AddForm extends Component {
       addressId: '0',
       frete: 0,
       retirada: 'centro',
-      produtos: [],
+      addresses: [],
+      taxas: [],
+      taxa: '',
+      client: this.props.client ? this.props.client : {}
     }
     
   }
@@ -49,13 +63,96 @@ export default class AddForm extends Component {
     this.setState({ retirada: e.target.value});
   }
 
-  render() {
-    
-    const { client } = this.props;
-    var newClient = {}
+  onChangeTaxa = (e) => {
+    this.setState({ taxa: e.target.value });
+  }
 
-    if (client)
-      newClient = client
+  // Get Client Address
+  getClientAddress = (id) => {
+    // Request Client
+    axios.post(GET_CLIENTE_ENDERECO, getClientAddressPorId(id))
+    .then(response => {
+
+      const result = response.data;
+      
+      this.setState({
+        addresses: result,
+      });
+
+    }).catch(errors => console.error(errors));
+
+  }
+
+  //
+  getTaxas = () => {
+
+    axios.post(GET_TAXA_ENTREGA, taxData())
+    .then(response => {
+
+      const result = response.data;
+      
+      this.setState({
+        taxas: result,
+      });
+
+    }).catch(errors => console.error(errors));
+  }
+
+  confirmation = () => {
+    
+    var confirmation = {
+      id_cliente: this.state.client.id_cliente,
+      status: this.state.status,
+      id_endereco: this.addressId,
+      taxa_entrega: this.state.taxa, //
+      data_pedido: this.currentDate(),
+      data_entrega: this.state.dateTime,
+      produto_valor: this.state.price,//
+      observacao: this.state.observacao,
+      pagamento: this.state.pagamento
+    }
+
+    console.log(confirmation);
+
+    const {products} = this.props;
+
+    const modalConfirmacao = {
+      nome: this.state.client.nome_cliente,
+      entrega: this.state.dateTime,
+      endereco: this.state.addressId,
+      taxa: this.state.taxa,
+      products: products
+    }
+
+    console.log(modalConfirmacao)
+
+  }
+
+  // others
+  currentDate = () => {
+    let d     = new Date(),
+          month = '' + (d.getMonth() + 1),
+          day   = '' + d.getDate(),
+          year  = d.getFullYear();
+  
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+  
+      return [year, month, day].join('-');
+  
+  }
+
+  componentDidMount = () => {
+
+    if (this.state.client)
+      this.getClientAddress(this.state.client.id_cliente);
+
+    this.getTaxas();
+  }
+
+  render() {
+
+    const {products} = this.props;
 
     return (
       <div>
@@ -66,8 +163,8 @@ export default class AddForm extends Component {
             </div>
             <div className="card-body container">
               <div className="row">
-                <p className="col-4 card-text">Nome: {newClient.nome_cliente}</p>
-                <p className="col card-text">Telefone: {newClient.telefone1}</p>
+                <p className="col-4 card-text">Nome: {this.state.client.nome_cliente}</p>
+                <p className="col card-text">Telefone: {this.state.client.telefone1}</p>
               </div>
               <div className="row">
                 <p className="col-4 card-text">
@@ -88,7 +185,7 @@ export default class AddForm extends Component {
                 </p>
                 <div className="col-8">
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="status" id="statusA" value="A" checked />
+                    <input className="form-check-input" type="radio" name="status" id="statusA" value="A" defaultChecked={true} />
                     <Status value="A" htmlFor="statusA"/>
                   </div>
                   <div className="form-check form-check-inline">
@@ -111,70 +208,39 @@ export default class AddForm extends Component {
             <div className="card-body">
 
               <div className="row">
-                <p className="card-text col">Local de entrega</p>
+                <p className="card-text col-5">Local de entrega</p>
                 <p className="card-text col">Retirada na loja</p>
+                <p className="card-text col-3">Taxa de entrega</p>
               </div>
               <div className="row">
-                <div className="col">
-                  <div className="row">
-                    <div className="form-check col-4" style={{ marginLeft: 14}}>
-                      <input 
-                       className="form-check-input" 
-                       type="radio" 
-                       name="delivery" 
-                       id="devilery1" 
-                       value="0"
-                       checked={this.state.addressId === '0'} 
-                       onChange={this.onChangeAddresses} />
-                      <label class="form-check-label" htmlFor="devilery1">
-                        Endereço A
-                      </label>
-                    </div>
-                    <div className="col-4">
-                      <select 
-                       className="form-control"
-                       value={this.state.frete} 
-                       onChange={this.onChangeFrete}> 
-                        <option>10</option>
-                        <option>20</option>
-                        <option>30</option>
-                        <option>40</option>
-                        <option>50</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="form-check col-4"  style={{ marginLeft: 14}}>
-                      <input 
-                       className="form-check-input"
-                       type="radio" 
-                       name="delivery" 
-                       id="devilery2" 
-                       value="1"
-                       checked={this.state.addressId === '1'} 
-                       onChange={this.onChangeAddresses} />
-                      <label className="form-check-label" htmlFor="devilery2">
-                        Endereço B
-                      </label>
-                    </div>
+                <div className="col-5">
+                  
+                  {this.state.addresses.map(address => {
+                    return (
+                      
+                      <div className="row" key={address.id_endereco}>
+                        <div className="form-check col-6" style={{ marginLeft: 14}}>
+                          <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="delivery" 
+                            id={`delivery${address.id_endereco}`}
+                            value={address.id_endereco}
+                            checked={this.state.addressId === address.id_endereco} 
+                            onChange={this.onChangeAddresses} />
+                          <label className="form-check-label" htmlFor={`delivery${address.id_endereco}`}>
+                          { `${address.bairro} nº ${address.numero}`}
+                          </label>
+                        </div>
+                        
+                      </div>
 
-                    <div className="col-4">
-                      <select 
-                       className="form-control"
-                       value={this.state.frete} 
-                       onChange={this.onChangeFrete}> 
-                        <option>10</option>
-                        <option>20</option>
-                        <option>30</option>
-                        <option>40</option>
-                        <option>50</option>
-                      </select>
-                    </div>
+                    );
+                  })}
 
-                  </div>
                 </div>
                 <div className="col">
-                <div className="form-check">
+                  <div className="form-check">
                     <input 
                      className="form-check-input" 
                      type="radio" 
@@ -184,7 +250,7 @@ export default class AddForm extends Component {
                      checked={this.state.retirada === 'centro'} 
                      onChange={this.onChangeRetirada}  
                      />
-                    <label class="form-check-label" htmlFor="retirada1">
+                    <label className="form-check-label" htmlFor="retirada1">
                       Centro
                     </label>
                   </div>
@@ -196,21 +262,34 @@ export default class AddForm extends Component {
                      value="vieralves" 
                      checked={this.state.retirada === 'vieralves'} 
                      onChange={this.onChangeRetirada} />
-                    <label class="form-check-label" htmlFor="retirada2">
+                    <label className="form-check-label" htmlFor="retirada2">
                       Vieralves
                     </label>
                   </div>
                 </div>
+                <div className="col-3">
+                    <select 
+                      className="form-control"
+                      value={this.state.frete} 
+                      onChange={this.onChangeFrete}> 
+                      
+                      {this.state.taxas.map(taxa => {
+                        return(
+                          <option key={taxa.id_taxa_entrega} value={taxa.valor} onChange={this.onChangeTaxa}>R$ {taxa.valor}</option>
+                        );
+                      })}
+                    </select>
+                  </div>
               </div>
 
-              <button
+              {/* <button
                 type="button" 
                 className="btn btn-primary"
                 data-toggle="tooltip" 
                 style={{marginTop: 14}}
                 data-placement="bottom" title="Remove produto">
                 Adicionar Endereço
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -230,32 +309,44 @@ export default class AddForm extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row" className="data">0</th>
-                    <td>
-                      Torta de Cupu
-                    </td>
-                    <td>
-                      R$ 120,00
-                    </td>
-                    <td>
-                      Feliz Aniversário
-                    </td>
-                    <td style={{width: 50}}>
-                      <button 
-                        type="button" 
-                        className="btn btn-link" 
-                        data-toggle="tooltip" data-placement="bottom" title="Remove produto">
-                        <Remove />
-                      </button>
-                    </td>
-                  </tr>  
+                  { products.map(produto => {
+                    return(
+                      <tr key={produto.id_produto}>
+                        <th scope="row" className="data">{produto.id_produto}</th>
+                        <td>
+                          {produto.nome_produto}
+                        </td>
+                        <td>
+                          R$ {produto.valor_produto}
+                        </td>
+                        <td>
+                          Feliz Aniversário
+                        </td>
+                        <td style={{width: 50}}>
+                          <button 
+                            type="button" 
+                            className="btn btn-link" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom" 
+                            title="Remove produto"
+                            onClick={ () => {
+                              this.props.onRemove(produto);
+                            }}>
+                            <Remove />
+                          </button>
+                        </td>
+                      </tr> 
+                    );
+                  }) } 
                 </tbody>
               </table>
               <button 
                 type="button" 
                 className="btn btn-primary"
-                data-toggle="tooltip" data-placement="bottom" title="Remove produto">
+                data-toggle="tooltip" 
+                data-placement="bottom"
+                title="Adicionar produtos"
+                onClick={ () => { this.props.onAddProducts(); }}>
                 Adicionar
               </button>
             </div>

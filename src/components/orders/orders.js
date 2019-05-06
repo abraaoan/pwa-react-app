@@ -64,7 +64,8 @@ class Orders extends Component {
       pedidos: [],
       currentPage: 1,
       currentStatus: 'T',
-      currentDate: null
+      currentDate: '',
+      currentProducts: [],
     }
 
   }
@@ -116,7 +117,32 @@ class Orders extends Component {
   }
 
   showAddProductsModal = () => {
+    $('#modalProduto').modal('hide');
     $('#addProductModal').modal();
+  }
+
+  onProductsModalFinish = (products) => {
+    this.setState({
+      currentProducts: products
+    });    
+  }
+
+  removeProduct = (product) => {
+    var all = [...this.state.currentProducts];
+    const index = all.indexOf(product);
+    if (index !== -1){
+      all.splice(index, 1);
+      this.setState({
+        currentProducts: all
+      });
+    }
+      
+  }
+
+  confirmarPedido = () => {
+
+  
+
   }
 
   componentDidMount = () => {
@@ -265,13 +291,20 @@ class Orders extends Component {
               }}>Confirmação</button>,
             <button key="3" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
-          <AddForm client={client} />
+          <AddForm 
+            client={client} 
+            onAddProducts={this.showAddProductsModal}
+            products={this.state.currentProducts}
+            onRemove={this.removeProduct} />
         </Modal>
 
         <ConfirmationModal
           onCancel={this.showAddModal} />
 
-        <AddProductModal />
+        <AddProductModal 
+         productsAdded={this.state.currentProducts}
+         onFinish={this.onProductsModalFinish}
+         onCancel={this.showAddModal}/>
 
       </div>
     </div>
