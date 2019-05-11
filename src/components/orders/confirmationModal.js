@@ -1,7 +1,19 @@
 import React, { Component } from 'react';
 
 class Confirmation extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      confirmation: {}
+    }
+  }
+
   render() {
+
+    const { confirmation } = this.props;
+
     return (
       <div>
         <div id="confirmationModal" className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -17,45 +29,47 @@ class Confirmation extends Component {
                 
                 {/* Content */}
                 <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                  <label className="form-check-label" htmlFor="defaultCheck1">
-                    Nome: Rivaplay
+                  <input className="form-check-input" type="checkbox" value="" id="kClientName" />
+                  <label className="form-check-label" htmlFor="kClientName">
+                    <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Nome:</span> { confirmation.client ? confirmation.client.nome_cliente : " - "  }
+                  </label>
+                </div>
+
+                <label style={{color: 'rgba(0, 0, 0, 0.5)', marginBottom: -10}}>Itens:</label>
+                { confirmation.products ? confirmation.products.map(product => {
+                  return (
+                    <div className="form-check" style={{marginLeft: 10}} key={product.id_produto}>
+                      <input className="form-check-input" type="checkbox" value="" id={`kPrd${product.id_produto}`} />
+                      <label className="form-check-label" htmlFor={`kPrd${product.id_produto}`}>
+                        {/* TODO add Obs */}
+                        {`${product.nome_produto}, ${product.tamanho}, R$ ${product.valor_produto}${product.obs ? ', ' + product.obs : ''}`} 
+                      </label>
+                    </div>
+                  )
+                }) : "-" }
+
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="kDataEntrega" />
+                  <label className="form-check-label" htmlFor="kDataEntrega">
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Data de entrega:</span> {confirmation.dataEntrega}
                   </label>
                 </div>
                 <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                  <label className="form-check-label" htmlFor="defaultCheck1">
-                    Torta de Cupuaçu (M), R$ 145,00, Feliz Aniversario
+                  <input className="form-check-input" type="checkbox" value="" id="kEndereco" />
+                  <label className="form-check-label" htmlFor="kEndereco">
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Entregar:</span> { confirmation.endereco ? `${confirmation.endereco.logradouro}, ${confirmation.endereco.numero}, ${confirmation.endereco.bairro} ${confirmation.endereco.complemento ? ', ' + confirmation.endereco.complemento : ''}` : "-" }
                   </label>
                 </div>
                 <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                  <label className="form-check-label" htmlFor="defaultCheck1">
-                    Torta de Morango (M), R$ 160,00
+                  <input className="form-check-input" type="checkbox" value="" id="kTaxa" />
+                  <label className="form-check-label" htmlFor="kTaxa">
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Taxa de entrega:</span> R$ {confirmation.taxa}
                   </label>
                 </div>
                 <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                  <label className="form-check-label" htmlFor="defaultCheck1">
-                    Data de entrega: 10/05/2019
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                  <label className="form-check-label" htmlFor="defaultCheck1">
-                    Entrega: Rua A, Bairro B, 123, Ed. Milano, Apto 1104, Bloco ABCD
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                  <label className="form-check-label" htmlFor="defaultCheck1">
-                    Taxa de entrega: R$ 10,00
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="defaultCheck2" />
-                  <label className="form-check-label" htmlFor="defaultCheck2">
-                    Total: R$ 320,50
+                  <input className="form-check-input" type="checkbox" value="" id="kTotal" />
+                  <label className="form-check-label" htmlFor="kTotal">
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Total:</span> R$ {confirmation.total}
                   </label>
                 </div>
 

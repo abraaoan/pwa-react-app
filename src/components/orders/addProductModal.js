@@ -91,7 +91,7 @@ class AddProductModal extends Component {
                         onChange={this.onChangeTerm}
                         onKeyPress={this.onKeyPress}/>
                     <div className="input-group-prepend">
-                        <button className="btn btn-outline-primary" type="button" onClick={()=>{this.props.onSearch()}}>Buscar</button>
+                        <button className="btn btn-outline-primary" type="button" onClick={()=>{this.onSearch()}}>Buscar</button>
                     </div>
                   </div>
                 </div>

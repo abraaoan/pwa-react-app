@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 
 // ICONS
-import Status from './status';
 import Remove from '../../assets/delete';
 
 //API
@@ -23,6 +23,15 @@ const styles = ({
   },
   cards: {
     marginTop: 10
+  },
+  linkButton: {
+    backgroundColor: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    display: 'inline',
+    margin: 0,
+    padding: 0,
   }
 });
 
@@ -34,8 +43,7 @@ export default class AddForm extends Component {
     this.state = {
       dateTime: '',
       status: 'A',
-      addressId: '0',
-      frete: 0,
+      address: {},
       retirada: 'centro',
       addresses: [],
       taxas: [],
@@ -51,12 +59,12 @@ export default class AddForm extends Component {
     }
   }
 
-  onChangeFrete = (e) => {
-    this.setState({frete: e.target.value});
-  }
-
   onChangeAddresses = (e) => {
-    this.setState({ addressId: e.target.value});
+
+    const addressIndex = e.target.value;
+    const address = this.state.addresses[addressIndex];
+
+    this.setState({ address });
   }
 
   onChangeRetirada = (e) => {
@@ -64,6 +72,7 @@ export default class AddForm extends Component {
   }
 
   onChangeTaxa = (e) => {
+    console.log(e.target.value);
     this.setState({ taxa: e.target.value });
   }
 
@@ -99,32 +108,28 @@ export default class AddForm extends Component {
   }
 
   confirmation = () => {
-    
-    var confirmation = {
-      id_cliente: this.state.client.id_cliente,
-      status: this.state.status,
-      id_endereco: this.addressId,
-      taxa_entrega: this.state.taxa, //
-      data_pedido: this.currentDate(),
-      data_entrega: this.state.dateTime,
-      produto_valor: this.state.price,//
-      observacao: this.state.observacao,
-      pagamento: this.state.pagamento
-    }
-
-    console.log(confirmation);
 
     const {products} = this.props;
 
+    var total = 0;
+
+    products.forEach(product => {
+      total += parseInt(product.valor_produto);
+    });
+
+    total += parseInt(this.state.taxa);
+
     const modalConfirmacao = {
-      nome: this.state.client.nome_cliente,
-      entrega: this.state.dateTime,
-      endereco: this.state.addressId,
+      client: this.state.client,
+      dataEntrega: this.state.dateTime,
+      dataPedido: this.currentDate(),
+      endereco: this.state.address,
       taxa: this.state.taxa,
-      products: products
+      products: products,
+      total,
     }
 
-    console.log(modalConfirmacao)
+    this.props.confirmation(modalConfirmacao);
 
   }
 
@@ -142,6 +147,13 @@ export default class AddForm extends Component {
   
   }
 
+  onSubmit = (e) => {
+    e.preventDefault();
+
+    this.confirmation();
+
+  }
+
   componentDidMount = () => {
 
     if (this.state.client)
@@ -155,7 +167,7 @@ export default class AddForm extends Component {
     const {products} = this.props;
 
     return (
-      <div>
+      <form id="orderForm" onSubmit={this.onSubmit}>
           {/* Cliente */}
           <div className="card" style={styles.cards}>
             <div className="card-header">
@@ -163,8 +175,8 @@ export default class AddForm extends Component {
             </div>
             <div className="card-body container">
               <div className="row">
-                <p className="col-4 card-text">Nome: {this.state.client.nome_cliente}</p>
-                <p className="col card-text">Telefone: {this.state.client.telefone1}</p>
+                <p className="col-4 card-text">Nome: <span style={{color: 'rgba(0, 0, 0, 0.7)'}}>{this.state.client.nome_cliente}</span> </p>
+                <p className="col card-text">Telefone: <span style={{color: 'rgba(0, 0, 0, 0.7)'}}>{this.state.client.telefone1}</span></p>
               </div>
               <div className="row">
                 <p className="col-4 card-text">
@@ -177,25 +189,6 @@ export default class AddForm extends Component {
                  placeholder="01/01/2019 14:00" 
                  value={this.state.dateTime}
                  onChange={this.onDateTimeChange}/>
-                </div>
-              </div>
-              <div className="row">
-                <p className="col-2 card-text">
-                  Status: 
-                </p>
-                <div className="col-8">
-                  <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="status" id="statusA" value="A" defaultChecked={true} />
-                    <Status value="A" htmlFor="statusA"/>
-                  </div>
-                  <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="status" id="statusC" value="C" />
-                    <Status value="C" htmlFor="statusC"/>
-                  </div>
-                  <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="status" id="statusE" value="E" />
-                    <Status value="E" htmlFor="statusE"/>
-                  </div>
                 </div>
               </div>
             </div>
@@ -225,8 +218,8 @@ export default class AddForm extends Component {
                             type="radio" 
                             name="delivery" 
                             id={`delivery${address.id_endereco}`}
-                            value={address.id_endereco}
-                            checked={this.state.addressId === address.id_endereco} 
+                            value={this.state.addresses.indexOf(address)}
+                            checked={this.state.address.id_endereco === address.id_endereco} 
                             onChange={this.onChangeAddresses} />
                           <label className="form-check-label" htmlFor={`delivery${address.id_endereco}`}>
                           { `${address.bairro} nº ${address.numero}`}
@@ -270,12 +263,12 @@ export default class AddForm extends Component {
                 <div className="col-3">
                     <select 
                       className="form-control"
-                      value={this.state.frete} 
-                      onChange={this.onChangeFrete}> 
+                      value={this.state.taxa} 
+                      onChange={this.onChangeTaxa}> 
                       
                       {this.state.taxas.map(taxa => {
                         return(
-                          <option key={taxa.id_taxa_entrega} value={taxa.valor} onChange={this.onChangeTaxa}>R$ {taxa.valor}</option>
+                          <option key={taxa.id_taxa_entrega} value={taxa.valor} >R$ {taxa.valor}</option>
                         );
                       })}
                     </select>
@@ -320,7 +313,23 @@ export default class AddForm extends Component {
                           R$ {produto.valor_produto}
                         </td>
                         <td>
-                          Feliz Aniversário
+
+                          <div id={`kObsPrd${produto.id_produto}`} style={{display: 'none'}} >
+                            <input id={`kObsInptPrd${produto.id_produto}`} type="text" placeholder="Observação" />
+                            <button type="button" onClick={() => {
+                              const value = $(`#kObsInptPrd${produto.id_produto}`).val()
+                              produto['obs'] = value;
+                              $(`#kObsPrd${produto.id_produto}`).css('display', 'none'); 
+                              $(`#kObsLinkPrd${produto.id_produto}`).html(value);
+                            }}>Adicionar</button>
+                          </div>
+
+                          <button id={`kObsLinkPrd${produto.id_produto}`} style={styles.linkButton} type="button" onClick={() => { 
+                            $(`#kObsPrd${produto.id_produto}`).css('display', 'inline'); 
+                            $(`#kObsLinkPrd${produto.id_produto}`).html('');
+                            }}>
+                            {produto.obs ? produto.obj : 'Inserir observação'}
+                          </button>
                         </td>
                         <td style={{width: 50}}>
                           <button 
@@ -351,7 +360,7 @@ export default class AddForm extends Component {
               </button>
             </div>
           </div>
-      </div>
+      </form>
     )
   }
 }

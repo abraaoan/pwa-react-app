@@ -62,7 +62,11 @@ export default class Home extends Component {
                                     <img alt="Cadastro de Relatórios" src={reports} className="img-thumbnail border-0" />
                                 </div>
                                 <p className="card-text">Visualizar os relatórios. Veja como esta a lista de pedidos e os status.</p>
-                                <a href={process.env.PUBLIC_URL + '/relatorios'} className="btn btn-primary">Acessar</a>
+                                <button 
+                                  disabled
+                                  href={process.env.PUBLIC_URL + '/relatorios'} 
+                                  className="btn btn-primary"
+                                  data-toggle="tooltip" data-placement="bottom" title="Ainda não ta pronto! 😘">Acessar</button>
                             </div>
                         </div>
                     </div>

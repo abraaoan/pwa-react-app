@@ -66,6 +66,7 @@ class Orders extends Component {
       currentStatus: 'T',
       currentDate: '',
       currentProducts: [],
+      confirmation: {},
     }
 
   }
@@ -139,10 +140,13 @@ class Orders extends Component {
       
   }
 
-  confirmarPedido = () => {
+  confirmarPedido = (confirmation) => {
 
+    this.setState({ confirmation });
+
+    $('#modalProduto').modal('hide');
+    $('#confirmationModal').modal();
   
-
   }
 
   componentDidMount = () => {
@@ -282,24 +286,23 @@ class Orders extends Component {
         <Modal 
           title="Abertura de pedido"
           buttons={[
-            <button key="2" 
-              type="button" 
-              className="btn btn-primary"
-              onClick={ () => { 
-                $('#modalProduto').modal('hide');
-                $('#confirmationModal').modal();
-              }}>Confirmação</button>,
+            <button key="2"
+              form="orderForm"  
+              type="submit" 
+              className="btn btn-primary">Confirmação</button>,
             <button key="3" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
           <AddForm 
             client={client} 
             onAddProducts={this.showAddProductsModal}
             products={this.state.currentProducts}
-            onRemove={this.removeProduct} />
+            onRemove={this.removeProduct}
+            confirmation={this.confirmarPedido} />
         </Modal>
 
         <ConfirmationModal
-          onCancel={this.showAddModal} />
+          onCancel={this.showAddModal}
+          confirmation={this.state.confirmation} />
 
         <AddProductModal 
          productsAdded={this.state.currentProducts}

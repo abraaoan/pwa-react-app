@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 const colors = {
   logo: { color: '#FFF' },
-  options: {color: '#C8A566'}
+  options: {color: '#C8A566'},
+  optionDisable: {color: '#C8A566', opacity: 0.5}
 }
 
 export default class Navbar extends Component {
@@ -30,14 +31,14 @@ export default class Navbar extends Component {
                   <li className="nav-item">
                     <a
                      className="nav-link"
-                     href={process.env.PUBLIC_URL + '/produtos?page=1'}
+                     href={process.env.PUBLIC_URL + '/product?page=1'}
                      style={colors.options}>Produtos</a>
                   </li>
                   <li className="nav-item">
                     <a 
-                     className="nav-link" 
+                     className="nav-link disabled" 
                      href={process.env.PUBLIC_URL + '/relatorios'}
-                     style={colors.options}>Relatorios</a>
+                     style={colors.optionDisable}>Relatorios</a>
                   </li>
                 </ul>
             </nav>
