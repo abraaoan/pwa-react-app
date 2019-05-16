@@ -52,7 +52,7 @@ export default class Home extends Component {
                                     <img alt="Cadastro de produtos" src={products} className="img-thumbnail border-0" />
                                 </div>
                                 <p className="card-text">Visualizar produtos cadastrados, editar e apagar informações.</p>
-                                <a href={process.env.PUBLIC_URL + '/product?page=1'} className="btn btn-primary">Ir para produtos</a>
+                                <a href={process.env.PUBLIC_URL + '/produtos?page=1'} className="btn btn-primary">Ir para produtos</a>
                             </div>
                         </div>
                         <div className="card" style={styles.card}>

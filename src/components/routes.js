@@ -5,6 +5,7 @@ import Product from './product/product';
 import Clients from './clients/clients';
 import ClientDetail from './clients/detail';
 import Order from './orders/orders';
+import OrderDetail from './orders/detail';
 import Report from './reports/reports';
 import NotFound from './notFound';
 import { Provider } from 'react-redux';
@@ -17,9 +18,10 @@ export default function Routes() {
     <BrowserRouter>
         <Switch>
             <Route exact  path={process.env.PUBLIC_URL + '/'} component={App} />
-            <Route path={process.env.PUBLIC_URL + '/product'} component={Product} />
+            <Route path={process.env.PUBLIC_URL + '/produtos'} component={Product} />
             <Route path={process.env.PUBLIC_URL + '/clientes'} component={Clients} />
             <Route path={process.env.PUBLIC_URL + `/cliente/:id`} component={ClientDetail} />
+            <Route path={process.env.PUBLIC_URL + `/pedido/:id`} component={OrderDetail} />
             <Route path={process.env.PUBLIC_URL + '/pedidos'} component={Order} />
             <Route path={process.env.PUBLIC_URL + '/relatorios'} component={Report} />
             <Route path='*' component={NotFound} />

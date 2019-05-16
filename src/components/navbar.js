@@ -31,7 +31,7 @@ export default class Navbar extends Component {
                   <li className="nav-item">
                     <a
                      className="nav-link"
-                     href={process.env.PUBLIC_URL + '/product?page=1'}
+                     href={process.env.PUBLIC_URL + '/produtos?page=1'}
                      style={colors.options}>Produtos</a>
                   </li>
                   <li className="nav-item">

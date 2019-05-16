@@ -20,10 +20,11 @@ export const PUT_CLIENTE_ENDERECO = 'enderecos/put_endereco.php'
 export const EDIT_CLIENTE_ENDERECO = 'enderecos/edit_endereco.php'
 export const DELETE_CLIENTE_ENDERECO = 'enderecos/delete_endereco.php'
 
-// ---- ADDRESSES ---- //
-export const GET_PEDIDO_PAGINACAO = 'pedidos/get_pedidos_por_data_pedido_paginacao.php'
+// ---- PEDIDOS ---- //
+export const GET_PEDIDO_PAGINACAO = 'pedidos/get_pedidos_por_data_entrega_paginacao.php'
 export const GET_PEDIDO_STATUS_PAG = 'pedidos/get_pedidos_por_status_paginacao.php'
-
+export const GET_PEDIDO_POR_CLIENTE = 'pedidos/get_pedidos_por_id_cliente_e_data_entrega.php'
+export const GET_PEDIDO_POR_ID = 'pedidos/get_pedido_por_id.php'
 
 // ---- OUTROS
 export const GET_TAMANHO_PRODUTO = 'tamanhos/get_tamanhos.php'

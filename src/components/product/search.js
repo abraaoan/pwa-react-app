@@ -34,7 +34,7 @@ export default class Search extends Component {
       this.props.onSearchFinish(products);
       
       this.setState({
-        hRef: process.env.PUBLIC_URL + '/product?page=1',
+        hRef: process.env.PUBLIC_URL + '/produtos?page=1',
         linkName: 'Voltar pra produtos',
         title: 'Resultado da busca',
       });

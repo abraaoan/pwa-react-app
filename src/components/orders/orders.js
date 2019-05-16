@@ -8,6 +8,7 @@ import AddForm from './formAdd';
 import AddProductModal from './addProductModal';
 import ConfirmationModal from './confirmationModal';
 import $ from 'jquery';
+import {formatDateTime} from '../utils';
 
 // ICONS
 import Edit from '../../assets/edit';
@@ -23,10 +24,12 @@ import queryString from 'query-string';
 import {
   axiosInstance as axios,
   getPedidosPaginacaoData as data,
+  getPedidosPorIdCliente
 } from '../../api'; 
 import { 
   GET_PEDIDO_PAGINACAO,
-  GET_PEDIDO_STATUS_PAG
+  GET_PEDIDO_STATUS_PAG,
+  GET_PEDIDO_POR_CLIENTE
 } from '../../api/endpoints';
 
 const styles = ({
@@ -98,13 +101,56 @@ class Orders extends Component {
 
   }
 
+  getPedidosClientes = (idCliente, date) => {
+    const newData = getPedidosPorIdCliente(idCliente, date);
+    const urlParam = GET_PEDIDO_POR_CLIENTE;
+
+    this.props.addOrders([]);
+
+    // Request Clients
+    axios.post(urlParam, newData)
+    .then(response => {
+
+      const result = response.data;
+      const apiPedidos = result;
+
+      this.props.addOrders(apiPedidos);
+
+    }).catch(errors => console.error(errors));
+
+  }
+
   changeStatus = (status) => {
     this.getPedidos(status);
     this.setState({ currentStatus: status });
   }
 
+  onKeyPress = (e) => {
+    if (e.key === 'Enter')
+        this.filterByDate();
+  }
+
   filterByDate = () => {
-    this.getPedidos(this.state.currentStatus, this.state.currentDate);
+
+    const queries = queryString.parse(this.props.location.search)
+    const action = queries.action;
+
+    if (action === 'listPedido') {
+      
+      const idClient = queries.idClient;
+
+      if (idClient)
+        this.getPedidosClientes(idClient, this.state.currentDate);
+
+    } else {
+      this.getPedidos(this.state.currentStatus, this.state.currentDate);
+    }
+
+  }
+
+  navigateToDetail = (idPedido) => {
+    const { history } = this.props;
+    history.push(`${process.env.PUBLIC_URL}/pedido/${idPedido}`)
   }
 
   // ---
@@ -150,13 +196,23 @@ class Orders extends Component {
   }
 
   componentDidMount = () => {
-    this.getPedidos('T');
-
+    
     const queries = queryString.parse(this.props.location.search)
     const action = queries.action;
 
     if (action === 'addPedido') {
       this.showAddModal();
+    } else if (action === 'listPedido') {
+      
+      const idClient = queries.idClient;
+
+      console.log('-->', idClient);
+
+      if (idClient)
+        this.getPedidosClientes(idClient);
+
+    } else {
+      this.getPedidos('T');
     }
 
   }
@@ -207,7 +263,8 @@ class Orders extends Component {
                   placeholder="01/01/2019"
                   aria-describedby="basic-addon1"
                   value={this.state.currentDate}
-                  onChange={this.onDateChange}/>
+                  onChange={this.onDateChange}
+                  onKeyPress={this.onKeyPress}/>
               <div className="input-group-prepend">
                   <button 
                     className="btn btn-outline-primary" 
@@ -236,19 +293,19 @@ class Orders extends Component {
                 return(
                   <tr key={order.pedido.id_pedido}>
                     <th scope="row" className="data">{order.pedido.id_pedido}</th>
-                    <td>
+                    <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
                       {order.cliente.nome_cliente}
                     </td>
-                    <td>
+                    <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
                       {order.cliente.telefone1}
                     </td>
-                    <td>
-                      {order.pedido.data_entrega}
+                    <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
+                      {formatDateTime(order.pedido.data_entrega)}
                     </td>
-                    <td>
+                    <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
                       {order.endereco.bairro}
                     </td>
-                    <td>
+                    <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
                       R$ {order.pedido.taxa_entrega}
                     </td>
                     

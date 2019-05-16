@@ -276,7 +276,7 @@ class Clients extends Component {
                     <td style={{width: 130}}>
                       <Link to={{
                           pathname: process.env.PUBLIC_URL + '/pedidos',
-                          search: '?page=1&action=listPedido',
+                          search: `?page=1&action=listPedido&idClient=${client.id_cliente}`,
                           client
                       }}>
                       Listar pedidos
