@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Navbar from '../navbar';
 import Toolbar from '../toolbar';
 import Alert from '../alert';
-import $ from 'jquery';
 import Status from './status';
 import {formatDateTime} from '../utils';
 
@@ -86,29 +85,58 @@ export default class Detail extends Component {
 
         <Toolbar
             title="Detalhe do pedido" 
-            hRef={process.env.PUBLIC_URL + '/orders?page=1'}
+            hRef={process.env.PUBLIC_URL + '/pedidos?page=1'}
             linkName="Voltar para pedidos"
             shouldHideSearch={true}/>
+        {/* Infors  */}
         <div className="container-fluid">
           <div className="card" style={styles.client}>
-          <div className="card-header">
+            <div className="card-header">
               Informações do pedido - #{this.state.idPedido}
             </div>
             <div className="card-body">
-               <h5 className="card-title">{`${this.state.cliente.nome_cliente}`}</h5>
+              <h5 className="card-title">{`${this.state.cliente.nome_cliente}`}</h5>
               <p className="card-text">Status: <Status value={ this.state.pedido.status } /></p>
               <p className="card-text">Data entrega: {formatDateTime(this.state.pedido.data_entrega)}</p>
-              {/*<p className="card-text">Telefone outros: {this.state.client.telefone2 ? this.state.client.telefone2 : 'inexistente'}</p>
-              <p className="card-text">Lista negra? <b>{this.state.client.lista_negra === '0' ? 'Não': 'SIM'}</b></p>
+              <p className="card-text">Taxa entrega: R$ {this.state.pedido.taxa_entrega},00</p>
+              <p className="card-text">Data do pedido: {formatDateTime(this.state.pedido.data_pedido)}</p>
               <button type="button" 
-                className="btn btn-primary mr-auto"
-                data-toggle="modal" 
-                data-target=".bd-example-modal-lg"
-                onClick={() => { this.refs.form.clearFields(); }}>Adicionar endereço</button> */}
+                className="btn btn-primary mr-auto">Cancelar pedido</button>
             </div>
           </div>
-
         </div>
+        {/* Endereco */}
+        <div className="container-fluid">
+          <div className="card" style={styles.client}>
+            <div className="card-header">
+              Endereço de entrega
+            </div>
+            <div className="card-body">
+              <p className="card-text">Logradouro: {this.state.endereco.logradouro}</p>
+              <p className="card-text">Bairro: {this.state.endereco.bairro}</p>
+              <p className="card-text">Número: {this.state.endereco.numero}</p>
+              <p className="card-text">CEP: {this.state.endereco.cep}</p>
+              <p className="card-text">Referência: {this.state.endereco.referencia}</p>
+              <p className="card-text">Complemento: {this.state.endereco.complemento}</p>
+            </div>
+          </div>
+        </div>
+        {/* Endereco */}
+        <div className="container-fluid">
+          <div className="card" style={styles.client}>
+            <div className="card-header">
+              Dados do cliente
+            </div>
+            <div className="card-body">
+              <h5 className="card-title">{`${this.state.cliente.nome_cliente}`}</h5>
+              <p className="card-text">ID: {this.state.cliente.id_cliente}</p>
+              <p className="card-text">Telefone: {this.state.cliente.telefone1}</p>
+              <p className="card-text">Telefone outros: {this.state.cliente.telefone2 ? this.state.cliente.telefone2 : 'inexistente'}</p>
+              <p className="card-text">Lista negra? <b>{this.state.cliente.lista_negra === '0' ? 'Não': 'SIM'}</b></p>
+            </div>
+          </div>
+        </div>
+
       </div>
     )
   }

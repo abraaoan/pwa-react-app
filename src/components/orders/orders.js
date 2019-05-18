@@ -202,6 +202,7 @@ class Orders extends Component {
 
     if (action === 'addPedido') {
       this.showAddModal();
+      this.getPedidos('T');
     } else if (action === 'listPedido') {
       
       const idClient = queries.idClient;
@@ -346,7 +347,8 @@ class Orders extends Component {
             <button key="2"
               form="orderForm"  
               type="submit" 
-              className="btn btn-primary">Confirmação</button>,
+              className="btn btn-primary"
+              disabled={this.state.currentProducts.length === 0}>Confirmação</button>,
             <button key="3" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
           <AddForm 

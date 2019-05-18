@@ -15,6 +15,7 @@ import {
   GET_TAXA_ENTREGA
  } from '../../api/endpoints';
 
+ // Styles
 const styles = ({
   listView: {
     marginLeft: 60,
@@ -64,11 +65,17 @@ export default class AddForm extends Component {
     const addressIndex = e.target.value;
     const address = this.state.addresses[addressIndex];
 
-    this.setState({ address });
+    this.setState({
+      address,
+      retirada: addressIndex
+     });
   }
 
   onChangeRetirada = (e) => {
-    this.setState({ retirada: e.target.value});
+    this.setState({ 
+      retirada: e.target.value,
+      address: {},
+    });
   }
 
   onChangeTaxa = (e) => {
@@ -265,7 +272,7 @@ export default class AddForm extends Component {
                       className="form-control"
                       value={this.state.taxa} 
                       onChange={this.onChangeTaxa}> 
-                      
+                      <option value="0" >Selecione</option>
                       {this.state.taxas.map(taxa => {
                         return(
                           <option key={taxa.id_taxa_entrega} value={taxa.valor} >R$ {taxa.valor}</option>

@@ -94,6 +94,20 @@ export const getPedidoPorId = (id) => {
 
 }
 
+export const putPedidoData = (pedidos) => {
+
+  const data = new FormData();
+
+  for (var key in pedidos)
+    data.append(key, pedidos[key]);
+
+  data.append('token', token('put_pedidos'));
+  data.append('nome_script', 'put_pedidos');
+
+  return data;
+
+}
+
 // ---- PRODUTOS ---- //
 
 export const getProdutosPaginacaoData = (registros, pagina) => {
