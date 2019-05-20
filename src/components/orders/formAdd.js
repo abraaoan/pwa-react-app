@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
+import { currentDateTime, formatDateTime, unformatDateTime } from '../utils';
 
 // ICONS
 import Remove from '../../assets/delete';
@@ -9,10 +10,12 @@ import {
   axiosInstance as axios, 
   getClientAddressPorId,
   taxData,
+  editPedidoData
 } from '../../api'; 
 import { 
   GET_CLIENTE_ENDERECO,
-  GET_TAXA_ENTREGA
+  GET_TAXA_ENTREGA,
+  EDIT_PEDIDO
  } from '../../api/endpoints';
 
  // Styles
@@ -49,7 +52,10 @@ export default class AddForm extends Component {
       addresses: [],
       taxas: [],
       taxa: '',
-      client: this.props.client ? this.props.client : {}
+      observacao: '',
+      client: this.props.client ? this.props.client : {},
+      editMode: false,
+      pedido: {},
     }
     
   }
@@ -79,8 +85,11 @@ export default class AddForm extends Component {
   }
 
   onChangeTaxa = (e) => {
-    console.log(e.target.value);
     this.setState({ taxa: e.target.value });
+  }
+
+  onChangeObservacao = (e) => {
+    this.setState({ observacao: e.target.value });
   }
 
   // Get Client Address
@@ -129,35 +138,117 @@ export default class AddForm extends Component {
     const modalConfirmacao = {
       client: this.state.client,
       dataEntrega: this.state.dateTime,
-      dataPedido: this.currentDate(),
+      dataPedido: currentDateTime(),
       endereco: this.state.address,
       taxa: this.state.taxa,
       products: products,
       total,
+      observacao: this.state.observacao,
     }
 
-    this.props.confirmation(modalConfirmacao);
+    if (this.state.editMode) {
+      this.sendData(modalConfirmacao);
+    } else {
+      this.props.confirmation(modalConfirmacao);
+    }
 
   }
 
-  // others
-  currentDate = () => {
-    let d     = new Date(),
-          month = '' + (d.getMonth() + 1),
-          day   = '' + d.getDate(),
-          year  = d.getFullYear();
-  
-      if (month.length < 2) month = '0' + month;
-      if (day.length < 2) day = '0' + day;
-  
-      return [year, month, day].join('-');
-  
+  clearFields = () => {
+    this.setState({
+      dateTime: '',
+      status: 'A',
+      address: {},
+      retirada: 'centro',
+      addresses: [],
+      taxas: [],
+      taxa: '',
+      observacao: '',
+      client: this.props.client ? this.props.client : {},
+      editMode: false
+    });
+  }
+
+  loadFields = (pedido) => {
+
+    this.getClientAddress(pedido.cliente.id_cliente);
+
+    this.setState({
+      dateTime: formatDateTime(pedido.pedido.data_entrega, true),
+      status: pedido.pedido.status,
+      address: pedido.endereco,
+      retirada: pedido.endereco.id_endereco ? pedido.endereco.id_endereco : 'centro',
+      taxa: pedido.pedido.taxa_entrega,
+      observacao: pedido.pedido.observacao,
+      client: pedido.cliente,
+      editMode: true,
+      pedido
+    });
   }
 
   onSubmit = (e) => {
     e.preventDefault();
-
     this.confirmation();
+  }
+
+  // Only when editMode
+  sendData = (confirmation) => {
+
+    const client = confirmation.client ? confirmation.client : null;
+    const products = confirmation.products ? confirmation.products : null;
+    const address = confirmation.endereco ? confirmation.endereco: null;
+
+    if (!client | !address | !products)
+      return
+
+    var param = {
+      id_pedido: this.state.pedido.pedido.id_pedido,
+      id_cliente: client.id_cliente,
+      status: 'A',
+      id_endereco: address.id_endereco,
+      taxa_entrega: confirmation.taxa ? confirmation.taxa : 0,
+      data_pedido: currentDateTime(),
+      data_entrega: unformatDateTime(confirmation.dataEntrega ? confirmation.dataEntrega : null),
+      observacao: confirmation.observacao ? confirmation.observacao : '',
+      pagamento: 'N',
+      pagamento_efetuado: '0',
+      
+    }
+
+    //23:T.CUPUACU COM CHOCOLATE:MEDIO:145:Feliz Aniversario 
+    var valor_produto = "";
+
+    for (var i = 0; i < products.length; i++ ) {
+      const product = products[i];
+      valor_produto += `${product.id_produto}:`;
+      valor_produto += `${product.nome_produto}:`;
+      valor_produto += `${product.tamanho}:`;
+      valor_produto += `${product.valor_produto}:`;
+      valor_produto += `${product.obs ? product.obs : ''}//`;
+    }
+
+    param['produto_valor'] = valor_produto;
+
+    axios.post(EDIT_PEDIDO, editPedidoData(param))
+    .then(response => {
+
+      try {
+
+        const result = response.data;
+
+        if (result['status'] === 'ok') {
+          this.props.onNotify('', 'Pedido Atualizado com sucesso');
+        } else {
+          alert('OPS!');
+        }
+
+        console.log('-->', result);
+
+      } catch(errors) {
+        console.error(errors);
+      }
+
+    }).catch(errors => console.error(errors));
 
   }
 
@@ -331,11 +422,16 @@ export default class AddForm extends Component {
                             }}>Adicionar</button>
                           </div>
 
-                          <button id={`kObsLinkPrd${produto.id_produto}`} style={styles.linkButton} type="button" onClick={() => { 
+                          <button id={`kObsLinkPrd${produto.id_produto}`} 
+                            style={styles.linkButton} 
+                            type="button" 
+                            onClick={() => { 
+
                             $(`#kObsPrd${produto.id_produto}`).css('display', 'inline'); 
                             $(`#kObsLinkPrd${produto.id_produto}`).html('');
+
                             }}>
-                            {produto.obs ? produto.obj : 'Inserir observação'}
+                            {produto.obs ? produto.obs : 'Inserir observação'}
                           </button>
                         </td>
                         <td style={{width: 50}}>
@@ -367,6 +463,23 @@ export default class AddForm extends Component {
               </button>
             </div>
           </div>
+          {/* Observaçao */}
+          <div className="card" style={styles.cards}>
+              <div className="card-header">
+                Observação
+              </div>
+              <div className="card-body container">
+                <div className="row">
+                  <textarea 
+                    className="form-control"
+                    placeholder="Insira uma observação"
+                    id="idObservacao" 
+                    rows="3"
+                    value={this.state.observacao}
+                    onChange={this.onChangeObservacao}></textarea>
+                </div>
+              </div>
+            </div>
       </form>
     )
   }

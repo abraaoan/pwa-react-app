@@ -9,6 +9,8 @@ import AddProductModal from './addProductModal';
 import ConfirmationModal from './confirmationModal';
 import $ from 'jquery';
 import {formatDateTime} from '../utils';
+import Alert from '../alert';
+import DecisionModal from '../decisionModal';
 
 // ICONS
 import Edit from '../../assets/edit';
@@ -24,13 +26,17 @@ import queryString from 'query-string';
 import {
   axiosInstance as axios,
   getPedidosPaginacaoData as data,
-  getPedidosPorIdCliente
+  getPedidosPorIdCliente,
+  editPedidoData,
 } from '../../api'; 
 import { 
   GET_PEDIDO_PAGINACAO,
   GET_PEDIDO_STATUS_PAG,
-  GET_PEDIDO_POR_CLIENTE
+  GET_PEDIDO_POR_CLIENTE,
+  EDIT_PEDIDO,
 } from '../../api/endpoints';
+
+import { convertProducts } from '../utils';
 
 const styles = ({
   listView: {
@@ -70,6 +76,11 @@ class Orders extends Component {
       currentDate: '',
       currentProducts: [],
       confirmation: {},
+      showAlert: false,
+      alertType: 'success', // danger, warning
+      alertTitle: 'Pedido criado com sucesso!',
+      alertMessage: '',
+      modalContent: '',
     }
 
   }
@@ -195,9 +206,94 @@ class Orders extends Component {
   
   }
 
+  cancelarAlert = (pedido) => {
+
+    this.setState({
+      modalContent: `${pedido.pedido.id_pedido} - ${pedido.cliente.nome_cliente}`
+    });
+
+    $('#modalDecision').modal()
+
+    $('#decisionModalAction').click(()=>{
+      this.cancelarPedido(pedido);
+      $('#modalDecision').modal('hide');
+    });
+
+  }
+
+  cancelarPedido = (pedido) => {
+
+    const param = {
+      id_pedido: pedido.pedido.id_pedido,
+      id_cliente: pedido.cliente.id_cliente,
+      status: 'C',
+      id_endereco: pedido.endereco.id_endereco,
+      taxa_entrega: pedido.pedido.taxa_entrega,
+      data_pedido: pedido.pedido.data_pedido,
+      data_entrega: pedido.pedido.data_entrega,
+      produto_valor: pedido.pedido.produto_valor,
+      observacao: pedido.pedido.observacao,
+      pagamento: pedido.pedido.pagamento,
+      pagamento_efetuado: '0',
+
+    }
+
+    axios.post(EDIT_PEDIDO, editPedidoData(param))
+    .then(response => {
+
+      const result = response.data;
+      console.log(result);
+
+      this.getPedidos('T');
+
+    }).catch(errors => console.error(errors));
+
+  }
+
+  onEdit = (pedido) => {
+
+    const products = convertProducts(pedido.pedido.produto_valor);
+
+    this.setState({
+      currentProducts: products
+    });
+
+    this.refs.addForm.loadFields(pedido);
+    $('#modalProduto').modal();
+
+    // Change the title of Confirmation buttton
+    $('#idConfirmarPedido').text('Atualizar');
+
+  }
+
+  // ---- Notification ---- //
+
+  onNotification = (title, message, type) => {
+
+    $('#confirmationModal').modal('hide');
+    $('#modalProduto').modal('hide');
+
+    this.setState({
+      alertTitle: title,
+      alertMessage: message,
+      showAlert: true,
+      alertType: type ? type : 'success'
+    });
+
+    // Self close
+    setTimeout(() => {
+      this.setState({showAlert: false})
+    }, 5000); // 5s
+
+    this.getPedidos('T');
+
+  }
+
+  // ---
+
   componentDidMount = () => {
     
-    const queries = queryString.parse(this.props.location.search)
+    const queries = queryString.parse(this.props.location.search);
     const action = queries.action;
 
     if (action === 'addPedido') {
@@ -206,8 +302,6 @@ class Orders extends Component {
     } else if (action === 'listPedido') {
       
       const idClient = queries.idClient;
-
-      console.log('-->', idClient);
 
       if (idClient)
         this.getPedidosClientes(idClient);
@@ -226,6 +320,13 @@ class Orders extends Component {
     return (
       <div>
         <Navbar />
+
+        <Alert 
+          show={this.state.showAlert} 
+          title={this.state.alertTitle} 
+          message={`${this.state.alertMessage}.`}
+          type={this.state.alertType} />
+
         <Search 
           title="Pedidos"/>
 
@@ -317,7 +418,11 @@ class Orders extends Component {
                       <button 
                         type="button" 
                         className="btn btn-link" 
-                        data-toggle="tooltip" data-placement="bottom" title="Editar pedido">
+                        data-toggle="tooltip" 
+                        data-placement="bottom"
+                        title="Editar pedido"
+                        onClick={ () => { this.onEdit(order) }}
+                        disabled={order.pedido.status !== 'A'}>
                         <Edit />
                       </button>
                     </td>
@@ -325,7 +430,9 @@ class Orders extends Component {
                       <button 
                         type="button" 
                         className="btn btn-link" 
-                        data-toggle="tooltip" data-placement="bottom" title="Cancelar pedido">
+                        data-toggle="tooltip" data-placement="bottom" title="Cancelar pedido"
+                        onClick={ () => { this.cancelarAlert(order) }}
+                        disabled={order.pedido.status !== 'A'}>
                         <Delete />
                       </button>
                     </td>
@@ -344,7 +451,9 @@ class Orders extends Component {
         <Modal 
           title="Abertura de pedido"
           buttons={[
-            <button key="2"
+            <button 
+              id="idConfirmarPedido"
+              key="2"
               form="orderForm"  
               type="submit" 
               className="btn btn-primary"
@@ -352,21 +461,29 @@ class Orders extends Component {
             <button key="3" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
           <AddForm 
+            ref="addForm"
             client={client} 
             onAddProducts={this.showAddProductsModal}
             products={this.state.currentProducts}
             onRemove={this.removeProduct}
-            confirmation={this.confirmarPedido} />
+            confirmation={this.confirmarPedido}
+            onNotify={this.onNotification} />
         </Modal>
 
         <ConfirmationModal
           onCancel={this.showAddModal}
-          confirmation={this.state.confirmation} />
+          confirmation={this.state.confirmation} 
+          onNotify={this.onNotification}/>
 
         <AddProductModal 
          productsAdded={this.state.currentProducts}
          onFinish={this.onProductsModalFinish}
          onCancel={this.showAddModal}/>
+
+        <DecisionModal title="Atenção" actionTitle="Cancelar pedido">
+          <div>Deseja realmente cancelar esse pedido?</div>
+          <strong>{this.state.modalContent}</strong>
+        </DecisionModal>
 
       </div>
     </div>

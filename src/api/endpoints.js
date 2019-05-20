@@ -26,6 +26,7 @@ export const GET_PEDIDO_STATUS_PAG = 'pedidos/get_pedidos_por_status_paginacao.p
 export const GET_PEDIDO_POR_CLIENTE = 'pedidos/get_pedidos_por_id_cliente_e_data_entrega.php'
 export const GET_PEDIDO_POR_ID = 'pedidos/get_pedido_por_id.php'
 export const PUT_PEDIDO = 'pedidos/put_pedidos.php'
+export const EDIT_PEDIDO = 'pedidos/edit_pedido_por_id_cliente.php'
 
 // ---- OUTROS
 export const GET_TAMANHO_PRODUTO = 'tamanhos/get_tamanhos.php'

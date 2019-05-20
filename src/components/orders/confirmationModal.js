@@ -72,10 +72,9 @@ class Confirmation extends Component {
       data_pedido: currentDateTime(),
       data_entrega: unformatDateTime(confirmation.dataEntrega ? confirmation.dataEntrega : null),
       observacao: confirmation.observacao ? confirmation.observacao : '',
+      pagamento: 'N',
       
     }
-
-    //pagamento: confirmation.pagamento ? confirmation.pagamento : '',
 
     for (var i = 0; i < products.length; i++ ) {
       const keyBase = `produto_valor[${i}]`;
@@ -93,18 +92,23 @@ class Confirmation extends Component {
       param[observacao] = product.obs ? product.obs : '';
     }
 
-    console.log('ALL here: ', param);
-
     axios.post(PUT_PEDIDO, putPedidoData(param))
     .then(response => {
 
-      const result = response.data;
+      try {
+        const result = response.data;
 
-      console.log('-->', result);
-      
-      this.setState({
-        taxas: result,
-      });
+        if (result['status'] === 'ok') {
+          this.props.onNotify('', 'Pedido adicionado com sucesso');
+        } else {
+          alert('OPS!');
+        }
+
+        console.log('-->', result);
+
+      } catch(errors) {
+        console.error(errors);
+      }
 
     }).catch(errors => console.error(errors));
 
@@ -192,6 +196,11 @@ class Confirmation extends Component {
                   <input className="form-check-input" type="checkbox" value="total" id="kTotal" onChange={this.onCheckChange} />
                   <label className="form-check-label" htmlFor="kTotal">
                   <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Total:</span> R$ {confirmation.total}
+                  </label>
+                </div>
+                <div className="form-check">
+                  <label className="form-check-label" htmlFor="kTotal">
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Observacao:</span> {confirmation.observacao}
                   </label>
                 </div>
 

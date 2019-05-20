@@ -3,7 +3,7 @@ import Navbar from '../navbar';
 import Toolbar from '../toolbar';
 import Alert from '../alert';
 import Status from './status';
-import {formatDateTime} from '../utils';
+import { formatDateTime, convertProducts } from '../utils';
 
 //API
 import {
@@ -40,6 +40,7 @@ export default class Detail extends Component {
       pedido: {},
       endereco: {},
       cliente: {},
+      products: [],
       idPedido: '',
     }
 
@@ -53,13 +54,16 @@ export default class Detail extends Component {
     .then(response => {
 
       const result = response.data[0];
-      
+
+      const products = convertProducts(result.pedido.produto_valor);
       console.log(result);
+      console.log(products);
 
       this.setState({
         pedido: result.pedido,
         cliente: result.cliente,
         endereco: result.endereco,
+        products,
         idPedido: id,
       });
 
@@ -100,6 +104,7 @@ export default class Detail extends Component {
               <p className="card-text">Data entrega: {formatDateTime(this.state.pedido.data_entrega)}</p>
               <p className="card-text">Taxa entrega: R$ {this.state.pedido.taxa_entrega},00</p>
               <p className="card-text">Data do pedido: {formatDateTime(this.state.pedido.data_pedido)}</p>
+              
               <button type="button" 
                 className="btn btn-primary mr-auto">Cancelar pedido</button>
             </div>
