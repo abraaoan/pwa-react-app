@@ -9,6 +9,7 @@ import {
   EDIT_CLIENTE,
 } from '../../api/endpoints';
 import Alert from '../alert';
+import { currentDateTime, unFormatDate, formatDate } from '../utils';
 
 class Form extends Component {
 
@@ -78,10 +79,10 @@ class Form extends Component {
       nome_cliente: this.state.name,
       telefone1: this.state.phone,
       telefone2: this.state.phone2,
-      aniversario: this.state.bithday,
+      aniversario: this.state.bithday ? unFormatDate(this.state.bithday) : unFormatDate('01/01/2900'),
       lista_negra: this.state.blackList === 'nao' ? '0' : '1',
       observacao_cliente: this.state.observation,
-      data_cadastro: this.state.date ? this.state.date : this.getCurrentDate()
+      data_cadastro: this.state.date ? this.state.date : currentDateTime()
     }
 
     this.sendClient(client);
@@ -104,8 +105,6 @@ class Form extends Component {
 
       try {
         let result = response.data;
-
-        console.log(result);
 
         if (Array.isArray(result)) {
           const client = result[0];
@@ -140,7 +139,7 @@ class Form extends Component {
       bithday: '',
       blackList: 'nao',
       observation: '',
-      date: this.getCurrentDate(),
+      date: currentDateTime(),
       editMode: false,
     });
   }
@@ -154,27 +153,13 @@ class Form extends Component {
         name: client.nome_cliente,
         phone: client.telefone1,
         phone2: client.telefone2 == null ? '' : client.telefone2,
-        bithday: client.aniversario,
+        bithday: formatDate(client.aniversario),
         blackList: client.lista_negra === '0' ? 'nao' : 'sim',
         observation: client.observacao_cliente,
-        date: client.data_cadastro ? client.data_cadastro : this.getCurrentDate(),
+        date: client.data_cadastro ? client.data_cadastro : currentDateTime(),
         editMode: true
       })
     }
-  }
-
-  getCurrentDate = () => {
-
-    let d     = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day   = '' + d.getDate(),
-        year  = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-');
-
   }
   
   render() {
@@ -229,7 +214,7 @@ class Form extends Component {
               <label htmlFor="inputNome">Aniversário</label>
               <input className="form-control"
               id="bithday" 
-              placeholder="Ex: 1986-01-01"
+              placeholder="Ex: 01/01/1986"
               value={this.state.bithday}
               onChange={this.onChangeBirthday}/>
              </div>

@@ -7,7 +7,7 @@ import Form from './form';
 import $ from 'jquery';
 import DecisionModal from '../decisionModal';
 import Alert from '../alert';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 // APIS
 import queryString from 'query-string';

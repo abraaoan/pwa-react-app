@@ -6,6 +6,8 @@ import Form from './addressForm';
 import Alert from '../alert';
 import $ from 'jquery';
 import DecisionModal from '../decisionModal';
+import { formatDate }  from '../utils';
+import { Link } from 'react-router-dom'
 
 //API
 import {
@@ -209,6 +211,19 @@ export default class Detail extends Component {
               <p className="card-text">Telefone: {this.state.client.telefone1}</p>
               <p className="card-text">Telefone outros: {this.state.client.telefone2 ? this.state.client.telefone2 : 'inexistente'}</p>
               <p className="card-text">Lista negra? <b>{this.state.client.lista_negra === '0' ? 'Não': 'SIM'}</b></p>
+              <p className="card-text">Aniversario: {this.state.client.aniversario ? (formatDate(this.state.client.aniversario) === '01/01/2900' ? 'Não informado' : formatDate(this.state.client.aniversario)) : ''}</p>
+              
+              <Link to={{
+                        pathname: process.env.PUBLIC_URL + '/pedidos',
+                        search: '?page=1&action=addPedido',
+                        client: this.state.client
+                      }}
+                    style={
+                      {marginRight: 20}
+                    }>
+                        Fazer pedido
+                      </Link>
+
               <button type="button" 
                 className="btn btn-primary mr-auto"
                 data-toggle="modal" 

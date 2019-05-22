@@ -230,7 +230,7 @@ class Product extends Component {
              data-toggle="modal" 
              data-target=".bd-example-modal-lg" 
              onClick={() => { this.refs.form.clearFields(); }}>Adicionar novo produto</button>
-            <Pages path="product" pagination={this.state.pagination} currentPage={this.state.currentPage} />  
+            <Pages path="produtos" pagination={this.state.pagination} currentPage={this.state.currentPage} />  
           </div>
 
         </div>
