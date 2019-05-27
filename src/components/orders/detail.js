@@ -3,7 +3,7 @@ import Navbar from '../navbar';
 import Toolbar from '../toolbar';
 import Alert from '../alert';
 import Status from './status';
-import { formatDateTime, convertProducts, currentDateTime, unformatDateTime } from '../utils';
+import { formatDateTime, convertProducts} from '../utils';
 
 //API
 import {
@@ -52,7 +52,8 @@ export default class Detail extends Component {
       products: [],
       idPedido: '',
       status: 'A',
-      pagamentoEfetuado: false
+      pagamentoEfetuado: false,
+      showAlert: false,
     }
 
   }
@@ -66,8 +67,29 @@ export default class Detail extends Component {
     this.setState({ pagamentoEfetuado: isChecked });
   }
 
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.sendData();
+  }
+
+  onNotification = () => {
+
+    window.scrollTo(0, 0);
+    this.setState({ showAlert: true });
+
+    // Self close
+    setTimeout(() => {
+      this.setState({showAlert: false})
+    }, 5000); // 5s
+
+    this.getOrders();
+
+  }
+
   // Get Client Informations
-  getOrders = (id) => {
+  getOrders = () => {
+
+    const { id } = this.props.match.params;
 
     // Request Client
     axios.post(GET_PEDIDO_POR_ID, getPedidoPorId(id))
@@ -76,8 +98,8 @@ export default class Detail extends Component {
       const result = response.data[0];
 
       const products = convertProducts(result.pedido.produto_valor);
-      console.log(result);
-      console.log(products);
+      //console.log(result);
+      //console.log(products);
 
       this.setState({
         pedido: result.pedido,
@@ -86,6 +108,7 @@ export default class Detail extends Component {
         products,
         idPedido: id,
         status: result.pedido.status,
+        pagamentoEfetuado: result.pedido.pagamento_efetuado === 'S',
       });
 
     }).catch(errors => console.error(errors));
@@ -93,26 +116,26 @@ export default class Detail extends Component {
   }
 
   // Only when editMode
-  sendData = (confirmation) => {
+  sendData = () => {
 
-    const client = confirmation.client ? confirmation.client : null;
-    const products = confirmation.products ? confirmation.products : null;
-    const address = confirmation.endereco ? confirmation.endereco: null;
+    const client = this.state.cliente ? this.state.cliente : null;
+    const products = this.state.products ? this.state.products : null;
+    const address = this.state.endereco ? this.state.endereco : null;
 
     if (!client | !address | !products)
       return
 
     var param = {
-      id_pedido: this.state.pedido.pedido.id_pedido,
+      id_pedido: this.state.pedido.id_pedido,
       id_cliente: client.id_cliente,
-      status: 'A',
+      status: this.state.status,
       id_endereco: address.id_endereco,
-      taxa_entrega: confirmation.taxa ? confirmation.taxa : 0,
-      data_pedido: currentDateTime(),
-      data_entrega: unformatDateTime(confirmation.dataEntrega ? confirmation.dataEntrega : null),
-      observacao: confirmation.observacao ? confirmation.observacao : '',
-      pagamento: 'N',
-      pagamento_efetuado: '0',
+      taxa_entrega: this.state.pedido.taxa_entrega ? this.state.pedido.taxa_entrega : 0,
+      data_pedido: this.state.pedido.data_pedido ? this.state.pedido.data_pedido : null,
+      data_entrega: this.state.pedido.data_entrega ? this.state.pedido.data_entrega : null,
+      observacao: this.state.pedido.observacao ? this.state.pedido.observacao : '',
+      pagamento: this.state.pedido.pagamento ? this.state.pedido.pagamento : 'D',
+      pagamento_efetuado: this.state.pagamentoEfetuado ? '1' : '0',
       
     }
 
@@ -138,11 +161,10 @@ export default class Detail extends Component {
         const result = response.data;
 
         if (result['status'] === 'ok') {
-          this.props.onNotify('', 'Pedido Atualizado com sucesso');
+          this.onNotification();
         } else {
           alert('OPS!');
         }
-
         console.log('-->', result);
 
       } catch(errors) {
@@ -154,8 +176,7 @@ export default class Detail extends Component {
   }
 
   componentDidMount = () => {
-    const { id } = this.props.match.params;
-    this.getOrders(id);
+    this.getOrders();
   }
 
   render() {
@@ -165,9 +186,9 @@ export default class Detail extends Component {
 
         <Alert 
         show={this.state.showAlert} 
-        title={this.state.alertTitle} 
-        message={`${this.state.alertMessage}.`}
-        type={this.state.alertType} />
+        title="" 
+        message="Pedido Atualizado com sucesso"
+        type="success" />
 
         <Toolbar
             title="Detalhe do pedido" 
@@ -182,11 +203,14 @@ export default class Detail extends Component {
             </div>
             <div className="card-body">
               <h5 className="card-title">{`${this.state.cliente.nome_cliente}`}</h5>
-              <p className="card-text">Status atual: <Status style={{float: 'right', marginRight:220 }} value={ this.state.pedido.status } /></p>
+              <p className="card-text">Status atual: <Status style={{float: 'right', marginRight:200 }} value={ this.state.pedido.status } /></p>
               <p className="card-text">Data entrega: {formatDateTime(this.state.pedido.data_entrega)}</p>
               <p className="card-text">Taxa entrega: R$ {this.state.pedido.taxa_entrega},00</p>
               <p className="card-text">Data do pedido: {formatDateTime(this.state.pedido.data_pedido)}</p>
-              
+              <p className="card-text">Pagamento: {
+                this.state.pedido.pagamento ? (this.state.pedido.pagamento === 'C' ? 'Cartão' : 'Dinheiro') : 'Não informado'
+              }</p>
+
               <p style={{color:'#666666'}}>Itens:</p>
               { this.state.products.map(product => {
                 return (
@@ -198,7 +222,7 @@ export default class Detail extends Component {
 
               <div className="card">
                 <div className="card-body">
-                  <form>
+                  <form id="orderDetailForm" onSubmit={this.onSubmit}>
 
                     <b>Modificar status:</b>
                     <div className="form-check">
@@ -254,10 +278,8 @@ export default class Detail extends Component {
                       </label>
                     </div>
 
-                    <button type="button" style={{marginTop: 10}}
+                    <button type="submit" style={{marginTop: 10}}
                       className="btn btn-primary mr-auto">Atualizar pedido</button>
-                    <button type="button" style={{marginTop: 10, marginLeft: 10}}
-                      className="btn btn-danger mr-auto">Cancelar pedido</button>
                   </form>
                 </div>
               </div>

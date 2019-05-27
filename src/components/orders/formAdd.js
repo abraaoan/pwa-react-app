@@ -55,6 +55,7 @@ export default class AddForm extends Component {
       observacao: '',
       client: this.props.client ? this.props.client : {},
       editMode: false,
+      formaPagamento: 'D',
       pedido: {},
     }
     
@@ -90,6 +91,15 @@ export default class AddForm extends Component {
 
   onChangeObservacao = (e) => {
     this.setState({ observacao: e.target.value });
+  }
+
+  onFormaPagtoChange = (e) => {
+    this.setState({ formaPagamento: e.target.value });
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.confirmation();
   }
 
   // Get Client Address
@@ -143,6 +153,7 @@ export default class AddForm extends Component {
       taxa: this.state.taxa,
       products: products,
       total,
+      pagamento: this.state.formaPagamento,
       observacao: this.state.observacao,
     }
 
@@ -165,6 +176,7 @@ export default class AddForm extends Component {
       taxa: '',
       observacao: '',
       client: this.props.client ? this.props.client : {},
+      formaPagamento: 'D',
       editMode: false
     });
   }
@@ -181,14 +193,10 @@ export default class AddForm extends Component {
       taxa: pedido.pedido.taxa_entrega,
       observacao: pedido.pedido.observacao,
       client: pedido.cliente,
+      formaPagamento: pedido.pedido.pagamento ? pedido.pedido.pagamento : 'D',
       editMode: true,
       pedido
     });
-  }
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    this.confirmation();
   }
 
   // Only when editMode
@@ -210,7 +218,7 @@ export default class AddForm extends Component {
       data_pedido: currentDateTime(),
       data_entrega: unformatDateTime(confirmation.dataEntrega ? confirmation.dataEntrega : null),
       observacao: confirmation.observacao ? confirmation.observacao : '',
-      pagamento: 'N',
+      pagamento: this.state.formaPagamento,
       pagamento_efetuado: '0',
       
     }
@@ -477,6 +485,43 @@ export default class AddForm extends Component {
                     rows="3"
                     value={this.state.observacao}
                     onChange={this.onChangeObservacao}></textarea>
+                </div>
+              </div>
+            </div>
+            {/* Forma de pagamento */}
+          <div className="card" style={styles.cards}>
+              <div className="card-header">
+                Forma de pagamento
+              </div>
+              <div className="card-body container">
+                <div className="row">
+                  <div className="col-5">
+                    <label>Escolha uma forma de pagamento:</label>
+                  </div>
+                  <div className="col-2">
+                    <input 
+                     className="form-check-input" 
+                     type="radio" 
+                     value="D" 
+                     id="idDinheiro"
+                     checked={this.state.formaPagamento === 'D'}
+                     onChange={this.onFormaPagtoChange}/>
+                    <label className="form-check-label" htmlFor="idDinheiro">
+                      Dinheiro
+                    </label>
+                  </div>
+                  <div className="col-2">
+                    <input
+                     className="form-check-input"
+                     type="radio" 
+                     value="C" 
+                     id="idCartao"
+                     checked={this.state.formaPagamento === 'C'}
+                     onChange={this.onFormaPagtoChange}/>
+                    <label className="form-check-label" htmlFor="idCartao">
+                      Cartão
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>

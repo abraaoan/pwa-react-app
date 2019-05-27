@@ -17,7 +17,7 @@ class Confirmation extends Component {
     super(props);
 
     this.state = {
-      defaultKeys: ['clientName', 'dataEntrega', 'endereco', 'taxa', 'total'],
+      defaultKeys: ['clientName', 'dataEntrega', 'endereco', 'taxa', 'total', 'pagamento'],
       keys: [],
     }
   }
@@ -72,7 +72,7 @@ class Confirmation extends Component {
       data_pedido: currentDateTime(),
       data_entrega: unformatDateTime(confirmation.dataEntrega ? confirmation.dataEntrega : null),
       observacao: confirmation.observacao ? confirmation.observacao : '',
-      pagamento: 'N',
+      pagamento: confirmation.pagamento ? confirmation.pagamento : 'D',
       
     }
 
@@ -159,7 +159,7 @@ class Confirmation extends Component {
                   </label>
                 </div>
 
-                <label style={{color: 'rgba(0, 0, 0, 0.5)', marginBottom: -10}}>Itens:</label>
+                <label style={{color: 'rgba(0, 0, 0, 0.5)', marginBottom: -10}}>Seu pedido é:</label>
                 { confirmation.products ? confirmation.products.map(product => {
                   this.addValue(product.id_produto);
                   
@@ -177,30 +177,40 @@ class Confirmation extends Component {
                 <div className="form-check">
                   <input className="form-check-input" type="checkbox" value="dataEntrega" id="kDataEntrega" onChange={this.onCheckChange} />
                   <label className="form-check-label" htmlFor="kDataEntrega">
-                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Data de entrega:</span> {confirmation.dataEntrega}
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Para entrega no dia:</span> {confirmation.dataEntrega}
                   </label>
                 </div>
                 <div className="form-check">
                   <input className="form-check-input" type="checkbox" value="endereco" id="kEndereco" onChange={this.onCheckChange} />
                   <label className="form-check-label" htmlFor="kEndereco">
-                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Entregar:</span> { confirmation.endereco ? `${confirmation.endereco.logradouro}, ${confirmation.endereco.numero}, ${confirmation.endereco.bairro} ${confirmation.endereco.complemento ? ', ' + confirmation.endereco.complemento : ''}` : "-" }
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>No endereço:</span> { confirmation.endereco ? `${confirmation.endereco.logradouro}, ${confirmation.endereco.numero}, ${confirmation.endereco.bairro} ${confirmation.endereco.complemento ? ', ' + confirmation.endereco.complemento : ''}` : "-" }
                   </label>
                 </div>
                 <div className="form-check">
                   <input className="form-check-input" type="checkbox" value="taxa" id="kTaxa" onChange={this.onCheckChange} />
                   <label className="form-check-label" htmlFor="kTaxa">
-                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Taxa de entrega:</span> R$ {confirmation.taxa}
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Com a taxa de entrega:</span> R$ {confirmation.taxa}
                   </label>
                 </div>
                 <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="total" id="kTotal" onChange={this.onCheckChange} />
-                  <label className="form-check-label" htmlFor="kTotal">
-                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Total:</span> R$ {confirmation.total}
+                  <input className="form-check-input" type="checkbox" value="pagamento" id="kPagamento" onChange={this.onCheckChange} />
+                  <label className="form-check-label" htmlFor="kPagamento">
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Forma de pagamento:</span> {confirmation.pagamento === 'C' ? 'Cartão' : 'Dinheiro'}
                   </label>
                 </div>
+                {confirmation.observacao ? 
                 <div className="form-check">
                   <label className="form-check-label" htmlFor="kTotal">
                   <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Observacao:</span> {confirmation.observacao}
+                  </label>
+                </div>
+                :
+                ''
+                }
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="total" id="kTotal" onChange={this.onCheckChange} />
+                  <label className="form-check-label" htmlFor="kTotal">
+                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Totalizando:</span> R$ {confirmation.total}
                   </label>
                 </div>
 
