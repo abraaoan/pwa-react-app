@@ -10,6 +10,7 @@ import {
   PUT_PEDIDO,
  } from '../../api/endpoints';
 
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 class Confirmation extends Component {
 
@@ -134,6 +135,24 @@ class Confirmation extends Component {
 
   }
 
+  getAddressLabel = (confirmation) => {
+    const idCentro = isOnDevMode ? '11' : '13';
+    const idVieralves = isOnDevMode ? '12' : '14';
+
+    if (confirmation.endereco) {
+      
+      if (confirmation.endereco.id_endereco === idCentro || confirmation.endereco.id_endereco === idVieralves) {
+        return 'Retirar na loja: '
+      } else {
+        return 'No endereço: ';
+      }
+
+    } else {
+      return '';
+    }
+
+  }
+
   render() {
 
     const { confirmation } = this.props;
@@ -183,7 +202,10 @@ class Confirmation extends Component {
                 <div className="form-check">
                   <input className="form-check-input" type="checkbox" value="endereco" id="kEndereco" onChange={this.onCheckChange} />
                   <label className="form-check-label" htmlFor="kEndereco">
-                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>No endereço:</span> { confirmation.endereco ? `${confirmation.endereco.logradouro}, ${confirmation.endereco.numero}, ${confirmation.endereco.bairro} ${confirmation.endereco.complemento ? ', ' + confirmation.endereco.complemento : ''}` : "-" }
+                    <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>
+                      {this.getAddressLabel(confirmation)}
+                    </span> 
+                    { confirmation.endereco ? `${confirmation.endereco.logradouro}, ${confirmation.endereco.numero}, ${confirmation.endereco.bairro} ${confirmation.endereco.complemento ? ', ' + confirmation.endereco.complemento : ''}` : "-" }
                   </label>
                 </div>
                 <div className="form-check">

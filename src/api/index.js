@@ -87,8 +87,8 @@ export const getPedidoPorId = (id) => {
   const data = new FormData();
 
   data.append('id_pedido', id);
-  data.append('token', token('get_produtos_paginacao'));
-  data.append('nome_script', 'get_produtos_paginacao');
+  data.append('token', token('get_pedido_por_id'));
+  data.append('nome_script', 'get_pedido_por_id');
 
   return data;
 

@@ -40,6 +40,8 @@ const styles = ({
   },
 });
 
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+
 export default class Detail extends Component {
 
   constructor(props) {
@@ -175,6 +177,17 @@ export default class Detail extends Component {
 
   }
 
+  getAddressLabel = (endereco) => {
+    const idCentro = isOnDevMode ? '11' : '13';
+    const idVieralves = isOnDevMode ? '12' : '14';
+      
+    if (endereco.id_endereco === idCentro || endereco.id_endereco === idVieralves) {
+      return 'Endereço de retirada:'
+    } else {
+      return 'Endereço de entrega:';
+    }
+  }
+
   componentDidMount = () => {
     this.getOrders();
   }
@@ -224,7 +237,7 @@ export default class Detail extends Component {
                 <div className="card-body">
                   <form id="orderDetailForm" onSubmit={this.onSubmit}>
 
-                    <b>Modificar status:</b>
+                    <b>Status:</b>
                     <div className="form-check">
                       <input 
                         className="form-check-input" 
@@ -290,7 +303,7 @@ export default class Detail extends Component {
         <div className="container-fluid">
           <div className="card" style={styles.client}>
             <div className="card-header">
-              Endereço de entrega
+              {this.getAddressLabel(this.state.endereco)}
             </div>
             <div className="card-body">
               <p className="card-text">Logradouro: {this.state.endereco.logradouro}</p>

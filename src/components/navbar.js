@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import packageJson from '../../package.json';
 
 const colors = {
   logo: { color: '#FFF' },
@@ -13,7 +14,7 @@ export default class Navbar extends Component {
                 <a className="navbar-brand"
                  href={process.env.PUBLIC_URL + '/'}
                  style={colors.logo}>
-                 iPede Aí
+                 Cats Pedidos <small className="text-muted" style={{fontSize: 12}}>v{packageJson.version}</small>
                 </a>
                 <ul className="nav justify-content-end">
                   <li className="nav-item">

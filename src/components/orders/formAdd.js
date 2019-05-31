@@ -39,6 +39,30 @@ const styles = ({
   }
 });
 
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+
+const centro = {
+  bairro: 'Centro',
+  cep: '69020-030',
+  complemento: '',
+  id_cliente: isOnDevMode ? '31' : '27', //Change when production
+  id_endereco: isOnDevMode ? '11' : '13', //Change when production
+  logradouro: 'Av. Joaquim Nabuco',
+  numero: '1180',
+  referencia: '',
+}
+
+const vieralves = {
+  bairro: 'Vieiralves',
+  cep: '69053-050',
+  complemento: '',
+  id_cliente: isOnDevMode ? '31' : '27', //Change when production
+  id_endereco: isOnDevMode ? '12' : '14', //Change when production
+  logradouro: 'Rua Rio Purús',
+  numero: '660',
+  referencia: '',
+}
+
 export default class AddForm extends Component {
 
   constructor(props){
@@ -47,7 +71,7 @@ export default class AddForm extends Component {
     this.state = {
       dateTime: '',
       status: 'A',
-      address: {},
+      address: centro,
       retirada: 'centro',
       addresses: [],
       taxas: [],
@@ -81,7 +105,7 @@ export default class AddForm extends Component {
   onChangeRetirada = (e) => {
     this.setState({ 
       retirada: e.target.value,
-      address: {},
+      address: e.target.value === 'centro' ? centro : vieralves,
     });
   }
 
@@ -109,6 +133,10 @@ export default class AddForm extends Component {
     .then(response => {
 
       const result = response.data;
+
+      
+
+      console.log(result);
       
       this.setState({
         addresses: result,
@@ -286,7 +314,7 @@ export default class AddForm extends Component {
               </div>
               <div className="row">
                 <p className="col-4 card-text">
-                  Data e hora da entregada:
+                  Data e hora da entrega:
                 </p>
                 <div className="col-4">
                 <input 

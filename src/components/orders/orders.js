@@ -384,7 +384,8 @@ class Orders extends Component {
               <th scope="col">Telefone 1</th>
               <th scope="col">Data e hora</th>
               <th scope="col">Bairro</th>
-              <th scope="col">Taxa</th>
+              {/* <th scope="col">Taxa</th> */}
+              <th scope="col">Pago?</th>
               <th scope="col">Status</th>
               <th scope="col" colSpan="2"></th>
             </tr>
@@ -407,8 +408,11 @@ class Orders extends Component {
                     <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
                       {order.endereco.bairro}
                     </td>
-                    <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
+                    {/* <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
                       R$ {order.pedido.taxa_entrega}
+                    </td> */}
+                    <td style={{textAlign: 'center'}}>
+                      {order.pedido.pagamento_efetuado}
                     </td>
                     
                     <td>
