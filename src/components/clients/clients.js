@@ -101,7 +101,7 @@ class Clients extends Component {
       try {
         let result = response.data;
         if (result['status'] === 'ok') {
-          const message = 'Produto removido com sucesso!'
+          const message = 'Cliente removido com sucesso!'
           this.onAddClient(client, message);
         } else {
 

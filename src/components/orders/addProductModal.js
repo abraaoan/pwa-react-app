@@ -46,19 +46,19 @@ class AddProductModal extends Component {
 
   onSelectProduct = (product) => {
 
-    var all = [...this.state.productsToSave];
-    var index = all.indexOf(product);
+    // var all = [...this.state.productsToSave];
+    // var index = all.indexOf(product);
 
-    if (index !== -1) {
-      all.splice(index, 1);
-      this.setState({
-        productsToSave: all
-      });
-    } else {
+    // if (index !== -1) {
+    //   all.splice(index, 1);
+    //   this.setState({
+    //     productsToSave: all
+    //   });
+    // } else {
       this.setState(prevState => ({
         productsToSave: [...prevState.productsToSave, product]
       }))
-    }
+    // }
   }
 
   add = () => {

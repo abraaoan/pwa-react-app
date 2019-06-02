@@ -4,7 +4,7 @@ export default class Modal extends Component {
     render() {
         return (
             <div>
-                <div id="modalProduto" className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div id="modalProduto" {...this.props} className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                   <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                     <div className="modal-content">
                       <div className="modal-header">

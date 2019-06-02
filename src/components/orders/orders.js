@@ -11,6 +11,7 @@ import $ from 'jquery';
 import {formatDateTime} from '../utils';
 import Alert from '../alert';
 import DecisionModal from '../decisionModal';
+import Form from '../clients/addressForm';
 
 // ICONS
 import Edit from '../../assets/edit';
@@ -31,6 +32,7 @@ import {
 } from '../../api'; 
 import { 
   GET_PEDIDO_PAGINACAO,
+  GET_PEDIDO_DATAPEDIDO_PAGINACAO,
   GET_PEDIDO_STATUS_PAG,
   GET_PEDIDO_POR_CLIENTE,
   EDIT_PEDIDO,
@@ -85,11 +87,14 @@ class Orders extends Component {
 
   }
 
-  getPedidos = (status, date) => {
+  getPedidos = (status, date, isDtPedido) => {
     const queries = queryString.parse(this.props.location.search)
     const paginaAtual = queries.page;
     const newData = data(6, paginaAtual, date, status);
-    const urlParam = status === 'T' ? GET_PEDIDO_PAGINACAO : GET_PEDIDO_STATUS_PAG;
+    var urlParam = status === 'T' ? GET_PEDIDO_PAGINACAO : GET_PEDIDO_STATUS_PAG;
+
+    if (isDtPedido)
+      urlParam = GET_PEDIDO_DATAPEDIDO_PAGINACAO;
 
     this.props.addOrders([]);
 
@@ -133,7 +138,10 @@ class Orders extends Component {
 
   changeStatus = (status) => {
     this.getPedidos(status);
-    this.setState({ currentStatus: status });
+    this.setState({ 
+      currentStatus: status,
+      currentDate: '',
+    });
   }
 
   onKeyPress = (e) => {
@@ -141,7 +149,7 @@ class Orders extends Component {
         this.filterByDate();
   }
 
-  filterByDate = () => {
+  filterByDate = (isDtPedido) => {
 
     const queries = queryString.parse(this.props.location.search)
     const action = queries.action;
@@ -151,10 +159,10 @@ class Orders extends Component {
       const idClient = queries.idClient;
 
       if (idClient)
-        this.getPedidosClientes(idClient, this.state.currentDate);
+        this.getPedidosClientes(idClient, this.state.currentDate, isDtPedido);
 
     } else {
-      this.getPedidos(this.state.currentStatus, this.state.currentDate);
+      this.getPedidos(this.state.currentStatus, this.state.currentDate, isDtPedido);
     }
 
   }
@@ -179,10 +187,22 @@ class Orders extends Component {
     $('#addProductModal').modal();
   }
 
+  showAddAddressModal = () => {
+    $('#modalProduto').modal('hide');
+    $('#idModalAddress').modal();
+  }
+
   onProductsModalFinish = (products) => {
     this.setState({
       currentProducts: products
     });    
+  }
+
+  onAddAddress = (address, message) => {
+    this.onNotification('', message);
+    $('#idModalAddress').modal('hide');
+    this.refs.addForm.getClientAddress(address.id_cliente);
+    $('#modalProduto').modal();
   }
 
   removeProduct = (product) => {
@@ -272,6 +292,7 @@ class Orders extends Component {
 
     $('#confirmationModal').modal('hide');
     $('#modalProduto').modal('hide');
+    $('#idModalAddress').modal('hide');
 
     this.setState({
       alertTitle: title,
@@ -309,7 +330,6 @@ class Orders extends Component {
     } else {
       this.getPedidos('T');
     }
-
   }
 
   render() {
@@ -368,10 +388,18 @@ class Orders extends Component {
                   onChange={this.onDateChange}
                   onKeyPress={this.onKeyPress}/>
               <div className="input-group-prepend">
-                  <button 
-                    className="btn btn-outline-primary" 
-                    type="button"
-                    onClick={ () => { this.filterByDate() }}>Filtrar</button>
+                <div className="btn-group" role="group">
+                  <button id="btnGroupDrop1" type="button" className="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filtrar
+                  </button>
+                  <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <button 
+                      className="dropdown-item"
+                      onClick={ () => { this.filterByDate(false) }}>Data entrega</button> 
+                    <button className="dropdown-item"
+                      onClick={ () => { this.filterByDate(true) }}>Data pedido</button>
+                  </div>
+                </div>
               </div>
           </div>
         
@@ -385,7 +413,8 @@ class Orders extends Component {
               <th scope="col">Data e hora</th>
               <th scope="col">Bairro</th>
               {/* <th scope="col">Taxa</th> */}
-              <th scope="col">Pago?</th>
+              <th scope="col" style={{textAlign: 'center'}} >F. Pago</th>
+              <th scope="col" style={{textAlign: 'center'}} >Pago?</th>
               <th scope="col">Status</th>
               <th scope="col" colSpan="2"></th>
             </tr>
@@ -411,6 +440,9 @@ class Orders extends Component {
                     {/* <td onClick={ ()=> this.navigateToDetail(order.pedido.id_pedido) }>
                       R$ {order.pedido.taxa_entrega}
                     </td> */}
+                    <td style={{textAlign: 'center'}}>
+                      {order.pedido.pagamento ? order.pedido.pagamento === 'C' ? 'Crédito' : 'Dinheiro' : '-'}
+                    </td>
                     <td style={{textAlign: 'center'}}>
                       {order.pedido.pagamento_efetuado}
                     </td>
@@ -468,6 +500,7 @@ class Orders extends Component {
             ref="addForm"
             client={client} 
             onAddProducts={this.showAddProductsModal}
+            onAddAddress={this.showAddAddressModal}
             products={this.state.currentProducts}
             onRemove={this.removeProduct}
             confirmation={this.confirmarPedido}
@@ -488,6 +521,27 @@ class Orders extends Component {
           <div>Deseja realmente cancelar esse pedido?</div>
           <strong>{this.state.modalContent}</strong>
         </DecisionModal>
+
+        <Modal id="idModalAddress"
+            title="Cadastro de endereço"
+            buttons={[
+              <button key="2" 
+                type="submit" 
+                form="clientAddressForm" 
+                className="btn btn-primary">Salvar</button>,
+              <button key="3" 
+                type="button" 
+                className="btn btn-secondary" 
+                data-dismiss="modal"
+                onClick={ ()=> { $('#modalProduto').modal(); }}>Cancelar</button>,
+            ]}>
+
+            <Form 
+              ref="form"
+              onAddAddress={this.onAddAddress}
+              idCliente={client ? client.id_cliente : ''}/>
+
+          </Modal>
 
       </div>
     </div>

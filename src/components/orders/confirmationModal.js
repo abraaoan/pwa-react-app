@@ -211,7 +211,10 @@ class Confirmation extends Component {
                 <div className="form-check">
                   <input className="form-check-input" type="checkbox" value="taxa" id="kTaxa" onChange={this.onCheckChange} />
                   <label className="form-check-label" htmlFor="kTaxa">
-                  <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Com a taxa de entrega:</span> R$ {confirmation.taxa}
+                    <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>
+                      {confirmation.taxa === '0' ? 'Sem taxa de entrega: ' : 'Com a taxa de entrega: '}
+                    </span> 
+                    R$ {confirmation.taxa}
                   </label>
                 </div>
                 <div className="form-check">

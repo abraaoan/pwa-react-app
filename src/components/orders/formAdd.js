@@ -75,12 +75,13 @@ export default class AddForm extends Component {
       retirada: 'centro',
       addresses: [],
       taxas: [],
-      taxa: '',
+      taxa: '0',
       observacao: '',
       client: this.props.client ? this.props.client : {},
       editMode: false,
       formaPagamento: 'D',
       pedido: {},
+      taxaEnable: false,
     }
     
   }
@@ -98,7 +99,8 @@ export default class AddForm extends Component {
 
     this.setState({
       address,
-      retirada: addressIndex
+      retirada: addressIndex,
+      taxaEnable: true,
      });
   }
 
@@ -106,6 +108,8 @@ export default class AddForm extends Component {
     this.setState({ 
       retirada: e.target.value,
       address: e.target.value === 'centro' ? centro : vieralves,
+      taxa: '0',
+      taxaEnable: false,
     });
   }
 
@@ -134,10 +138,8 @@ export default class AddForm extends Component {
 
       const result = response.data;
 
-      
-
       console.log(result);
-      
+
       this.setState({
         addresses: result,
       });
@@ -278,14 +280,11 @@ export default class AddForm extends Component {
           alert('OPS!');
         }
 
-        console.log('-->', result);
-
       } catch(errors) {
         console.error(errors);
       }
 
     }).catch(errors => console.error(errors));
-
   }
 
   componentDidMount = () => {
@@ -322,7 +321,7 @@ export default class AddForm extends Component {
                  type="text" 
                  placeholder="01/01/2019 14:00" 
                  value={this.state.dateTime}
-                 onChange={this.onDateTimeChange}/>
+                 onChange={this.onDateTimeChange} required={true}/>
                 </div>
               </div>
             </div>
@@ -398,7 +397,9 @@ export default class AddForm extends Component {
                     <select 
                       className="form-control"
                       value={this.state.taxa} 
-                      onChange={this.onChangeTaxa}> 
+                      onChange={this.onChangeTaxa}
+                      disabled={!this.state.taxaEnable}
+                      > 
                       <option value="0" >Selecione</option>
                       {this.state.taxas.map(taxa => {
                         return(
@@ -409,14 +410,15 @@ export default class AddForm extends Component {
                   </div>
               </div>
 
-              {/* <button
+              <button
                 type="button" 
                 className="btn btn-primary"
                 data-toggle="tooltip" 
                 style={{marginTop: 14}}
-                data-placement="bottom" title="Remove produto">
+                data-placement="bottom" title="Remove produto"
+                onClick={this.props.onAddAddress}>
                 Adicionar Endereço
-              </button> */}
+              </button>
             </div>
           </div>
 
@@ -446,21 +448,23 @@ export default class AddForm extends Component {
                         <td>
                           R$ {produto.valor_produto}
                         </td>
-                        <td>
+                        <td style={{width: 300}}>
 
-                          <div id={`kObsPrd${produto.id_produto}`} style={{display: 'none'}} >
-                            <input id={`kObsInptPrd${produto.id_produto}`} type="text" placeholder="Observação" />
-                            <button type="button" onClick={() => {
-                              const value = $(`#kObsInptPrd${produto.id_produto}`).val()
-                              produto['obs'] = value;
-                              $(`#kObsPrd${produto.id_produto}`).css('display', 'none'); 
-                              $(`#kObsLinkPrd${produto.id_produto}`).html(value);
-                            }}>Adicionar</button>
+                          <div id={`kObsPrd${produto.id_produto}`} style={{display: 'none', width: 240}} className="input-group" >
+                            <input id={`kObsInptPrd${produto.id_produto}`} style={{width: 160, float: 'left'}} className="form-control form-control-sm" type="text" placeholder="Observação" />
+                            <div class="input-group-append" style={{width: 80, float: 'left'}}>
+                              <button type="button" className="btn btn-primary btn-sm" onClick={() => {
+                                const value = $(`#kObsInptPrd${produto.id_produto}`).val()
+                                produto['obs'] = value;
+                                $(`#kObsPrd${produto.id_produto}`).css('display', 'none'); 
+                                $(`#kObsLinkPrd${produto.id_produto}`).html(value);
+                              }}>Adicionar</button>
+                            </div>
                           </div>
 
                           <button id={`kObsLinkPrd${produto.id_produto}`} 
                             style={styles.linkButton} 
-                            type="button" 
+                            type="button"
                             onClick={() => { 
 
                             $(`#kObsPrd${produto.id_produto}`).css('display', 'inline'); 
