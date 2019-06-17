@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import { currentDateTime, formatDateTime, unformatDateTime } from '../utils';
+import { 
+  currentDateTime,
+  formatDateTime, 
+  unformatDateTime,
+  isValidDate
+ } from '../utils';
 
 // ICONS
 import Remove from '../../assets/delete';
@@ -162,6 +167,11 @@ export default class AddForm extends Component {
   }
 
   confirmation = () => {
+
+    if (!isValidDate(this.state.dateTime)) {
+      alert('Data deve ser maior que a data atual.');
+      return;
+    }
 
     const { products } = this.props;
 

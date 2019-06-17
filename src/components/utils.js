@@ -94,6 +94,46 @@ export const currentDateTime = () => {
     return `${date} ${time}`;
 }
 
+export const isValidDate = (date) => {
+
+  if (!date)
+    return false;
+
+  const uDate = toJsDate(date);
+  const jsDate = new Date(uDate);
+  const now = new Date();
+
+  if(now <= jsDate) {
+		return true; 
+	} else {
+    return false;
+  }
+
+}
+
+const toJsDate = (date) => {
+
+  try {
+
+    const dateTime = date.split(/\s+/);
+    const newDate = dateTime[0];
+    const time = dateTime[1].split(':');
+    const dateList = newDate.split('/');
+    const year = dateList[0].split('').length > 2 ? dateList[0] : dateList[2];
+    const month = dateList[1];
+    const day = dateList[0].split('').length > 2 ? dateList[2] : dateList[0];
+
+  //(year, month, day, hours, minutes, seconds, milliseconds)
+  //subtract 1 from month because Jan is 0 and Dec is 11
+  return new Date(year, (month-1), day, time[0], time[1], 0, 0);
+
+  } catch {
+    return '';
+  }
+  
+  
+}
+
 export const convertProducts = (valorProduto) => {
 
   //--> 23:T.CUPUACU COM CHOCOLATE:MEDIO:145:Feliz Aniversario //9:T.CUPUACU:MEDIO:145://
