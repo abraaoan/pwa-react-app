@@ -2,7 +2,7 @@ import axios from 'axios';
 import sha1 from 'js-sha1';
 import md5 from 'md5';
 
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export const axiosInstance = axios.create({
   baseURL: isOnDevMode ? `http://localhost:8080/cats/api` : `http://157.230.84.180/cats/api/`,

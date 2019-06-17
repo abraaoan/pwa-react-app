@@ -105,33 +105,11 @@ class Confirmation extends Component {
           alert('OPS!');
         }
 
-        console.log('-->', result);
-
       } catch(errors) {
         console.error(errors);
       }
 
     }).catch(errors => console.error(errors));
-
-
-//id_cliente:6
-// status:A
-// id_endereco:
-// taxa_entrega:
-// data_pedido:2019-04-14 15:21:58
-// data_entrega:2019-02-16 16:00:00
-// produto_valor[0][id]:20
-// produto_valor[0][nome]:T. BACALHAU
-// produto_valor[0][tamanho]:MEDIO
-// produto_valor[0][valor]:170
-// produto_valor[0][observacao]:
-// produto_valor[1][id]:2
-// produto_valor[1][nome]:T. COCO
-// produto_valor[1][tamanho]:PEQUENO
-// produto_valor[1][valor]:110
-// produto_valor[1][observacao]:Placa de Bem Vindo
-// observacao:
-// pagamento:
 
   }
 
@@ -179,13 +157,13 @@ class Confirmation extends Component {
                 </div>
 
                 <label style={{color: 'rgba(0, 0, 0, 0.5)', marginBottom: -10}}>Seu pedido é:</label>
-                { confirmation.products ? confirmation.products.map(product => {
-                  this.addValue(product.id_produto);
-                  
+                { confirmation.products ? confirmation.products.map((product, index) => {
+                  this.addValue(product.id_produto + index);
+
                   return (
                     <div className="form-check" style={{marginLeft: 10}} key={product.id_produto}>
-                      <input className="form-check-input" type="checkbox" value={product.id_produto} id={`kPrd${product.id_produto}`} onChange={this.onCheckChange} />
-                      <label className="form-check-label" htmlFor={`kPrd${product.id_produto}`}>
+                      <input className="form-check-input" type="checkbox" value={product.id_produto + index} id={`kPrd${product.id_produto + index}`} onChange={this.onCheckChange} />
+                      <label className="form-check-label" htmlFor={`kPrd${product.id_produto + index}`}>
                         {/* TODO add Obs */}
                         {`${product.nome_produto}, ${product.tamanho}, R$ ${product.valor_produto}${product.obs ? ', ' + product.obs : ''}`} 
                       </label>

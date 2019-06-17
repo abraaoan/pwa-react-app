@@ -98,9 +98,6 @@ class Form extends Component {
     else
       request = axios.post(PUT_CLIENTE_GET, putClientGetData(client))
 
-
-      console.log(client);
-
     request.then((response) => {
 
       try {

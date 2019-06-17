@@ -138,8 +138,6 @@ export default class AddForm extends Component {
 
       const result = response.data;
 
-      console.log(result);
-
       this.setState({
         addresses: result,
       });
@@ -165,7 +163,7 @@ export default class AddForm extends Component {
 
   confirmation = () => {
 
-    const {products} = this.props;
+    const { products } = this.props;
 
     var total = 0;
 
@@ -253,7 +251,6 @@ export default class AddForm extends Component {
       
     }
 
-    //23:T.CUPUACU COM CHOCOLATE:MEDIO:145:Feliz Aniversario 
     var valor_produto = "";
 
     for (var i = 0; i < products.length; i++ ) {
@@ -274,7 +271,7 @@ export default class AddForm extends Component {
 
         const result = response.data;
 
-        if (result['status'] === 'ok') {
+        if (result['status'] === 'ok' || result === '{\'status\':\'ok\'}') {
           this.props.onNotify('', 'Pedido Atualizado com sucesso');
         } else {
           alert('OPS!');
@@ -438,9 +435,9 @@ export default class AddForm extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  { products.map(produto => {
+                  { products.map((produto, index) => {
                     return(
-                      <tr key={produto.id_produto}>
+                      <tr key={produto.id_produto + index}>
                         <th scope="row" className="data">{produto.id_produto}</th>
                         <td>
                           {produto.nome_produto}
@@ -450,25 +447,25 @@ export default class AddForm extends Component {
                         </td>
                         <td style={{width: 300}}>
 
-                          <div id={`kObsPrd${produto.id_produto}`} style={{display: 'none', width: 240}} className="input-group" >
-                            <input id={`kObsInptPrd${produto.id_produto}`} style={{width: 160, float: 'left'}} className="form-control form-control-sm" type="text" placeholder="Observação" />
+                          <div id={`kObsPrd${produto.id_produto + index}`} style={{display: 'none', width: 240}} className="input-group" >
+                            <input id={`kObsInptPrd${produto.id_produto + index}`} style={{width: 160, float: 'left'}} className="form-control form-control-sm" type="text" placeholder="Observação" />
                             <div class="input-group-append" style={{width: 80, float: 'left'}}>
                               <button type="button" className="btn btn-primary btn-sm" onClick={() => {
-                                const value = $(`#kObsInptPrd${produto.id_produto}`).val()
-                                produto['obs'] = value;
-                                $(`#kObsPrd${produto.id_produto}`).css('display', 'none'); 
-                                $(`#kObsLinkPrd${produto.id_produto}`).html(value);
+                                const value = $(`#kObsInptPrd${produto.id_produto + index}`).val()
+                                products[index]['obs'] = value;
+                                $(`#kObsPrd${produto.id_produto + index}`).css('display', 'none'); 
+                                $(`#kObsLinkPrd${produto.id_produto + index}`).html(value);
                               }}>Adicionar</button>
                             </div>
                           </div>
 
-                          <button id={`kObsLinkPrd${produto.id_produto}`} 
+                          <button id={`kObsLinkPrd${produto.id_produto + index}`} 
                             style={styles.linkButton} 
                             type="button"
                             onClick={() => { 
 
-                            $(`#kObsPrd${produto.id_produto}`).css('display', 'inline'); 
-                            $(`#kObsLinkPrd${produto.id_produto}`).html('');
+                            $(`#kObsPrd${produto.id_produto + index}`).css('display', 'inline'); 
+                            $(`#kObsLinkPrd${produto.id_produto + index}`).html('');
 
                             }}>
                             {produto.obs ? produto.obs : 'Inserir observação'}

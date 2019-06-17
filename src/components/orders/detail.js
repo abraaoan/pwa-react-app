@@ -98,10 +98,7 @@ export default class Detail extends Component {
     .then(response => {
 
       const result = response.data[0];
-
       const products = convertProducts(result.pedido.produto_valor);
-      //console.log(result);
-      //console.log(products);
 
       this.setState({
         pedido: result.pedido,
@@ -162,12 +159,11 @@ export default class Detail extends Component {
 
         const result = response.data;
 
-        if (result['status'] === 'ok') {
+        if (result['status'] === 'ok' || result === '{\'status\':\'ok\'}') {
           this.onNotification();
         } else {
           alert('OPS!');
         }
-        console.log('-->', result);
 
       } catch(errors) {
         console.error(errors);

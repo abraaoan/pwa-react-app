@@ -194,8 +194,8 @@ class Orders extends Component {
 
   onProductsModalFinish = (products) => {
     this.setState({
-      currentProducts: products
-    });    
+      currentProducts: this.state.currentProducts.concat(products)
+    });
   }
 
   onAddAddress = (address, message) => {
@@ -261,9 +261,7 @@ class Orders extends Component {
     axios.post(EDIT_PEDIDO, editPedidoData(param))
     .then(response => {
 
-      const result = response.data;
-      console.log(result);
-
+      //const result = response.data;
       this.getPedidos('T');
 
     }).catch(errors => console.error(errors));
@@ -441,7 +439,7 @@ class Orders extends Component {
                       R$ {order.pedido.taxa_entrega}
                     </td> */}
                     <td style={{textAlign: 'center'}}>
-                      {order.pedido.pagamento ? order.pedido.pagamento === 'C' ? 'Crédito' : 'Dinheiro' : '-'}
+                      {order.pedido.pagamento ? order.pedido.pagamento === 'C' ? 'Cartão' : 'Dinheiro' : '-'}
                     </td>
                     <td style={{textAlign: 'center'}}>
                       {order.pedido.pagamento_efetuado}

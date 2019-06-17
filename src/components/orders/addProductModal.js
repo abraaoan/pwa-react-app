@@ -65,6 +65,11 @@ class AddProductModal extends Component {
     $('#addProductModal').modal('hide');
     $('#modalProduto').modal();
     this.props.onFinish(this.state.productsToSave);
+    this.setState({
+      products: [],
+      productsToSave: [],
+      term: '',
+    });
   }
 
   render() {
