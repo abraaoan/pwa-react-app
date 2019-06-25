@@ -6,6 +6,7 @@ import {
   unformatDateTime,
   isValidDate
  } from '../utils';
+ import MaskedInput from 'react-maskedinput';
 
 // ICONS
 import Remove from '../../assets/delete';
@@ -323,10 +324,12 @@ export default class AddForm extends Component {
                   Data e hora da entrega:
                 </p>
                 <div className="col-4">
-                <input 
+                <MaskedInput 
                  className="form-control form-control-sm" 
                  type="text" 
-                 placeholder="01/01/2019 14:00" 
+                 placeholder="01/01/2019 14:00"
+                 mask="11/11/1111 11:11"
+                 size="16"
                  value={this.state.dateTime}
                  onChange={this.onDateTimeChange} required={true}/>
                 </div>

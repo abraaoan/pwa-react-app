@@ -366,6 +366,28 @@ export const taxData = () => {
 
 }
 
+export const categorias = () => {
+
+  const data = new FormData();
+
+  data.append('token', token('get_categorias'));
+  data.append('nome_script', 'get_categorias');
+
+  return data;
+
+}
+
+export const tamanhos = () => {
+
+  const data = new FormData();
+
+  data.append('token', token('get_tamanhos'));
+  data.append('nome_script', 'get_tamanhos');
+
+  return data;
+
+}
+
 //
 
 const currentDate = () => {

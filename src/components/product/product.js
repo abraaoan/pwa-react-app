@@ -238,8 +238,8 @@ class Product extends Component {
         <Modal 
           title="Cadastro de produto"
           buttons={[
-            <button type="submit" form="productForm" className="btn btn-primary">Salvar</button>,
-            <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
+            <button key="0" type="submit" form="productForm" className="btn btn-primary">Salvar</button>,
+            <button key="1" type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>,
           ]}>
           <Form 
             ref="form"

@@ -31,7 +31,7 @@ export const EDIT_PEDIDO = 'pedidos/edit_pedido_por_id_cliente.php'
 
 // ---- OUTROS
 export const GET_TAMANHO_PRODUTO = 'tamanhos/get_tamanhos.php'
-export const GET_CATEGORIA_PRODUTO = 'categoria/get_categorias.php'
+export const GET_CATEGORIA_PRODUTO = 'categorias/get_categorias.php'
 export const GET_TAXA_ENTREGA = 'taxa_entrega/get_taxa_entrega.php'
 
 

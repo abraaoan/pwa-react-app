@@ -3,10 +3,14 @@ import {
   axiosInstance as axios,
   putProdutoData,
   editProdutoData,
+  categorias,
+  tamanhos,
 } from '../../api';
 import { 
   PUT_PRODUTO, 
   EDIT_PRODUTO,
+  GET_CATEGORIA_PRODUTO,
+  GET_TAMANHO_PRODUTO,
 } from '../../api/endpoints';
 import Alert from '../alert';
 
@@ -26,12 +30,40 @@ class Form extends Component {
       alertTitle: '',
       alertMessage: '',
       editMode: false,
+      sizes: [],
+      categories: [],
     }
 
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangePrice = this.onChangePrice.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
 
+  }
+
+  getCategories = () => {
+    axios.post(GET_CATEGORIA_PRODUTO, categorias())
+    .then(response => {
+
+      const result = response.data;
+      
+      this.setState({
+        categories: result,
+      });
+
+    }).catch(errors => console.error(errors));
+  }
+
+  getSizes = () => {
+    axios.post(GET_TAMANHO_PRODUTO, tamanhos())
+    .then(response => {
+
+      const result = response.data;
+      
+      this.setState({
+        sizes: result,
+      });
+
+    }).catch(errors => console.error(errors));
   }
 
   onChangeName(e) {
@@ -150,6 +182,11 @@ class Form extends Component {
     }
   }
 
+  componentDidMount = () => {
+    this.getCategories();
+    this.getSizes();
+    
+  }
   
   render() {
 
@@ -201,16 +238,17 @@ class Form extends Component {
                 <select id="inputState" 
                 className="form-control" 
                 value={this.state.size} 
-                onChange={this.onChangeSize}>
-                  <option value="Mini">Mini</option>
-                  <option value="Baby">Baby</option>
-                  <option value="Pequeno">Pequeno</option>
-                  <option value="Medio">Medio</option>
-                  <option value="Grande">Grande</option>
-                  <option value="Extra Grande">Extra Grande</option>
-                  <option value="Pirex Oval">Pirex Oval</option>
-                  <option value="Pirex Retangula">Pirex Retangula</option>
-                  <option value="Tradicional">Tradicional</option>
+                onChange={this.onChangeSize}
+                style={{textTransform: 'lowercase'}}>
+                  {this.state.sizes.map( size => {
+                    return (
+                      <option 
+                        key={size.id_tamanho} 
+                        value={size.tamanho}
+                        style={{textTransform: 'capitalize'}}>{size.tamanho}</option>
+                    )
+                  })}
+                  
                 </select>
               </div>
               <div className="col-6">
@@ -218,15 +256,17 @@ class Form extends Component {
                 <select id="inputState" 
                 className="form-control" 
                 value={this.state.category} 
-                onChange={this.onChangeCategory}>
-                  <option value="Americano">Americano</option>
-                  <option value="Bola">Bola</option>
-                  <option value="Bolo">Bolo</option>
-                  <option value="Casquinha">Casquinha</option>
-                  <option value="Conde">Conde</option>
-                  <option value="Pao de lo">Pão de lo</option>
-                  <option value="Pave">Pave</option>
-                  <option value="Salgada">Salgada</option>
+                onChange={this.onChangeCategory}
+                style={{textTransform: 'lowercase'}}>
+                  {this.state.categories.map(categorie => {
+                    return (
+                      <option 
+                        key={categorie.id_categoria} 
+                        value={categorie.categoria}>
+                        {categorie.categoria}
+                      </option>
+                    )
+                  })}
                 </select>
               </div>
             </div>

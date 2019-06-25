@@ -10,6 +10,7 @@ import {
 } from '../../api/endpoints';
 import Alert from '../alert';
 import { currentDateTime, unFormatDate, formatDate } from '../utils';
+import MaskedInput from 'react-maskedinput';
 
 class Form extends Component {
 
@@ -184,11 +185,13 @@ class Form extends Component {
             <div className="col">
               <label htmlFor="inputPhone">Telefone1</label>
               <div className="input-group">
-                <input className="form-control" 
+                <MaskedInput className="form-control" 
                 id="phone1"
                 placeholder="99999-9999"
                 type="text"
-                pattern="[0-9]*" 
+                pattern="[0-9]*"
+                size="10"
+                mask="11111-1111"
                 value={this.state.phone}
                 onChange={this.onChangePhone}/>
               </div>
@@ -196,11 +199,13 @@ class Form extends Component {
             <div className="col">
               <label htmlFor="inputPhone2">Telefone2</label>
               <div className="input-group">
-                <input className="form-control" 
+                <MaskedInput className="form-control" 
                 id="phone2"
                 placeholder="99999-9999"
                 type="text"
                 pattern="[0-9]*" 
+                size="10"
+                mask="11111-1111"
                 value={this.state.phone2}
                 onChange={this.onChangePhone2}/>
               </div>
@@ -209,9 +214,11 @@ class Form extends Component {
           <div className="form-group row">
             <div className="col">
               <label htmlFor="inputNome">Aniversário</label>
-              <input className="form-control"
+              <MaskedInput className="form-control"
               id="bithday" 
               placeholder="Ex: 01/01/1986"
+              size="10"
+              mask="11/11/1111"
               value={this.state.bithday}
               onChange={this.onChangeBirthday}/>
              </div>
