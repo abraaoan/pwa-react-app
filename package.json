@@ -1,6 +1,6 @@
 {
   "name": "pwa-react-app",
-  "version": "0.2.0",
+  "version": "0.2.4",
   "private": false,
   "dependencies": {
     "axios": "^0.18.0",
@@ -38,6 +38,7 @@
   ],
   "devDependencies": {
     "react-redux": "^6.0.1",
+    "react-to-print": "^2.3.0",
     "redux": "^4.0.1",
     "uglify-js-brunch": "^2.10.0"
   },

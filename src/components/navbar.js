@@ -37,9 +37,9 @@ export default class Navbar extends Component {
                   </li>
                   <li className="nav-item">
                     <a 
-                     className="nav-link disabled" 
+                     className="nav-link" 
                      href={process.env.PUBLIC_URL + '/relatorios'}
-                     style={colors.optionDisable}>Relatorios</a>
+                     style={colors.options}>Relatorios</a>
                   </li>
                 </ul>
             </nav>

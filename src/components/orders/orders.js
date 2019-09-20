@@ -12,6 +12,7 @@ import {formatDateTime} from '../utils';
 import Alert from '../alert';
 import DecisionModal from '../decisionModal';
 import Form from '../clients/addressForm';
+import MaskedInput from 'react-maskedinput';
 
 // ICONS
 import Edit from '../../assets/edit';
@@ -378,9 +379,10 @@ class Orders extends Component {
           </button>
         </div>
         <div className="input-group" style={styles.dateFilter}>
-              <input type="text" 
+              <MaskedInput type="text" 
                   className="form-control"
                   placeholder="01/01/2019"
+                  mask="11/11/1111"
                   aria-describedby="basic-addon1"
                   value={this.state.currentDate}
                   onChange={this.onDateChange}

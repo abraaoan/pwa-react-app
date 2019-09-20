@@ -34,5 +34,12 @@ export const GET_TAMANHO_PRODUTO = 'tamanhos/get_tamanhos.php'
 export const GET_CATEGORIA_PRODUTO = 'categorias/get_categorias.php'
 export const GET_TAXA_ENTREGA = 'taxa_entrega/get_taxa_entrega.php'
 
+// ---- REPORTS
+
+export const GET_GRAFICO_GERAL = 'relatorio/get_grafico_geral.php'
+export const GET_GRAFICO_CATEGORIA = 'relatorio/get_grafico_por_categoria.php'
+export const LISTAGEM_GERAL = 'relatorio/listagem_geral.php'
+export const LISTAGEM_POR_CATEGORIA = 'relatorio/listagem_por_categoria.php'
+
 
 

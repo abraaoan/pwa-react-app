@@ -1,6 +1,7 @@
 import axios from 'axios';
 import sha1 from 'js-sha1';
 import md5 from 'md5';
+import {currentDateTime} from '../components/utils'
 
 const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
@@ -21,7 +22,7 @@ export const getPedidosPaginacaoData = (registros, pagina, date, status) => {
   // Caso não exista o parametro data pega o range do ano todo
   if (!date) {
     const year = currantYear();
-    dataInicio = `${year}-01-01 00:00:00`;
+    dataInicio = currentDateTime();
     dataFim = `${year}-12-31 23:59:59`;
   } else {
 
@@ -351,6 +352,72 @@ export const deleteAddressData = (id) => {
 
   return data;
 
+}
+
+// --- REPORT
+
+export const graficoData = (date) => {
+  const data = new FormData();
+
+  var dataInicio;
+  var dataFim;
+
+  // Caso não exista o parametro data pega o range do ano todo
+  if (!date) {
+    const year = currantYear();
+    dataInicio = currentDateTime();
+    dataFim = `${year}-12-31 23:59:59`;
+  } else {
+
+    //TODO split date 01/01/2019
+    var infors = date.split('/');
+
+    var year = infors[2];
+    var month = infors[1];
+    var day = infors[0];
+
+    dataInicio = `${year}-${month}-${day} 00:00:00`;
+    dataFim = `${year}-${month}-${day} 23:59:00`;
+  }
+
+  data.append('data_inicio', dataInicio);
+  data.append('data_fim', dataFim);
+  data.append('token', token('get_grafico_geral'));
+  data.append('nome_script', 'get_grafico_geral');
+
+  return data;
+}
+
+export const listagemData = (date) => {
+  const data = new FormData();
+
+  var dataInicio;
+  var dataFim;
+
+  // Caso não exista o parametro data pega o range do ano todo
+  if (!date) {
+    const year = currantYear();
+    dataInicio = currentDateTime();
+    dataFim = `${year}-12-31 23:59:59`;
+  } else {
+
+    //TODO split date 01/01/2019
+    var infors = date.split('/');
+
+    var year = infors[2];
+    var month = infors[1];
+    var day = infors[0];
+
+    dataInicio = `${year}-${month}-${day} 00:00:00`;
+    dataFim = `${year}-${month}-${day} 23:59:00`;
+  }
+
+  data.append('data_inicio', dataInicio);
+  data.append('data_fim', dataFim);
+  data.append('token', token('listagem_geral'));
+  data.append('nome_script', 'listagem_geral');
+
+  return data;
 }
 
 // --- OUTROS

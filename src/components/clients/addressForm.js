@@ -9,6 +9,7 @@ import {
   EDIT_CLIENTE_ENDERECO,
 } from '../../api/endpoints';
 import Alert from '../alert';
+import MaskedInput from 'react-maskedinput';
 
 class AddressForm extends Component {
 
@@ -238,10 +239,11 @@ class AddressForm extends Component {
               <div className="form-group row">
                 <div className="col">
                   <label htmlFor="inputNome">CEP</label>
-                  <input className="form-control"
+                  <MaskedInput className="form-control"
                   id="cep" 
                   placeholder="Ex: 69000-000" 
                   value={this.state.cep}
+                  mask="11111-111"
                   onChange={this.onChangeCep}/>
                 </div>
               </div>

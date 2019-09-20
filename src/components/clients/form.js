@@ -189,7 +189,6 @@ class Form extends Component {
                 id="phone1"
                 placeholder="99999-9999"
                 type="text"
-                pattern="[0-9]*"
                 size="10"
                 mask="11111-1111"
                 value={this.state.phone}
@@ -203,7 +202,6 @@ class Form extends Component {
                 id="phone2"
                 placeholder="99999-9999"
                 type="text"
-                pattern="[0-9]*" 
                 size="10"
                 mask="11111-1111"
                 value={this.state.phone2}

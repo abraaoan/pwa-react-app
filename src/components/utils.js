@@ -1,5 +1,5 @@
 ///Expect date in this format: 2019-01-01 18:15:00 YYYY-MM-dd HH:mm:ss.
-export const formatDateTime = (date, withoutAs) => {
+export const formatDateTime = (date, withoutAs, onlyTime) => {
 
   if (!date)
     return '';
@@ -10,7 +10,9 @@ export const formatDateTime = (date, withoutAs) => {
 
   const dateFormated = formatDate(newDate);
 
-  if (withoutAs)
+  if (onlyTime)
+    return `${time}`;
+  else if (withoutAs)
     return `${dateFormated} ${time}`;
   else
     return `${dateFormated} às ${time}`;
@@ -84,6 +86,24 @@ export const currentDateTime = () => {
       hh    = d.getHours(),
       mm    = d.getMinutes(),
       ss    = d.getSeconds();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    const date = [year, month, day].join('-');
+    const time = [hh, mm, ss].join(':');
+
+    return `${date} ${time}`;
+}
+
+export const currentDateTimeEndDay = () => {
+  let d     = new Date(),
+      month = '' + (d.getMonth() + 1),
+      day   = '' + d.getDate(),
+      year  = d.getFullYear(),
+      hh    = '23',
+      mm    = '59',
+      ss    = '59';
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
