@@ -9,6 +9,7 @@ import OrderDetail from './orders/detail';
 import Report from './reports/reports';
 import Graficos from './reports/grafico';
 import List from './reports/listagem';
+import Etiquestas from './reports/etiqueta';
 import NotFound from './notFound';
 import { Provider } from 'react-redux';
 import { Store } from '../store';
@@ -27,6 +28,7 @@ export default function Routes() {
             <Route path={process.env.PUBLIC_URL + '/pedidos'} component={Order} />
             <Route path={process.env.PUBLIC_URL + '/relatorios/graficos'} component={Graficos} />
             <Route path={process.env.PUBLIC_URL + '/relatorios/listagem'} component={List} />
+            <Route path={process.env.PUBLIC_URL + '/relatorios/etiquetas'} component={Etiquestas} />
             <Route  path={process.env.PUBLIC_URL + '/relatorios'} component={Report}/>
             <Route path='*' component={NotFound} />
         </Switch>

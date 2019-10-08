@@ -55,7 +55,7 @@ export default class Reports extends Component {
                             <div className="card-body">
                                 <h5 className="card-title">Etiquetas</h5>
                                 <p className="card-text">Impressão de etiquetas.</p>
-                                <a href={process.env.PUBLIC_URL + '/clientes?page=1'} className="btn btn-primary stretched-link">Acessar</a>
+                                <a href={process.env.PUBLIC_URL + '/relatorios/etiquetas'} className="btn btn-primary stretched-link">Acessar</a>
                             </div>
                         </div>
                       </div>

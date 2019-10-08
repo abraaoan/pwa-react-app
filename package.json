@@ -1,6 +1,6 @@
 {
   "name": "pwa-react-app",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": false,
   "dependencies": {
     "axios": "^0.18.0",
@@ -9,6 +9,7 @@
     "history": "^4.9.0",
     "jquery": "^3.3.1",
     "js-sha1": "^0.6.0",
+    "jspdf": "^1.5.3",
     "md5": "^2.2.1",
     "popper.js": "^1.14.7",
     "query-string": "^6.4.2",

@@ -388,7 +388,7 @@ export const graficoData = (date) => {
   return data;
 }
 
-export const listagemData = (date) => {
+export const listagemData = (date, categoria) => {
   const data = new FormData();
 
   var dataInicio;
@@ -414,6 +414,7 @@ export const listagemData = (date) => {
 
   data.append('data_inicio', dataInicio);
   data.append('data_fim', dataFim);
+  data.append('categoria', categoria);
   data.append('token', token('listagem_geral'));
   data.append('nome_script', 'listagem_geral');
 

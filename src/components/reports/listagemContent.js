@@ -6,7 +6,7 @@ import {
   axiosInstance as axios, 
   listagemData,
 } from '../../api'; 
-import { LISTAGEM_GERAL } from '../../api/endpoints';
+import { LISTAGEM_POR_CATEGORIA, LISTAGEM_GERAL } from '../../api/endpoints';
 import {formatDateTime} from '../utils';
 
 export default class ListagemContent extends Component {
@@ -24,7 +24,7 @@ export default class ListagemContent extends Component {
 
   getReport = () => {
 
-    const { currentDate } = this.props;
+    const { currentDate, currentCategory } = this.props;
     const groupBy = function(xs, key) {
       return xs.reduce(function(rv, x) {
         (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -32,8 +32,10 @@ export default class ListagemContent extends Component {
       }, {});
     };
 
+    const category = currentCategory === 'Todas' ? null : currentCategory;
+
     // Request Products
-    axios.post(LISTAGEM_GERAL, listagemData(currentDate))
+    axios.post(category ? LISTAGEM_POR_CATEGORIA : LISTAGEM_GERAL, listagemData(currentDate, currentCategory))
     .then(response => {
 
       const result = response.data;
@@ -55,7 +57,7 @@ export default class ListagemContent extends Component {
 
   render() {
 
-    const { currentDate } = this.props;
+    const { currentDate, currentCategory } = this.props;
 
     return (
       <div style={{margin: 50}}>
@@ -72,7 +74,9 @@ export default class ListagemContent extends Component {
             </div>
           );
         })}
-        <div className="divPrintHeader"><h4>Relátorio de Listagem</h4></div>
+        <div className="divPrintHeader">
+          <h4>Relátorio de Listagem { currentCategory ? `- ${currentCategory}` : '' }</h4>
+        </div>
       </div>
     );
   }
