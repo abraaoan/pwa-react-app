@@ -69,7 +69,7 @@ export default class Listagem extends Component {
           title="Listagem"
           hRef={process.env.PUBLIC_URL + '/relatorios'} />
         
-        <div className="input-group" style={{width: 260, marginLeft: 60, float: 'left'}}>
+        <div className="input-group" style={{width: 180, marginLeft: 60, float: 'left'}}>
           <MaskedInput type="text" 
               className="form-control"
               placeholder="01/01/2019"
@@ -89,13 +89,13 @@ export default class Listagem extends Component {
             </div>
           </div>
         </div>
-        <div style={{marginLeft: 20, marginBottom: 50, width: 200, float: 'left'}}>  
-          <label htmlFor="inputState">Categoria:</label>
+        <div className="row" style={{marginLeft: 10, marginBottom: 50, width: 200, marginRight: 10, float: 'left'}}>  
+          <label className="col-sm" style={{width:60, marginTop: 6}} htmlFor="inputState">Categoria:</label>
           <select id="inputState" 
-          className="form-control" 
+          className="form-control col-sm" 
           value={this.state.category} 
           onChange={this.onChangeCategory}
-          style={{textTransform: 'lowercase'}}>
+          style={{textTransform: 'lowercase', width: 100}}>
             <option 
                 key={0} 
                 value={null}>

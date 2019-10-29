@@ -356,7 +356,7 @@ export const deleteAddressData = (id) => {
 
 // --- REPORT
 
-export const graficoData = (date) => {
+export const graficoData = (date, category) => {
   const data = new FormData();
 
   var dataInicio;
@@ -382,6 +382,7 @@ export const graficoData = (date) => {
 
   data.append('data_inicio', dataInicio);
   data.append('data_fim', dataFim);
+  data.append('categoria', category);
   data.append('token', token('get_grafico_geral'));
   data.append('nome_script', 'get_grafico_geral');
 

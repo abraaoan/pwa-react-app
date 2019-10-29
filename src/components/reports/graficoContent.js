@@ -6,7 +6,7 @@ import {
   axiosInstance as axios, 
   graficoData,
 } from '../../api'; 
-import { GET_GRAFICO_GERAL } from '../../api/endpoints';
+import { GET_GRAFICO_GERAL, GET_GRAFICO_CATEGORIA } from '../../api/endpoints';
 
 export default class GraficoContent extends Component {
 
@@ -23,10 +23,12 @@ export default class GraficoContent extends Component {
 
   getReport = () => {
 
-    const { currentDate } = this.props;
+    const { currentDate, currentCategory } = this.props;
+
+    const category = currentCategory === 'Todas' ? null : currentCategory;
 
     // Request Products
-    axios.post(GET_GRAFICO_GERAL, graficoData(currentDate))
+    axios.post(category ? GET_GRAFICO_CATEGORIA : GET_GRAFICO_GERAL, graficoData(currentDate, category))
     .then(response => {
 
       const result = response.data;
