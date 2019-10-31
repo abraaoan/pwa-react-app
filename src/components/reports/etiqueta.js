@@ -13,6 +13,8 @@ import {
 import { LISTAGEM_GERAL, LISTAGEM_POR_CATEGORIA, GET_CATEGORIA_PRODUTO } from '../../api/endpoints';
 import {formatDateTime, isValidDate} from '../utils';
 
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+
 export default class Etiquetas extends Component {
 
   constructor(props) {
@@ -42,7 +44,7 @@ export default class Etiquetas extends Component {
     if (this.state.date === '')
       return;
 
-    if (!isValidDate(this.state.date + ' 23:59:59')) {
+    if (!isOnDevMode && (!isValidDate(this.state.date + ' 23:59:59'))) {
       alert('Data deve ser maior que a data atual.');
       return;
     }
@@ -88,6 +90,25 @@ export default class Etiquetas extends Component {
     this.getCategories();
   }
 
+  handleNameValue = (name) => {
+    let newName = name.replace('com', 'c/').toLowerCase();
+    newName = newName.replace(' de ', ' ');
+    newName = newName.replace(' do ', ' ');
+    newName = newName.replace('chocolate', 'Choc.');
+    newName = newName.replace('pequeno', 'Peq.');
+    newName = newName.replace('medio', 'Med.');
+    newName = newName.replace('grande', 'Gran.');
+    newName = newName.replace('crocante', 'Croc.');
+
+    if (newName.slice(0, 2) === 't.') {
+      newName = newName.charAt(0).toUpperCase() + newName.charAt(1).toUpperCase() + newName.charAt(2).toUpperCase() + newName.slice(3);
+    }  else {
+      newName = newName.charAt(0).toUpperCase() + newName.slice(1);
+    }
+    
+    return newName
+  }
+
   genaratePDF = () => {
 
     var doc = new jsPDF()
@@ -97,7 +118,7 @@ export default class Etiquetas extends Component {
 
     // Style
     doc.setFont("helvetica");
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setFontStyle('normal');
 
     const padding = 3;
@@ -116,12 +137,13 @@ export default class Etiquetas extends Component {
 
     this.state.orders.map((order, index) => {
 
-      var name = `${order.item}-${order.tamanho}`;
+      var name = `${order.item} - ${order.tamanho}`;
+      name = this.handleNameValue(name);
 
       var nameSize = doc.getTextDimensions(name).w;
 
       // Calculate crop text
-      while (nameSize > cellWidth) {
+      while (nameSize >= cellWidth) {
 
         // Remove last word
         var lastIndex = name.lastIndexOf(" ");
@@ -131,9 +153,20 @@ export default class Etiquetas extends Component {
 
       }
 
-      var value = `${order.nome_cliente.split(' ')[0]}-${order.telefone1}\n`;
+      // Retirada
+      let retirada = "ENTREGA";
+      
+      // Vieralves
+      if (order.entrega === (isOnDevMode ? "11" : "13")) {
+        retirada = "Retirada: centro";
+      } else if (order.entrega === (isOnDevMode ? "12" : "14")) {
+        retirada = "Retirada: vieralves";
+      }
+
+      var value = `${order.nome_cliente.split(' ')[0]} - ${order.telefone1}\n`;
       value += `${name}\n`;
-      value += `${formatDateTime(order.horario)}\n`;
+      value += `${formatDateTime(order.horario).slice(0, -3)}\n`;
+      value += `${retirada}`;
 
       x = ((cellWidth + padding) * i) + fx;
 
