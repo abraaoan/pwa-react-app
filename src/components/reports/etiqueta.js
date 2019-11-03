@@ -13,7 +13,7 @@ import {
 import { LISTAGEM_GERAL, LISTAGEM_POR_CATEGORIA, GET_CATEGORIA_PRODUTO } from '../../api/endpoints';
 import {formatDateTime, isValidDate} from '../utils';
 
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export default class Etiquetas extends Component {
 
@@ -26,7 +26,6 @@ export default class Etiquetas extends Component {
       category: '',
       categories: [],
     }
-
   }
 
   // --- OnChanges
@@ -95,9 +94,17 @@ export default class Etiquetas extends Component {
     newName = newName.replace(' de ', ' ');
     newName = newName.replace(' do ', ' ');
     newName = newName.replace('chocolate', 'Choc.');
-    newName = newName.replace('pequeno', 'Peq.');
-    newName = newName.replace('medio', 'Med.');
-    newName = newName.replace('grande', 'Gran.');
+    newName = newName.replace('pequeno', 'P');
+    newName = newName.replace('medio', 'M');
+    newName = newName.replace('extra grande', 'EG');
+    newName = newName.replace('grande', 'G');
+    newName = newName.replace('pirex oval', 'PO');
+    newName = newName.replace('pirex retangular', 'PR');
+    newName = newName.replace('tradicional', 'T');
+    newName = newName.replace('descartável', 'DESC');
+    newName = newName.replace('padrão', 'PDR');
+    newName = newName.replace('mini', 'MM');
+    newName = newName.replace('baby', 'bb');
     newName = newName.replace('crocante', 'Croc.');
 
     if (newName.slice(0, 2) === 't.') {
@@ -111,14 +118,15 @@ export default class Etiquetas extends Component {
 
   genaratePDF = () => {
 
-    var doc = new jsPDF()
+    var doc = new jsPDF({
+      precision: 3,
+    });
 
     var width   = doc.internal.pageSize.getWidth();
     var height  = doc.internal.pageSize.getHeight(); 
 
     // Style
-    doc.setFont("helvetica");
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFontStyle('normal');
 
     const padding = 3;
@@ -158,15 +166,34 @@ export default class Etiquetas extends Component {
       
       // Vieralves
       if (order.entrega === (isOnDevMode ? "11" : "13")) {
-        retirada = "Retirada: centro";
+        retirada = "RETIRADA: Centro";
       } else if (order.entrega === (isOnDevMode ? "12" : "14")) {
-        retirada = "Retirada: vieralves";
+        retirada = "RETIRADA: Vieralves";
       }
 
       var value = `${order.nome_cliente.split(' ')[0]} - ${order.telefone1}\n`;
       value += `${name}\n`;
       value += `${formatDateTime(order.horario).slice(0, -3)}\n`;
-      value += `${retirada}`;
+      value += `${retirada}\n`;
+
+      if (order.pedido_produto_observacao !== "") {
+
+        let obs = `"${order.pedido_produto_observacao}`;
+        let obsSize = doc.getTextDimensions(obs).w;
+
+        // Calculate crop text
+        while (obsSize >= cellWidth) {
+  
+          // Remove last word
+          let obsLastIndex = obs.lastIndexOf(" ");
+          obs = obs.substring(0, obsLastIndex);
+  
+          obsSize = doc.getTextDimensions(`${obs}"`).w;
+  
+        }
+
+        value += `${obs}"`;
+      }
 
       x = ((cellWidth + padding) * i) + fx;
 

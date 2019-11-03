@@ -121,12 +121,6 @@ export default class Reports extends Component {
           @page {
             size: A4;
           }
-            @media print {
-              div.divPrintHeader {
-                position: fixed;
-                top: 0;
-              }
-            }
           "
           />
         </div>

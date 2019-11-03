@@ -67,7 +67,6 @@ export default class GraficoContent extends Component {
             })}
           </tbody>
         </table>
-        <div className="divPrintHeader"><h4>Relátorio de Gráficos</h4></div>
       </div>
     );
   }

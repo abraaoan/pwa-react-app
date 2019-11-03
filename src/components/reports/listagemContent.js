@@ -57,7 +57,7 @@ export default class ListagemContent extends Component {
 
   render() {
 
-    const { currentDate, currentCategory } = this.props;
+    const { currentDate } = this.props;
 
     return (
       <div style={{margin: 50}}>
@@ -74,9 +74,6 @@ export default class ListagemContent extends Component {
             </div>
           );
         })}
-        <div className="divPrintHeader">
-          <h4>Relátorio de Listagem { currentCategory ? `- ${currentCategory}` : '' }</h4>
-        </div>
       </div>
     );
   }

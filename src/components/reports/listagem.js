@@ -120,12 +120,6 @@ export default class Listagem extends Component {
           @page {
             size: A4;
           }
-            @media print {
-              div.divPrintHeader {
-                position: fixed;
-                top: 0;
-              }
-            }
           "
           />
         </div>

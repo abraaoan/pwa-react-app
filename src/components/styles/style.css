@@ -23,9 +23,3 @@
   margin: '15px auto';
   width: 1250;
 }
-
-@media screen {
-  div.divPrintHeader {
-    display: none;
-  }
-}
