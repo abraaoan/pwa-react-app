@@ -45,14 +45,14 @@ const styles = ({
   }
 });
 
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 const centro = {
   bairro: 'Centro',
   cep: '69020-030',
   complemento: '',
-  id_cliente: isOnDevMode ? '31' : '27', //Change when production
-  id_endereco: isOnDevMode ? '11' : '13', //Change when production
+  id_cliente: isOnDevMode ? '31' : '187', //Change when production
+  id_endereco: isOnDevMode ? '11' : '2', //Change when production
   logradouro: 'Av. Joaquim Nabuco',
   numero: '1180',
   referencia: '',
@@ -62,8 +62,8 @@ const vieralves = {
   bairro: 'Vieiralves',
   cep: '69053-050',
   complemento: '',
-  id_cliente: isOnDevMode ? '31' : '27', //Change when production
-  id_endereco: isOnDevMode ? '12' : '14', //Change when production
+  id_cliente: isOnDevMode ? '31' : '188', //Change when production
+  id_endereco: isOnDevMode ? '12' : '3', //Change when production
   logradouro: 'Rua Rio Purús',
   numero: '660',
   referencia: '',
@@ -222,13 +222,15 @@ export default class AddForm extends Component {
 
   loadFields = (pedido) => {
 
+    console.log(pedido);
+
     this.getClientAddress(pedido.cliente.id_cliente);
 
     this.setState({
       dateTime: formatDateTime(pedido.pedido.data_entrega, true),
       status: pedido.pedido.status,
       address: pedido.endereco,
-      retirada: pedido.endereco.id_endereco ? pedido.endereco.id_endereco : 'centro',
+      retirada: this.handleRetirada(pedido),//pedido.endereco.id_endereco ? pedido.endereco.id_endereco : 'centro',
       taxa: pedido.pedido.taxa_entrega,
       observacao: pedido.pedido.observacao,
       client: pedido.cliente,
@@ -293,6 +295,19 @@ export default class AddForm extends Component {
       }
 
     }).catch(errors => console.error(errors));
+  }
+
+  handleRetirada = (pedido) => {
+
+    if (pedido.endereco.id_endereco) {
+
+      if (pedido.endereco.id_endereco === vieralves.id_endereco)
+        return 'vieralves';
+      else if (pedido.endereco.id_endereco !== centro.id_endereco)
+        return pedido.endereco.id_endereco;
+    }
+
+    return 'centro';
   }
 
   componentDidMount = () => {

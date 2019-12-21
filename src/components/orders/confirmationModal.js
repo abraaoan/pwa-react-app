@@ -18,7 +18,7 @@ class Confirmation extends Component {
     super(props);
 
     this.state = {
-      defaultKeys: ['clientName', 'dataEntrega', 'endereco', 'taxa', 'total', 'pagamento'],
+      defaultKeys: ['clientName', 'clientTel', 'dataEntrega', 'endereco', 'taxa', 'total', 'pagamento'],
       keys: [],
     }
   }
@@ -114,8 +114,8 @@ class Confirmation extends Component {
   }
 
   getAddressLabel = (confirmation) => {
-    const idCentro = isOnDevMode ? '11' : '13';
-    const idVieralves = isOnDevMode ? '12' : '14';
+    const idCentro = isOnDevMode ? '11' : '2';
+    const idVieralves = isOnDevMode ? '12' : '3';
 
     if (confirmation.endereco) {
       
@@ -153,6 +153,13 @@ class Confirmation extends Component {
                   <input className="form-check-input" type="checkbox" id="kClientName" value="clientName" onChange={this.onCheckChange} />
                   <label className="form-check-label" htmlFor="kClientName">
                     <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Nome:</span> { confirmation.client ? confirmation.client.nome_cliente : " - "  }
+                  </label>
+                </div>
+
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" id="kClientTel" value="clientTel" onChange={this.onCheckChange} />
+                  <label className="form-check-label" htmlFor="kClientTel">
+                    <span style={{color: 'rgba(0, 0, 0, 0.5)'}}>Telefone:</span> { confirmation.client ? confirmation.client.telefone1 : " - "  }
                   </label>
                 </div>
 

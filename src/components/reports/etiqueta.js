@@ -165,9 +165,9 @@ export default class Etiquetas extends Component {
       let retirada = "ENTREGA";
       
       // Vieralves
-      if (order.entrega === (isOnDevMode ? "11" : "13")) {
+      if (order.entrega === (isOnDevMode ? "11" : "2")) {
         retirada = "RETIRADA: Centro";
-      } else if (order.entrega === (isOnDevMode ? "12" : "14")) {
+      } else if (order.entrega === (isOnDevMode ? "12" : "3")) {
         retirada = "RETIRADA: Vieralves";
       }
 

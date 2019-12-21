@@ -174,8 +174,8 @@ export default class Detail extends Component {
   }
 
   getAddressLabel = (endereco) => {
-    const idCentro = isOnDevMode ? '11' : '13';
-    const idVieralves = isOnDevMode ? '12' : '14';
+    const idCentro = isOnDevMode ? '11' : '2';
+    const idVieralves = isOnDevMode ? '12' : '3';
       
     if (endereco.id_endereco === idCentro || endereco.id_endereco === idVieralves) {
       return 'Endereço de retirada:'
