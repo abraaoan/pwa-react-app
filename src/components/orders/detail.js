@@ -40,7 +40,7 @@ const styles = ({
   },
 });
 
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export default class Detail extends Component {
 
@@ -134,7 +134,7 @@ export default class Detail extends Component {
       data_entrega: this.state.pedido.data_entrega ? this.state.pedido.data_entrega : null,
       observacao: this.state.pedido.observacao ? this.state.pedido.observacao : '',
       pagamento: this.state.pedido.pagamento ? this.state.pedido.pagamento : 'D',
-      pagamento_efetuado: this.state.pagamentoEfetuado ? '1' : '0',
+      pagamento_efetuado: this.state.pagamentoEfetuado ? 'S' : 'N',
       
     }
 

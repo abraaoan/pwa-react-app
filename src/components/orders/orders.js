@@ -91,7 +91,7 @@ class Orders extends Component {
   getPedidos = (status, date, isDtPedido) => {
     const queries = queryString.parse(this.props.location.search)
     const paginaAtual = queries.page;
-    const newData = data(6, paginaAtual, date, status);
+    const newData = data(25, paginaAtual, date, status);
     var urlParam = status === 'T' ? GET_PEDIDO_PAGINACAO : GET_PEDIDO_STATUS_PAG;
 
     if (isDtPedido)

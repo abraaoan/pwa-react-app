@@ -86,6 +86,7 @@ export default class AddForm extends Component {
       client: this.props.client ? this.props.client : {},
       editMode: false,
       formaPagamento: 'D',
+      pagamentoEfetuado: 'N',
       pedido: {},
       taxaEnable: false,
     }
@@ -235,6 +236,7 @@ export default class AddForm extends Component {
       observacao: pedido.pedido.observacao,
       client: pedido.cliente,
       formaPagamento: pedido.pedido.pagamento ? pedido.pedido.pagamento : 'D',
+      pagamentoEfetuado: pedido.pedido.pagamento_efetuado ? pedido.pedido.pagamento_efetuado : 'N',
       editMode: true,
       pedido
     });
@@ -260,7 +262,7 @@ export default class AddForm extends Component {
       data_entrega: unformatDateTime(confirmation.dataEntrega ? confirmation.dataEntrega : null),
       observacao: confirmation.observacao ? confirmation.observacao : '',
       pagamento: this.state.formaPagamento,
-      pagamento_efetuado: '0',
+      pagamento_efetuado: this.state.pagamentoEfetuado,
       
     }
 
