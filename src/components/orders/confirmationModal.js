@@ -10,7 +10,7 @@ import {
   PUT_PEDIDO,
  } from '../../api/endpoints';
 
-const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 class Confirmation extends Component {
 

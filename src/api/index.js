@@ -1,9 +1,9 @@
 import axios from 'axios';
 import sha1 from 'js-sha1';
 import md5 from 'md5';
-import {currentDateTime} from '../components/utils'
+import {currentDateTime, currentDate} from '../components/utils'
 
-const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export const axiosInstance = axios.create({
   baseURL: isOnDevMode ? `http://localhost:8080/cats/api` : `http://157.230.84.180/cats/api/`,
@@ -21,12 +21,10 @@ export const getPedidosPaginacaoData = (registros, pagina, date, status) => {
 
   // Caso não exista o parametro data pega o range do ano todo
   if (!date) {
-    const year = currantYear();
     dataInicio = currentDateTime();
-    dataFim = `${year}-12-31 23:59:59`;
+    dataFim = `${currentDate()} 23:59:59`;
   } else {
 
-    //TODO split date 01/01/2019
     var infors = date.split('/');
 
     var year = infors[2];
@@ -459,7 +457,7 @@ export const tamanhos = () => {
 
 //
 
-const currentDate = () => {
+const currentForTokenDate = () => {
   let d     = new Date(),
         month = '' + (d.getMonth() + 1),
         day   = '' + d.getDate(),
@@ -475,7 +473,7 @@ const currentDate = () => {
 const token = (nome_script) => {
 
   const id = '32325179';
-  const date = currentDate();
+  const date = currentForTokenDate();
 
   const str = `${id}.${date}.${nome_script}`;
   const md = md5(str);

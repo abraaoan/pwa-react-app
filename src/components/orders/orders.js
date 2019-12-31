@@ -75,8 +75,8 @@ class Orders extends Component {
       pagination: [],
       pedidos: [],
       currentPage: 1,
-      currentStatus: 'T',
-      currentDate: '',
+      currentStatus: 'A',
+      currentDate: null,
       currentProducts: [],
       confirmation: {},
       showAlert: false,
@@ -138,10 +138,9 @@ class Orders extends Component {
   }
 
   changeStatus = (status) => {
-    this.getPedidos(status);
+    this.getPedidos(status, this.state.currentDate);
     this.setState({ 
       currentStatus: status,
-      currentDate: '',
     });
   }
 
@@ -327,7 +326,7 @@ class Orders extends Component {
         this.getPedidosClientes(idClient);
 
     } else {
-      this.getPedidos('T');
+      this.getPedidos(this.state.currentStatus, this.state.currentDate);
     }
   }
 

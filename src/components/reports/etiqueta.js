@@ -13,7 +13,7 @@ import {
 import { LISTAGEM_GERAL, LISTAGEM_POR_CATEGORIA, GET_CATEGORIA_PRODUTO } from '../../api/endpoints';
 import {formatDateTime, isValidDate} from '../utils';
 
-const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export default class Etiquetas extends Component {
 

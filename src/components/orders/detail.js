@@ -40,7 +40,7 @@ const styles = ({
   },
 });
 
-const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export default class Detail extends Component {
 
@@ -99,6 +99,8 @@ export default class Detail extends Component {
 
       const result = response.data[0];
       const products = convertProducts(result.pedido.produto_valor);
+
+      console.log(products);
 
       this.setState({
         pedido: result.pedido,
@@ -219,13 +221,19 @@ export default class Detail extends Component {
               <p className="card-text">Pagamento: {
                 this.state.pedido.pagamento ? (this.state.pedido.pagamento === 'C' ? 'Cartão' : 'Dinheiro') : 'Não informado'
               }</p>
+              <p className="card-text">observacao: {
+                this.state.pedido.observacao ? this.state.pedido.observacao : ""
+              }</p>
 
               <p style={{color:'#666666'}}>Itens:</p>
               { this.state.products.map(product => {
                 return (
-                  <p key={product.id_produto} style={{marginLeft: 10, marginTop: -5, fontSize: 14}}> 
+                  <div>
+                  <p key={product.id_produto} style={{marginLeft: 10, marginTop: -5}}> 
                     - {`${product.id_produto}, ${product.nome_produto}, ${product.tamanho}, ${ product.valor_produto }`} 
                   </p>
+                  <p style={{marginLeft: 20, marginTop: -15}}><i>{`${product.obs ? `${product.obs}` : ""}`}</i></p>
+                  </div>
                 )
               }) }
 

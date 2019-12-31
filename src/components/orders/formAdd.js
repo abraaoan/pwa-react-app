@@ -45,7 +45,7 @@ const styles = ({
   }
 });
 
-const isOnDevMode = false;//(!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 const centro = {
   bairro: 'Centro',
