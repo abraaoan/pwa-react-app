@@ -53,13 +53,12 @@ class Clients extends Component {
       alertTitle: 'Endereço adicionado com sucesso!',
       alertMessage: '',
     }
-
   }
 
   getClients = () => {
     const queries = queryString.parse(this.props.location.search)
     const paginaAtual = queries.page;
-    const newData = data(6, paginaAtual);
+    const newData = data(25, paginaAtual);
 
     // Request Clients
     axios.post(GET_CLIENTE_PAGINACAO, newData)

@@ -53,7 +53,7 @@ class Product extends Component {
   getProducts = () => {
     const queries = queryString.parse(this.props.location.search)
     const paginaAtual = queries.page;
-    const newData = data(8, paginaAtual);
+    const newData = data(25, paginaAtual);
 
     // Request Products
     axios.post(GET_PRODUTO_PAGINACAO, newData)
