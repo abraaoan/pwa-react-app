@@ -75,8 +75,6 @@ class Form extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    console.log('AQUI KRALEO!!!');
-
     const client = {
       id_cliente: this.state.id,
       nome_cliente: this.state.name,
@@ -191,10 +189,10 @@ class Form extends Component {
               <div className="input-group">
                 <MaskedInput className="form-control" 
                 id="phone1"
-                placeholder="99999-9999"
+                placeholder="(99) 99999-9999"
                 type="text"
-                size="10"
-                mask="11111-1111"
+                size="15"
+                mask="(11) 11111-1111"
                 value={this.state.phone}
                 onChange={this.onChangePhone}/>
               </div>
@@ -204,10 +202,10 @@ class Form extends Component {
               <div className="input-group">
                 <MaskedInput className="form-control" 
                 id="phone2"
-                placeholder="99999-9999"
+                placeholder="(99) 99999-9999"
                 type="text"
-                size="10"
-                mask="11111-1111"
+                size="15"
+                mask="(11) 11111-1111"
                 value={this.state.phone2}
                 onChange={this.onChangePhone2}/>
               </div>
