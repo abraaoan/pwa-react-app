@@ -21,7 +21,9 @@ export default class Reports extends Component {
     this.state = {
       currentDate: '',
       category: '',
+      location: '',
       categories: [],
+      locations: [{name:'Centro', value: 9}, {name: 'Vierálves', value: 10}]
     }
 
   }
@@ -30,8 +32,7 @@ export default class Reports extends Component {
     axios.post(GET_CATEGORIA_PRODUTO, categorias())
     .then(response => {
 
-      const result = response.data;
-      
+      const result = response.data;      
       this.setState({
         categories: result,
       });
@@ -40,6 +41,12 @@ export default class Reports extends Component {
   }
 
   // --- OnChanges
+
+  onChangeLocation = (e) => {
+    this.setState({location: e.target.value}, () => {
+      this.refs.content.getReport();
+    });
+  }
 
   onChangeCategory = (e) => {
     this.setState({category: e.target.value}, () => {
@@ -113,6 +120,29 @@ export default class Reports extends Component {
             })}
           </select>
         </div>
+        <div className="row" style={{marginLeft: 10, marginRight:10, marginBottom: 50, width: 200, float: 'left'}}>  
+          <label className="col-sm" htmlFor="inputState" style={{width: 60, marginTop: 6}}>Localidade:</label>
+          <select id="inputState" 
+          className="form-control col-sm" 
+          value={this.state.location} 
+          onChange={this.onChangeLocation}
+          style={{textTransform: 'lowercase', width: 100}}>
+            <option 
+                key={0} 
+                value={null}>
+                {'Todas'}
+              </option>
+            {this.state.locations.map(location => {
+              return (
+                <option 
+                  key={location.value} 
+                  value={location.value}>
+                  {location.name}
+                </option>
+              )
+            })}
+          </select>
+        </div>
         <div style={{marginLeft: 20, marginBottom: 50, float: 'left'}}>
           <ReactToPrint
           trigger={() => <button type="button" className="btn btn-primary">Imprimir</button>}
@@ -128,7 +158,8 @@ export default class Reports extends Component {
           <GraficoContent 
             ref="content" 
             currentDate={this.state.currentDate}
-            currentCategory={this.state.category}/>
+            currentCategory={this.state.category}
+            currentLocation={this.state.location}/>
         </div>
       </div>
     )

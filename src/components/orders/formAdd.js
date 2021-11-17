@@ -51,8 +51,8 @@ const centro = {
   bairro: 'Centro',
   cep: '69020-030',
   complemento: '',
-  id_cliente: isOnDevMode ? '31' : '187', //Change when production
-  id_endereco: isOnDevMode ? '11' : '2', //Change when production
+  id_cliente: isOnDevMode ? '32' : '187', //Change when production
+  id_endereco: isOnDevMode ? '9' : '2', //Change when production
   logradouro: 'Av. Joaquim Nabuco',
   numero: '1180',
   referencia: '',
@@ -62,8 +62,8 @@ const vieralves = {
   bairro: 'Vieiralves',
   cep: '69053-050',
   complemento: '',
-  id_cliente: isOnDevMode ? '31' : '188', //Change when production
-  id_endereco: isOnDevMode ? '12' : '3', //Change when production
+  id_cliente: isOnDevMode ? '33' : '188', //Change when production
+  id_endereco: isOnDevMode ? '10' : '3', //Change when production
   logradouro: 'Rua Rio Purús',
   numero: '660',
   referencia: '',

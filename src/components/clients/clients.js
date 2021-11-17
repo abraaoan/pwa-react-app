@@ -214,6 +214,18 @@ class Clients extends Component {
           title="Clientes" 
           onSearchFinish={this.onSearchFinish}/>
 
+        {/* Spinner */}
+        {/* <div 
+          class="d-flex justify-content-center" 
+          style={
+            {'visibility': clients.length > 0 ? 'hidden' : 'visible',
+             'height': clients.length > 0 ? '0px' : '50px'}
+            }>
+          <div className="spinner-border" role="status">
+            <span class="visually-hidden"></span>
+          </div>
+        </div> */}
+
         {/* TableView */}
         <div style={styles.tableView}>
           <table id="tableClients" className="table table-bordered table-hover">

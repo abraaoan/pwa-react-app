@@ -83,12 +83,27 @@ export const currentDateTime = () => {
       month = '' + (d.getMonth() + 1),
       day   = '' + d.getDate(),
       year  = d.getFullYear(),
-      hh    = d.getHours(),
+      hh    = '00',
       mm    = d.getMinutes(),
       ss    = d.getSeconds();
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
+
+    const date = [year, month, day].join('-');
+    const time = [hh, mm, ss].join(':');
+
+    return `${date} ${time}`;
+}
+
+export const lastYearDateTime = () => {
+  let d     = new Date(),
+      month = '12',
+      day   = '31',
+      year  = d.getFullYear(),
+      hh    = '23',
+      mm    = '59',
+      ss    = '59';
 
     const date = [year, month, day].join('-');
     const time = [hh, mm, ss].join(':');

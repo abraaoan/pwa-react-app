@@ -75,6 +75,8 @@ class Form extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
+    console.log('AQUI KRALEO!!!');
+
     const client = {
       id_cliente: this.state.id,
       nome_cliente: this.state.name,
@@ -103,6 +105,8 @@ class Form extends Component {
 
       try {
         let result = response.data;
+
+        console.log(result);
 
         if (Array.isArray(result)) {
           const client = result[0];

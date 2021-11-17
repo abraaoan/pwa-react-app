@@ -24,7 +24,7 @@ export default class ListagemContent extends Component {
 
   getReport = () => {
 
-    const { currentDate, currentCategory } = this.props;
+    const { currentDate, currentCategory, currentLocation } = this.props;
     const groupBy = function(xs, key) {
       return xs.reduce(function(rv, x) {
         (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -33,9 +33,12 @@ export default class ListagemContent extends Component {
     };
 
     const category = currentCategory === 'Todas' ? null : currentCategory;
+    const location = currentLocation === 'Todas' ? '' : currentLocation;
+
+    const base = (category || location != '') ? LISTAGEM_POR_CATEGORIA : LISTAGEM_GERAL;
 
     // Request Products
-    axios.post(category ? LISTAGEM_POR_CATEGORIA : LISTAGEM_GERAL, listagemData(currentDate, currentCategory))
+    axios.post(base, listagemData(currentDate, currentCategory, location))
     .then(response => {
 
       const result = response.data;

@@ -23,12 +23,14 @@ export default class GraficoContent extends Component {
 
   getReport = () => {
 
-    const { currentDate, currentCategory } = this.props;
+    const { currentDate, currentCategory, currentLocation } = this.props;
 
     const category = currentCategory === 'Todas' ? null : currentCategory;
+    const location = currentLocation === 'Todas' ? '' : currentLocation;
+    const base = (category || location != '') ? GET_GRAFICO_CATEGORIA : GET_GRAFICO_GERAL
 
     // Request Products
-    axios.post(category ? GET_GRAFICO_CATEGORIA : GET_GRAFICO_GERAL, graficoData(currentDate, category))
+    axios.post(base, graficoData(currentDate, category, location))
     .then(response => {
 
       const result = response.data;

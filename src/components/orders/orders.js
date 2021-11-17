@@ -104,6 +104,7 @@ class Orders extends Component {
     .then(response => {
 
       const result = response.data;
+      console.log(result);
       const pagination = result.pop();
       const apiPedidos = result;
 

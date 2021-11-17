@@ -1,7 +1,7 @@
 import axios from 'axios';
 import sha1 from 'js-sha1';
 import md5 from 'md5';
-import {currentDateTime, currentDate} from '../components/utils'
+import {currentDateTime, currentDate, lastYearDateTime} from '../components/utils'
 
 const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
@@ -22,7 +22,7 @@ export const getPedidosPaginacaoData = (registros, pagina, date, status) => {
   // Caso não exista o parametro data pega o range do ano todo
   if (!date) {
     dataInicio = currentDateTime();
-    dataFim = `${currentDate()} 23:59:59`;
+    dataFim = lastYearDateTime();
   } else {
 
     var infors = date.split('/');
@@ -354,7 +354,7 @@ export const deleteAddressData = (id) => {
 
 // --- REPORT
 
-export const graficoData = (date, category) => {
+export const graficoData = (date, category, location) => {
   const data = new FormData();
 
   var dataInicio;
@@ -381,13 +381,14 @@ export const graficoData = (date, category) => {
   data.append('data_inicio', dataInicio);
   data.append('data_fim', dataFim);
   data.append('categoria', category);
+  data.append('id_retirada', location);
   data.append('token', token('get_grafico_geral'));
   data.append('nome_script', 'get_grafico_geral');
 
   return data;
 }
 
-export const listagemData = (date, categoria) => {
+export const listagemData = (date, categoria, idRetirada) => {
   const data = new FormData();
 
   var dataInicio;
@@ -414,6 +415,7 @@ export const listagemData = (date, categoria) => {
   data.append('data_inicio', dataInicio);
   data.append('data_fim', dataFim);
   data.append('categoria', categoria);
+  data.append('id_retirada', idRetirada);
   data.append('token', token('listagem_geral'));
   data.append('nome_script', 'listagem_geral');
 
