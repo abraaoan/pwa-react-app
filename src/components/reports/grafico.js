@@ -13,6 +13,8 @@ import {
   GET_CATEGORIA_PRODUTO,
 } from '../../api/endpoints';
 
+const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+
 export default class Reports extends Component {
 
   constructor(props) {
@@ -23,7 +25,10 @@ export default class Reports extends Component {
       category: '',
       location: '',
       categories: [],
-      locations: [{name:'Centro', value: 9}, {name: 'Vierálves', value: 10}]
+      locations: [{name:'Centro', 
+                   value: isOnDevMode ? '9' : '2'}, 
+                  {name: 'Vierálves', 
+                   value: isOnDevMode ? '10' : '3'}]
     }
 
   }
