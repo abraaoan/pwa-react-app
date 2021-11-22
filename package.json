@@ -1,6 +1,6 @@
 {
   "name": "pwa-react-app",
-  "version": "0.3.4",
+  "version": "0.3.6",
   "private": false,
   "dependencies": {
     "axios": "^0.24.0",

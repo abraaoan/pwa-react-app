@@ -4,6 +4,7 @@ import Toolbar from '../toolbar';
 import MaskedInput from 'react-maskedinput';
 import ReactToPrint from 'react-to-print';
 import GraficoContent from './graficoContent';
+import { isDebugEnviroment } from '../utils';
 
 import {
   axiosInstance as axios,
@@ -12,8 +13,6 @@ import {
 import { 
   GET_CATEGORIA_PRODUTO,
 } from '../../api/endpoints';
-
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export default class Reports extends Component {
 
@@ -26,9 +25,9 @@ export default class Reports extends Component {
       location: '',
       categories: [],
       locations: [{name:'Centro', 
-                   value: isOnDevMode ? '9' : '2'}, 
+                   value: isDebugEnviroment() ? '9' : '2'}, 
                   {name: 'Vierálves', 
-                   value: isOnDevMode ? '10' : '3'}]
+                   value: isDebugEnviroment() ? '10' : '3'}]
     }
 
   }

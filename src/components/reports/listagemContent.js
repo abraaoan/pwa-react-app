@@ -98,9 +98,9 @@ class TableView extends Component {
             </tr>
           </thead>
           <tbody>
-            {orders.map(order => {
+            {orders.map((order, index) => { 
               return(
-                <tr>
+                <tr key={index}>
                   <td>{order.item}</td>
                   <td>{`R$ ${order.valor},00`}</td>
                   <td>{order.pedido_produto_observacao}</td>

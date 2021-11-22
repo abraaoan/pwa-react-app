@@ -1,12 +1,10 @@
 import axios from 'axios';
 import sha1 from 'js-sha1';
 import md5 from 'md5';
-import {currentDateTime, currentDate, lastYearDateTime} from '../components/utils'
-
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+import {currentDateTime, isDebugEnviroment, lastYearDateTime} from '../components/utils';
 
 export const axiosInstance = axios.create({
-  baseURL: isOnDevMode ? `http://abraaoan.com/cats/api/` : `http://157.230.84.180/cats/api/`,
+  baseURL: isDebugEnviroment() ? `http://abraaoan.com/cats/api/` : `http://157.230.84.180/cats/api/`,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
@@ -401,7 +399,7 @@ export const listagemData = (date, categoria, idRetirada) => {
     dataFim = `${year}-12-31 23:59:59`;
   } else {
 
-    //TODO split date 01/01/2019
+    // TODO split date 01/01/2019
     var infors = date.split('/');
 
     var year = infors[2];

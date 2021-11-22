@@ -4,7 +4,8 @@ import {
   currentDateTime,
   formatDateTime, 
   unformatDateTime,
-  isValidDate
+  isValidDate,
+  isDebugEnviroment
  } from '../utils';
  import MaskedInput from 'react-maskedinput';
 
@@ -45,14 +46,12 @@ const styles = ({
   }
 });
 
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
-
 const centro = {
   bairro: 'Centro',
   cep: '69020-030',
   complemento: '',
-  id_cliente: isOnDevMode ? '32' : '187', //Change when production
-  id_endereco: isOnDevMode ? '9' : '2', //Change when production
+  id_cliente: isDebugEnviroment() ? '32' : '187', //Change when production
+  id_endereco: isDebugEnviroment() ? '9' : '2', //Change when production
   logradouro: 'Av. Joaquim Nabuco',
   numero: '1180',
   referencia: '',
@@ -62,8 +61,8 @@ const vieralves = {
   bairro: 'Vieiralves',
   cep: '69053-050',
   complemento: '',
-  id_cliente: isOnDevMode ? '33' : '188', //Change when production
-  id_endereco: isOnDevMode ? '10' : '3', //Change when production
+  id_cliente: isDebugEnviroment() ? '33' : '188', //Change when production
+  id_endereco: isDebugEnviroment() ? '10' : '3', //Change when production
   logradouro: 'Rua Rio Purús',
   numero: '660',
   referencia: '',

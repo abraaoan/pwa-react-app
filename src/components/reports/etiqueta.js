@@ -3,6 +3,7 @@ import Navbar from '../navbar';
 import Toolbar from '../toolbar';
 import jsPDF from 'jspdf';
 import MaskedInput from 'react-maskedinput';
+import { isDebugEnviroment } from '../utils';
 
 // API
 import {
@@ -12,8 +13,6 @@ import {
 } from '../../api'; 
 import { LISTAGEM_GERAL, LISTAGEM_POR_CATEGORIA, GET_CATEGORIA_PRODUTO } from '../../api/endpoints';
 import {formatDateTime, isValidDate} from '../utils';
-
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export default class Etiquetas extends Component {
 
@@ -43,7 +42,7 @@ export default class Etiquetas extends Component {
     if (this.state.date === '')
       return;
 
-    if (!isOnDevMode && (!isValidDate(this.state.date + ' 23:59:59'))) {
+    if (!isDebugEnviroment() && (!isValidDate(this.state.date + ' 23:59:59'))) {
       alert('Data deve ser maior que a data atual.');
       return;
     }
@@ -165,9 +164,9 @@ export default class Etiquetas extends Component {
       let retirada = "ENTREGA";
       
       // Vieralves
-      if (order.entrega === (isOnDevMode ? "11" : "2")) {
+      if (order.entrega === (isDebugEnviroment() ? "11" : "2")) {
         retirada = "RETIRADA: Centro";
-      } else if (order.entrega === (isOnDevMode ? "12" : "3")) {
+      } else if (order.entrega === (isDebugEnviroment() ? "12" : "3")) {
         retirada = "RETIRADA: Vieralves";
       }
 

@@ -3,7 +3,7 @@ import Navbar from '../navbar';
 import Toolbar from '../toolbar';
 import Alert from '../alert';
 import Status from './status';
-import { formatDateTime, convertProducts} from '../utils';
+import { formatDateTime, convertProducts, isDebugEnviroment} from '../utils';
 
 //API
 import {
@@ -39,8 +39,6 @@ const styles = ({
     float: 'left',
   },
 });
-
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export default class Detail extends Component {
 
@@ -176,8 +174,8 @@ export default class Detail extends Component {
   }
 
   getAddressLabel = (endereco) => {
-    const idCentro = isOnDevMode ? '11' : '2';
-    const idVieralves = isOnDevMode ? '12' : '3';
+    const idCentro = isDebugEnviroment() ? '11' : '2';
+    const idVieralves = isDebugEnviroment() ? '12' : '3';
       
     if (endereco.id_endereco === idCentro || endereco.id_endereco === idVieralves) {
       return 'Endereço de retirada:'

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  currentDateTime, unformatDateTime } from '../utils';
+import {  currentDateTime, unformatDateTime, isDebugEnviroment } from '../utils';
 
 //API
 import {
@@ -9,8 +9,6 @@ import {
 import { 
   PUT_PEDIDO,
  } from '../../api/endpoints';
-
-const isOnDevMode = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 class Confirmation extends Component {
 
@@ -114,8 +112,8 @@ class Confirmation extends Component {
   }
 
   getAddressLabel = (confirmation) => {
-    const idCentro = isOnDevMode ? '11' : '2';
-    const idVieralves = isOnDevMode ? '12' : '3';
+    const idCentro = isDebugEnviroment() ? '11' : '2';
+    const idVieralves = isDebugEnviroment() ? '12' : '3';
 
     if (confirmation.endereco) {
       
